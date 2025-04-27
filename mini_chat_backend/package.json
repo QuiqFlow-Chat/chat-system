@@ -6,7 +6,11 @@
   "dependencies": {
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.2",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "pg": "^8.15.6",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6",
     "ts-node-dev": "^2.0.0"
   }
 }
