@@ -1,9 +1,10 @@
 .auth-container {
-    display: grid;
-    place-items: center;
-    min-height: 100vh;
-    width: 100%;
-    padding: 2rem var(--quiqflow-spacing-xs);
+    background-color: var(--quiqflow-color-white);
     box-sizing: border-box;
+    display: grid;
+    min-height: 100vh;
+    padding: 2rem var(--quiqflow-spacing-xs);
+    place-items: center;
+    width: 100%;
 }
 
