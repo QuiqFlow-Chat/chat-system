@@ -1,0 +1,38 @@
+.password-wrapper {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--quiqflow-color-grey);
+    background: none;
+    border: none;
+    padding: 0.25rem;
+}
+
+.password-strength {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 0.25rem;
+    background-color: var(--quiqflow-color-border-muted);
+    border-radius: 0.125rem;
+}
+
+.strength-bar.active {
+    background-color: var(--quiqflow-color-success);
+}
+
+.password-hint {
+    font-size: var(--quiqflow-font-size-xs);
+    color: var(--quiqflow-color-grey);
+    margin-top: 0.5rem;
+}

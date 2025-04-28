@@ -1,0 +1,26 @@
+.form-control {
+  width: 100%;
+  padding: .75rem 1rem;
+  font-size: var(--quiqflow-font-size-sm);
+  font-weight: var(--quiqflow-font-weight-normal);
+  border: 1px solid var(--quiqflow-color-border-muted);
+  border-radius: 0.375rem;
+  background-color: var(--quiqflow-color-bg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--quiqflow-color-primary);
+  box-shadow: var(--quiqflow-box-shadow-focus);
+}
+
+.form-control.is-invalid {
+  border-color: var(--quiqflow-color-error);
+  box-shadow: var(--quiqflow-box-shadow-error);
+}
+
+.form-control.is-valid {
+  border-color: var(--quiqflow-color-success);
+  box-shadow: var(--quiqflow-box-shadow-success);
+}
