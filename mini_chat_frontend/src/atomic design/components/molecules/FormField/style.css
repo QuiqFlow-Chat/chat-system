@@ -1,0 +1,14 @@
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.invalid-feedback {
+  display: none;
+  font-size: var(--quiqflow-font-size-xs);
+  color: var(--quiqflow-color-error);
+  margin-top: 0.25rem;
+}
+
+.is-invalid ~ .invalid-feedback {
+  display: block;
+}
