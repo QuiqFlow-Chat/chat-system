@@ -51,6 +51,7 @@ class User extends Model<User> implements UserAttributes {
   @Column({
     type: DataType.STRING,
   })
+  
   @AllowNull(false)
   password!: string;
 

@@ -13,11 +13,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       allowNull: false,
       type: DataType.STRING,
     },
-    isRead: {
-      allowNull: false,
-      type: DataType.BOOLEAN,
-    },
-    senderId: {
+    senderId: {  // Changed from userId to senderId
       allowNull: false,
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
@@ -37,12 +33,12 @@ export const up = async ({ context }: { context: Sequelize }) => {
       },
     },
 
-    CreatedAt: {
+    createdAt: {  // Changed from CreatedAt
       allowNull: false,
       type: DataType.DATE,
     },
 
-    UpdatedAt: {
+    updatedAt: {  // Changed from UpdatedAt
       allowNull: false,
       type: DataType.DATE,
     },
