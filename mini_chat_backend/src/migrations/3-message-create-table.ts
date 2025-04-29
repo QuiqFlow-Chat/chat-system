@@ -13,6 +13,10 @@ export const up = async ({ context }: { context: Sequelize }) => {
       allowNull: false,
       type: DataType.STRING,
     },
+    isRead: {
+      allowNull: false,
+      type: DataType.BOOLEAN,
+    },
     userId: {
       allowNull: false,
       type: DataType.UUID,

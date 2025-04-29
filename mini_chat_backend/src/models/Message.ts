@@ -17,6 +17,7 @@ interface MessageCreateAttributes {
   id: string;
   senderId: string;
   conversationId: string;
+  isRead:boolean;
   content: string;
   createdAt: Date;
   updatedAt: Date;
@@ -54,12 +55,10 @@ class Message extends Model<Message> implements MessageCreateAttributes {
   })
   @ForeignKey(() => Conversation)
   conversationId!: string;
-
-  @BelongsTo(() => User)
-  sender!: User;
-
-  @BelongsTo(() => Conversation)
-  conversation!: Conversation;
+   
+  @Column({type:DataType.BOOLEAN})
+  @AllowNull(false)
+  isRead!:boolean
 
   @CreatedAt
   @Column({ type: DataType.DATE })
@@ -70,5 +69,12 @@ class Message extends Model<Message> implements MessageCreateAttributes {
   @Column({ type: DataType.DATE })
   @AllowNull(false)
   updatedAt!: Date;
+
+  
+  @BelongsTo(() => User)
+  sender!: User;
+
+  @BelongsTo(() => Conversation)
+  conversation!: Conversation;
 }
 export default Message;
