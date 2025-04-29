@@ -1,28 +1,37 @@
-.form-control {
-  background-color: var(--quiqflow-color-light-grey);
+.input {
   border-radius: 0.375rem;
   border: 1px solid var(--quiqflow-color-border-muted);
-  font-size: var(--quiqflow-font-size-sm);
+  color: var(--quiqflow-color-grey);
+  font-size: var(--quiqflow-font-size-md);
   font-weight: var(--quiqflow-font-weight-normal);
   padding: .75rem 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  color: var(--quiqflow-color-grey);
   width: 100%;
 }
 
-.form-control:focus {
+input:focus{
+  outline: none;
+  border-color: var(--quiqflow-color-primary);
+}
+
+.auth-input{
+  background-color: var(--quiqflow-color-light-grey);
+  font-size: var(--quiqflow-font-size-sm);
+  border: none;
+}
+
+.auth-input:focus {
   outline: none;
   background-color: var(--quiqflow-color-bg-secondary);
-  /* border-color: var(--quiqflow-color-primary); */
   box-shadow: var(--quiqflow-box-shadow-focus);
 }
 
-/* .form-control.is-invalid {
+.input.is-invalid {
   border-color: var(--quiqflow-color-error);
   box-shadow: var(--quiqflow-box-shadow-error);
-} */
+}
 
-.form-control.is-valid {
+.input.is-valid {
   border-color: var(--quiqflow-color-success);
   box-shadow: var(--quiqflow-box-shadow-success);
 }
