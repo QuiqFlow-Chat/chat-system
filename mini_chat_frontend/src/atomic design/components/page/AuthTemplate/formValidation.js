@@ -1,60 +1,125 @@
-    // Simple form validation and password toggle
-    document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('loginForm');
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const passwordToggle = document.querySelector('.password-toggle');
-    const submitButton = document.getElementById('submitbutton');
-
+    const passwordToggleBtn = document.querySelector('[data-toggle-btn]');
+    const submitButton = document.getElementById('submitButton');
+    
+    // Regular expressions for validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  
+    // Track if form has been submitted at least once
+    let hasSubmitted = false;
+  
     // Toggle password visibility
-    passwordToggle.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.querySelector('svg').style.stroke = type === 'password' ? 'currentColor' : 'var(--quiqflow-color-primary)';
+    passwordToggleBtn.addEventListener('click', function() {
+      const icon = this.querySelector('i');
+      const isPassword = passwordInput.type === 'password';
+      
+      passwordInput.type = isPassword ? 'text' : 'password';
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+      
+      this.setAttribute('aria-label', 
+        isPassword ? 'Hide password' : 'Show password');
     });
-
-    // Form submission
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+  
+    // Validate email field
+    function validateEmail() {
+      const emailValue = emailInput.value.trim();
+      const emailField = emailInput.closest('[data-email-field]');
+      const errorElement = emailField.querySelector('.invalid-feedback');
+      
+      if (!emailValue) {
+        showError(emailField, errorElement, 'Email is required');
+        return false;
+      }
+      
+      if (!emailRegex.test(emailValue)) {
+        showError(emailField, errorElement, 'Please enter a valid email address');
+        return false;
+      }
+      
+      showSuccess(emailField);
+      return true;
+    }
+  
+    // Validate password field
+    function validatePassword() {
+      const passwordValue = passwordInput.value.trim();
+      const passwordField = passwordInput.closest('[data-password-field]');
+      const errorElement = passwordField.querySelector('.invalid-feedback');
+      
+      if (!passwordValue) {
+        showError(passwordField, errorElement, 'Password is required');
+        return false;
+      }
+      
+      if (passwordValue.length < 8) {
+        showError(passwordField, errorElement, 'Password must be at least 8 characters');
+        return false;
+      }
+      
+      showSuccess(passwordField);
+      return true;
+    }
+  
+    // Show error message
+    function showError(field, errorElement, message) {
+      field.classList.add('error');
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+    }
+  
+    // Show success state
+    function showSuccess(field) {
+      field.classList.remove('error');
+      const errorElement = field.querySelector('.invalid-feedback');
+      errorElement.style.display = 'none';
+    }
+  
+    // Activate real-time validation after first submission
+    function activateRealTimeValidation() {
+      if (!hasSubmitted) {
+        emailInput.addEventListener('input', validateEmail);
+        passwordInput.addEventListener('input', validatePassword);
+        emailInput.addEventListener('blur', validateEmail);
+        passwordInput.addEventListener('blur', validatePassword);
+        hasSubmitted = true;
+      }
+    }
+  
+    // Form submission handler
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Clear any existing errors first
+      const errorMessages = document.querySelectorAll('.invalid-feedback');
+      errorMessages.forEach(msg => msg.style.display = 'none');
+      const errorFields = document.querySelectorAll('.error');
+      errorFields.forEach(field => field.classList.remove('error'));
+      
+      // Validate all fields
+      const isEmailValid = validateEmail();
+      const isPasswordValid = validatePassword();
+      
+      if (isEmailValid && isPasswordValid) {
+        // Form is valid - you can submit data to server here
+        submitButton.disabled = true;
+        submitButton.textContent = 'Logging in...';
         
-        // Validate form
-        let isValid = true;
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-
-        if (!email.value || !email.validity.valid) {
-            email.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            email.classList.remove('is-invalid');
-        }
-
-        if (!password.value || password.value.length < 8) {
-            password.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            password.classList.remove('is-invalid');
-        }
-
-        if (isValid) {
-            // Simulate form submission
-            submitButton.disabled = true;
-            submitButton.classList.add('button-loading');
-            
-            setTimeout(() => {
-                submitButton.disabled = false;
-                submitButton.classList.remove('button-loading');
-                alert('Login successful!');
-            }, 1500);
-        }
+        // Simulate API call
+        setTimeout(() => {
+          alert('Login successful! (This is a demo)');
+          submitButton.disabled = false;
+          submitButton.textContent = 'Log In';
+          loginForm.reset();
+        }, 1500);
+      } else {
+        // Activate real-time validation after first failed submission
+        activateRealTimeValidation();
+      }
     });
-
-    // Password strength indicator (simplified)
-    passwordInput.addEventListener('input', function() {
-        const strengthBars = document.querySelectorAll('.strength-bar');
-        const strength = Math.min(4, Math.floor(this.value.length / 2));
-        
-        strengthBars.forEach((bar, index) => {
-            bar.classList.toggle('active', index < strength);
-        });
-    });
-});
+  });
