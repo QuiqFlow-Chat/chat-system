@@ -6,7 +6,7 @@ class DataBase {
   private static db_instance: Sequelize;
   private constructor() {}
 
-  public static getDbInsatnce() {
+  public static getDbInstance() {
     if (!DataBase.db_instance) {
       DataBase.db_instance = new Sequelize({
         username: process.env.DB_USER,

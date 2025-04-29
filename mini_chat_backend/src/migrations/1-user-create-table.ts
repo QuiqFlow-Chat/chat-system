@@ -21,7 +21,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
     password: {
       type: DataType.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     lastActivity: {
       type: DataType.DATE,
