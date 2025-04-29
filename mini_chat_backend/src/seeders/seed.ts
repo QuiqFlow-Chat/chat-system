@@ -7,7 +7,7 @@ import DataBase from '../config/database';
 const runSeeds = async () => {
   const sequelize = DataBase.getDbInstance();
   const queryInterface = sequelize.getQueryInterface();
-  
+
   try {
     // Run seeds in the correct order (following the dependencies between tables)
     console.log('Starting seed process...');
@@ -15,7 +15,7 @@ const runSeeds = async () => {
     await seedConversations({ context: queryInterface });
     await seedUserConversations({ context: queryInterface });
     await seedMessages({ context: queryInterface });
-    
+
     console.log('All seeds executed successfully');
   } catch (error) {
     console.error('Seeds execution failed:', error);
