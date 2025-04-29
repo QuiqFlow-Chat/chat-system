@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-import glob from 'glob';
-import path from 'path';
 import { Sequelize } from 'sequelize-typescript';
 dotenv.config();
 
@@ -17,7 +15,10 @@ dotenv.config();
                 host: process.env.DB_HOST,
                 port: Number(process.env.DB_PORT),
                 dialect: 'postgres',
-                models: glob.sync(path.join(__dirname, 'models', '*.ts')).map((file) => require(file).default),
+                define: {
+                    underscored: true,
+                  },
+                models: [__dirname + '/models'],
             });
         }
         return DataBase.db_instance;

@@ -5,7 +5,7 @@ import path from "path";
 const sequelize = DataBase.getDbInsatnce();
 const umzug = new Umzug({
     migrations :{
-        glob :  path.join(__dirname, 'migrations', '*.ts')
+        glob : 'src/migrations/*.ts'
     },
     context : sequelize,
     storage : new SequelizeStorage({sequelize}),
