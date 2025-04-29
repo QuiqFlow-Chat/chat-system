@@ -1,4 +1,4 @@
-.btn {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -12,21 +12,21 @@
   width: 100%;
 }
 
-.btn-primary {
+.button-primary {
   background-color: var(--quiqflow-color-primary);
   color: var(--quiqflow-color-white);
 }
 
-.btn-primary:hover {
+.button-primary:hover {
   background-color: var(--quiqflow-color-primary-hover);
 }
 
-.btn-primary:disabled {
+.button-primary:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.btn-spinner {
+.button-spinner {
   display: none;
   width: 1rem;
   height: 1rem;
@@ -37,7 +37,7 @@
   margin-left: 0.5rem;
 }
 
-.btn-loading .btn-spinner {
+.button-loading .button-spinner {
   display: inline-block;
 }
 
