@@ -3,20 +3,20 @@
 }
 
 .password-toggle {
+    background: none;
+    border: none;
+    color: var(--quiqflow-color-grey);
+    cursor: pointer;
+    padding: 0.25rem;
     position: absolute;
     right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
-    color: var(--quiqflow-color-grey);
-    background: none;
-    border: none;
-    padding: 0.25rem;
 }
 
 
 .password-hint {
-    font-size: var(--quiqflow-font-size-xs);
     color: var(--quiqflow-color-grey);
+    font-size: var(--quiqflow-font-size-xs);
     margin-top: 0.5rem;
 }

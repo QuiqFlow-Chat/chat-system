@@ -1,6 +1,6 @@
 .button {
   align-items: center;
-  border-radius: var(--quiqflow-radius-chip);
+  border-radius: var(--quiqflow-radius-button);
   border: none;
   box-shadow: var(--quiqflow-box-shadow-1);
   cursor: pointer;
@@ -20,7 +20,9 @@
 }
 
 .button-secondary{
-
+  background-color: var(--quiqflow-color-bg-dark);
+  color: var(--quiqflow-color-bg-secondary);
+  transition: all 0.3s ease-in-out;
 }
 
 .button-primary:hover {
@@ -32,6 +34,6 @@
 
 }
 .button-primary:disabled {
-  opacity: 0.7;
   cursor: not-allowed;
+  opacity: 0.7;
 }

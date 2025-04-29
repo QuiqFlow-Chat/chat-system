@@ -1,37 +1,37 @@
 .register-container{
-    width: 100%;
-    max-width: 28rem;
     background-color: var(--quiqflow-color-white);
     border-radius: 0.5rem;
     box-shadow: 0 .5rem 1.5rem .5rem rgba(0, 0, 0, .075);
-    padding: 2.5rem;
-    font-family: var(--quiqflow-font-primary), sans-serif;
-    line-height: 1.5;
     color: var(--quiqflow-color-primary-font);
-    margin: auto;
     display: flex;
     flex-direction: column;
+    font-family: var(--quiqflow-font-primary), sans-serif;
+    line-height: 1.5;
+    margin: auto;
+    max-width: 28rem;
+    padding: 2.5rem;
+    width: 100%;
 }
 
 .register-header {
-    text-align: center;
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 .register-title {
+    color: var(--quiqflow-color-primary);
     font-size: var(--quiqflow-font-size-3xl);
     font-weight: var(--quiqflow-font-weight-bold);
-    color: var(--quiqflow-color-primary);
     margin: 0 ;
 }
 
 .register-subtext {
-    font-size: var(--quiqflow-font-size-xs);
-    color: var(--quiqflow-color-grey);
-    margin: 20px ;
     align-items: center;
-    justify-content: center;
+    color: var(--quiqflow-color-grey);
     display: flex;
+    font-size: var(--quiqflow-font-size-xs);
+    justify-content: center;
+    margin: 20px ;
 }
 
 .button-container {

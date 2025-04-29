@@ -76,6 +76,7 @@
   --quiqflow-box-shadow-error: 0 0 0 2px rgba(229, 57, 53, 0.3);
   --quiqflow-box-shadow-success: 0 0 0 2px rgba(76, 175, 80, 0.3);
   --quiqflow-box-shadow-dark: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  --quiqflow-radius-button: 3px; /**/
 
   /* === Z-Index === */
   --quiqflow-z-index-1: 1;

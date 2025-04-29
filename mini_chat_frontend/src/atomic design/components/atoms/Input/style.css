@@ -10,21 +10,21 @@
 }
 
 input:focus{
-  outline: none;
   border-color: var(--quiqflow-color-primary);
+  outline: none;
 }
 
 /* form */
 .auth-input{
   background-color: var(--quiqflow-color-light-grey);
-  font-size: var(--quiqflow-font-size-sm);
   border: none;
+  font-size: var(--quiqflow-font-size-sm);
 }
 
 .auth-input:focus {
-  outline: none;
   background-color: var(--quiqflow-color-bg-secondary);
   box-shadow: var(--quiqflow-box-shadow-focus);
+  outline: none;
 }
 
 .input.is-invalid {
