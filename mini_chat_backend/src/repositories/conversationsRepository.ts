@@ -4,9 +4,9 @@ import User from '../models/User';
 import { IGenericRepository } from './genericRepositoryInterface';
 
 export class ConversationsRepository implements IGenericRepository<Conversation> {
-  async addAsync(data: any): Promise<void> {
+  async addAsync(): Promise<void> {
     try {
-      await Conversation.create(data);
+      await Conversation.create();
     } catch (error) {
       console.error('Error in addAsync:', error);
       throw new Error(`Failed to add conversation`);
