@@ -93,7 +93,7 @@ class InputController {
 
 // Initialize all input fields
 function initInputs() {
-  const inputs = document.querySelectorAll('.form-control');
+  const inputs = document.querySelectorAll('.input');
   return Array.from(inputs).map(input => new InputController(input));
 }
 

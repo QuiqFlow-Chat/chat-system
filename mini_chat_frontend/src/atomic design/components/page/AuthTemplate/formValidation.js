@@ -3,7 +3,7 @@
     const form = document.getElementById('loginForm');
     const passwordInput = document.getElementById('password');
     const passwordToggle = document.querySelector('.password-toggle');
-    const submitBtn = document.getElementById('submitBtn');
+    const submitButton = document.getElementById('submitbutton');
 
     // Toggle password visibility
     passwordToggle.addEventListener('click', function() {
@@ -37,12 +37,12 @@
 
         if (isValid) {
             // Simulate form submission
-            submitBtn.disabled = true;
-            submitBtn.classList.add('btn-loading');
+            submitButton.disabled = true;
+            submitButton.classList.add('button-loading');
             
             setTimeout(() => {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('btn-loading');
+                submitButton.disabled = false;
+                submitButton.classList.remove('button-loading');
                 alert('Login successful!');
             }, 1500);
         }

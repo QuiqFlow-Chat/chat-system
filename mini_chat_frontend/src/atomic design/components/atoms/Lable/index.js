@@ -68,7 +68,7 @@ class LabelController {
 
 // Initialize all label elements
 function initLabels() {
-  const labels = document.querySelectorAll('.form-label');
+  const labels = document.querySelectorAll('.input');
   return Array.from(labels).map(label => new LabelController(label));
 }
 
