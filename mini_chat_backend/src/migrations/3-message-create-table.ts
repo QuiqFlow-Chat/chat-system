@@ -17,7 +17,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       allowNull: false,
       type: DataType.BOOLEAN,
     },
-    userId: {
+    senderId: {
       allowNull: false,
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
