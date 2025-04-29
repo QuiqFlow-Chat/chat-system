@@ -11,14 +11,4 @@ const umzug = new Umzug({
   storage: new SequelizeStorage({ sequelize }),
   logger: console,
 });
-
-const undoAllMigrations = async () => {
-  try {
-    await umzug.down();
-    console.log('Undo all migrations completed .. ');
-  } catch (error) {
-    console.log('Undo all migrations faild');
-  }
-};
-undoAllMigrations();
 export default umzug;

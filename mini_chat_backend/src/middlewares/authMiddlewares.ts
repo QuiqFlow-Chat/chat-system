@@ -20,7 +20,7 @@ export class AuthMiddleware {
       const decoded = jwt.verify(token, AuthMiddleware.JWT_SECRET) as JwtPayload;
 
       // Attach user data to the request object for further use
-       // @ts-expect-error Extending Express Request
+      // @ts-expect-error Extending Express Request
       req.user = decoded;
 
       next();

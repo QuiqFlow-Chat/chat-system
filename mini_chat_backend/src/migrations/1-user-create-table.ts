@@ -24,7 +24,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       unique: true,
     },
     lastActivity: {
-      type: DataType.BIGINT,
+      type: DataType.DATE,
       allowNull: false,
     },
     createdAt: {
