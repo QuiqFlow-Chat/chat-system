@@ -14,6 +14,7 @@ input:focus{
   border-color: var(--quiqflow-color-primary);
 }
 
+/* form */
 .auth-input{
   background-color: var(--quiqflow-color-light-grey);
   font-size: var(--quiqflow-font-size-sm);

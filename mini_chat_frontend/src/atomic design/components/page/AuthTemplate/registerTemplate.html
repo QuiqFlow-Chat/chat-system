@@ -1,0 +1,71 @@
+<div class="register-page">
+    <div class="register-container">
+        <!-- Header -->
+        <header class="register-header">
+          <h1 class="register-title">Log In</h1>
+        </header>
+      
+        <!-- Form -->
+        <form id="loginForm" novalidate>
+          <!-- Email Field -->
+          <div class="form-group" data-email-field>
+            <!-- Label -->
+            <label for="email" class="label" data-label>Email</label>
+            
+            <!-- Input -->
+            <input 
+              type="email" 
+              id="email" 
+              class="input auth-input" 
+              placeholder="Enter your email" 
+              required
+              data-input
+            >
+            
+            <p class="invalid-feedback">Please enter a valid email address</p>
+          </div>          
+      
+          <!-- Password Field -->
+          <div class="form-group" data-password-field>
+            <!-- Label -->
+            <label for="password" class="label" data-label>Password</label>
+          
+            <div class="password-wrapper">
+              <!-- Input -->
+              <input 
+                type="password" 
+                id="password" 
+                class="input auth-input" 
+                placeholder="Enter your password" 
+                required 
+                minlength="8" 
+                data-input
+              >
+              
+              <!-- Toggle -->
+              <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-toggle-btn>
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          
+            <!-- error message -->
+            <p class="invalid-feedback">Password must be at least 8 characters</p>
+            
+            <!-- Hint -->
+            <p class="password-hint">Use 8 or more characters with a mix of letters, numbers & symbols</p>
+          
+          </div>
+      
+          <!-- Submit Button --> 
+          <div class="button-container">
+              <button type="submit" class="button button-primary" id="submitButton">
+                Log In
+              </button>
+          </div>
+      
+          <p class="register-subtext">
+            Don't have an account? <a href="#" class="register-link">Sign up</a>
+          </p>
+        </form>
+      </div>      
+</div>
