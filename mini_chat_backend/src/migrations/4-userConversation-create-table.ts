@@ -1,48 +1,48 @@
-import { DataType, Sequelize } from "sequelize-typescript";
+import { DataType, Sequelize } from 'sequelize-typescript';
 
-export const up = async ({context}:{context:Sequelize}) => {
-    const queryInterface = context.getQueryInterface();
-    await queryInterface.createTable('UserConversations',{
-        id:{
-            primaryKey:true,
-            allowNull:false,
-            type:DataType.UUID,
-            defaultValue:DataType.UUIDV4
-        },
+export const up = async ({ context }: { context: Sequelize }) => {
+  const queryInterface = context.getQueryInterface();
+  await queryInterface.createTable('UserConversations', {
+    id: {
+      primaryKey: true,
+      allowNull: false,
+      type: DataType.UUID,
+      defaultValue: DataType.UUIDV4,
+    },
 
-        userId:{
-            allowNull:false,
-            type:DataType.UUID,
-            defaultValue:DataType.UUIDV4,
-            references:{
-                model:'Users',
-                key:'id'
-            }
-        },
+    userId: {
+      allowNull: false,
+      type: DataType.UUID,
+      defaultValue: DataType.UUIDV4,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+    },
 
-        conversationId:{
-            allowNull:false,
-            type:DataType.UUID,
-            defaultValue:DataType.UUIDV4,
-            references:{
-                model:'Conversations',
-                key:'id'
-            }
-        },
+    conversationId: {
+      allowNull: false,
+      type: DataType.UUID,
+      defaultValue: DataType.UUIDV4,
+      references: {
+        model: 'Conversations',
+        key: 'id',
+      },
+    },
 
-        CreatedAt:{
-            allowNull:false,
-            type:DataType.DATE
-        },
+    CreatedAt: {
+      allowNull: false,
+      type: DataType.DATE,
+    },
 
-        UpdatedAt:{
-            allowNull:false,
-            type:DataType.DATE
-        }
-    });
-}
+    UpdatedAt: {
+      allowNull: false,
+      type: DataType.DATE,
+    },
+  });
+};
 
-export const down = async ({context}:{context:Sequelize}) => {
-    const queryInterface = context.getQueryInterface();
-    await queryInterface.dropTable('UserConversations');
-}
+export const down = async ({ context }: { context: Sequelize }) => {
+  const queryInterface = context.getQueryInterface();
+  await queryInterface.dropTable('UserConversations');
+};
