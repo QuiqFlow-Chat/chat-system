@@ -32,7 +32,7 @@ export class ConversationsRepository implements IGenericRepository<Conversation>
       throw new Error(`Failed to get all conversations`);
     }
   }
-  async getByIdAsync(id: number): Promise<Conversation | null> {
+  async getByIdAsync(id: string): Promise<Conversation | null> {
     try {
       return await Conversation.findByPk(id, {
         include: [

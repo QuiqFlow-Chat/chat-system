@@ -1,5 +1,3 @@
-import Message from '../models/Message';
-import User from '../models/User';
 import UserConversation from '../models/UserConversation';
 import { IGenericRepository } from './genericRepositoryInterface';
 
@@ -20,7 +18,7 @@ export class UserConversationRepository implements IGenericRepository<UserConver
       throw new Error(`Failed to get all userConversation`);
     }
   }
-  async getByIdAsync(id: number): Promise<UserConversation | null> {
+  async getByIdAsync(id: string): Promise<UserConversation | null> {
     try {
       return await UserConversation.findByPk(id);
     } catch (error) {

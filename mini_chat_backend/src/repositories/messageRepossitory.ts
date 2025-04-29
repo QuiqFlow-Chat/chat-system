@@ -18,7 +18,7 @@ export class MessageRepository implements IGenericRepository<Message> {
       throw new Error(`Failed to get all messages`);
     }
   }
-  async getByIdAsync(id: number): Promise<Message | null> {
+  async getByIdAsync(id: string): Promise<Message | null> {
     try {
       return await Message.findByPk(id);
     } catch (error) {

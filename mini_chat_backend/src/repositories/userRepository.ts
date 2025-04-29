@@ -1,9 +1,8 @@
-import { Model } from 'sequelize-typescript';
 import Message from '../models/Message';
 import User from '../models/User';
 import { IGenericRepository } from './genericRepositoryInterface';
-import UserConversation from '../models/UserConversation';
 import Conversation from '../models/Conversation';
+import { Op } from 'sequelize';
 
 export class UserRepository implements IGenericRepository<User> {
   async addAsync(data: any): Promise<void> {
@@ -34,7 +33,7 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to get all users:`);
     }
   }
-  async getByIdAsync(id: number): Promise<User | null> {
+  async getByIdAsync(id: string): Promise<User | null> {
     try {
       return await User.findByPk(id, {
         include: [
@@ -44,8 +43,41 @@ export class UserRepository implements IGenericRepository<User> {
           },
           {
             model: Conversation,
-            as: 'conversation',
+            as: 'conversations',
             through: { attributes: [] },
+          },
+        ],
+      });
+    } catch (error) {
+      console.error('Error in getByIdAsync:', error);
+      throw new Error(`Failed to get the user `);
+    }
+  }
+  async getUserConversationsAsync(id: string): Promise<User | null> {
+    try {
+      return await User.findByPk(id, {
+        include: [
+          {
+            model: Message,
+            as: 'messages',
+          },
+          {
+            model: Conversation,
+            as: 'conversations',
+            through: { attributes: [] },
+            include: [
+              {
+                model: User,
+                as: 'users',
+                through: { attributes: [] },
+                attributes: ['id', 'fullName', 'email', 'lastActivity'],
+                where: {
+                  id: {
+                    [Op.ne]: id,
+                  },
+                },
+              },
+            ],
           },
         ],
       });
