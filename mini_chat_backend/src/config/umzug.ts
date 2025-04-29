@@ -2,7 +2,7 @@ import { SequelizeStorage, Umzug } from 'umzug';
 import DataBase from './database';
 import path from 'path';
 
-const sequelize = DataBase.getDbInsatnce();
+const sequelize = DataBase.getDbInstance();
 const umzug = new Umzug({
   migrations: {
     glob: 'src/migrations/*.ts',

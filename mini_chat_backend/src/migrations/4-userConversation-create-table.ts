@@ -30,12 +30,12 @@ export const up = async ({ context }: { context: Sequelize }) => {
       },
     },
 
-    CreatedAt: {
+    createdAt: {
       allowNull: false,
       type: DataType.DATE,
     },
 
-    UpdatedAt: {
+    updatedAt: {
       allowNull: false,
       type: DataType.DATE,
     },
