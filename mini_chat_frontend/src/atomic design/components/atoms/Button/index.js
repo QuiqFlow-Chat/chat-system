@@ -3,7 +3,7 @@
 class ButtonController {
     constructor(buttonElement) {
       this.button = buttonElement;
-      this.spinner = buttonElement.querySelector('.btn-spinner');
+      this.spinner = buttonElement.querySelector('.button-spinner');
       this.initEvents();
     }
   
@@ -26,12 +26,12 @@ class ButtonController {
   
     setVariant(variant) {
       Array.from(this.button.classList).forEach(className => {
-        if (className.startsWith('btn-')) {
+        if (className.startsWith('button-')) {
           this.button.classList.remove(className);
         }
       });
       
-      this.button.classList.add('btn', `btn-${variant}`);
+      this.button.classList.add('button', `button-${variant}`);
       return this;
     }
   
@@ -42,9 +42,9 @@ class ButtonController {
   
     setLoading(loading) {
       if (loading) {
-        this.button.classList.add('btn-loading');
+        this.button.classList.add('button-loading');
       } else {
-        this.button.classList.remove('btn-loading');
+        this.button.classList.remove('button-loading');
       }
       return this;
     }
@@ -69,7 +69,7 @@ class ButtonController {
   }
   
   function initButtons() {
-    const buttons = document.querySelectorAll('.btn');
+    const buttons = document.querySelectorAll('.button');
     return Array.from(buttons).map(button => new ButtonController(button));
   }
   

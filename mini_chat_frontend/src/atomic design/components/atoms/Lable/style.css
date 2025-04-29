@@ -1,7 +1,9 @@
-.form-label {
+.label {
   display: block;
-  font-size: var(--quiqflow-font-size-sm);
-  font-weight: var(--quiqflow-font-weight-bold);
-  margin-bottom: 0.5rem;
   color: var(--quiqflow-color-primary-font);
+  font-size: var(--quiqflow-font-size-md);
+  font-weight: var(--quiqflow-font-weight-bold);
 }
+/* .form-label{
+
+} */

@@ -1,9 +1,7 @@
 import { InputController } from '../components/atoms/Input/index.js';
 import { LabelController } from '../components/atoms/Lable/index.js';
-import { ButtonController } from '../components/atoms/Button/index.js'; // فقط لو حبيت تستخدم زر التبديل مع ButtonController
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ابدأ بالتحكم في العناصر
   
   // input
   const passwordInputEl = document.getElementById('password');
@@ -15,22 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // button toggle
   const toggleBtnEl = document.querySelector('.password-toggle');
-  const toggleBtn = toggleBtnEl; // يمكنك تغليفه بـ ButtonController لو أردت
+  const toggleBtn = toggleBtnEl;
 
-  // قوة كلمة المرور
   const strengthBars = document.querySelectorAll('.password-strength .strength-bar');
 
-  // Hint و Feedback
   const passwordHint = document.querySelector('.password-hint');
   const invalidFeedback = document.querySelector('.invalid-feedback');
 
-  // تبديل إظهار/إخفاء كلمة المرور
   toggleBtn.addEventListener('click', () => {
     const type = passwordInput.getValue() && passwordInput.input.type === 'password' ? 'text' : 'password';
     passwordInput.setType(type);
   });
 
-  // التحقق من قوة كلمة المرور وعرض الـ Bars
   passwordInput.on('input', (e) => {
     const value = e.detail;
     updatePasswordStrength(value);

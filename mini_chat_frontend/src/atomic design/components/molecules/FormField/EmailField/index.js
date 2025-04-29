@@ -1,5 +1,5 @@
-import { initLabels } from '../../atoms/Lable/index.js';
-import { initInputs } from '../../atoms/Input/index.js';
+import { initLabels } from '../../../atoms/Lable/index.js';
+import { initInputs } from '../../../atoms/Input/index.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
