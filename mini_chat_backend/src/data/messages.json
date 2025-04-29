@@ -1,0 +1,82 @@
+[
+  {
+    "id": "f8a9b5c2-d3e4-4f1a-b6c7-d8e9f0a1b2c3",
+    "conversationId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "senderId": "a1b2c3d4-e5f6-47a1-b3c4-d5e6f7a8b9c0",
+    "content": "Hi Ayah, how are you doing?",
+    "createdAt": "2023-01-01T00:05:00.000Z",
+    "updatedAt": "2023-01-01T00:05:00.000Z"
+  },
+  {
+    "id": "a1b2c3d4-e5f6-4a7b-c8d9-e0f1a2b3c4d5",
+    "conversationId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "senderId": "b2c3d4e5-f6a7-48b2-c4d5-e6f7a8b9c0d1",
+    "content": "Hello Fares! I'm doing well, thanks for asking.",
+    "createdAt": "2023-01-01T00:06:30.000Z",
+    "updatedAt": "2023-01-01T00:06:30.000Z"
+  },
+  {
+    "id": "b2c3d4e5-f6a7-4b8c-d9e0-f1a2b3c4d5e6",
+    "conversationId": "b0e8ef25-8c35-4218-8c71-25c5e2a7a373",
+    "senderId": "f6a7b8c9-d0e1-52f6-a8b9-c0d1e2f3a4b5",
+    "content": "Fares, did you finish the project?",
+    "createdAt": "2023-01-01T01:15:00.000Z",
+    "updatedAt": "2023-01-01T01:15:00.000Z"
+  },
+  {
+    "id": "c3d4e5f6-a7b8-4c9d-e0f1-a2b3c4d5e6f7",
+    "conversationId": "b0e8ef25-8c35-4218-8c71-25c5e2a7a373",
+    "senderId": "a1b2c3d4-e5f6-47a1-b3c4-d5e6f7a8b9c0",
+    "content": "Almost done Mohammad, I'll send it to you tomorrow.",
+    "createdAt": "2023-01-01T01:17:20.000Z",
+    "updatedAt": "2023-01-01T01:17:20.000Z"
+  },
+  {
+    "id": "d4e5f6a7-b8c9-4d0e-f1a2-b3c4d5e6f7a8",
+    "conversationId": "6d2946c0-9bfe-4ddc-b18c-30016442a5c9",
+    "senderId": "c3d4e5f6-a7b8-49c3-d5e6-f7a8b9c0d1e2",
+    "content": "Minas, can you help me with the homework?",
+    "createdAt": "2023-01-01T02:30:00.000Z",
+    "updatedAt": "2023-01-01T02:30:00.000Z"
+  },
+  {
+    "id": "e5f6a7b8-c9d0-4e1f-a2b3-c4d5e6f7a8b9",
+    "conversationId": "6d2946c0-9bfe-4ddc-b18c-30016442a5c9",
+    "senderId": "d4e5f6a7-b8c9-50d4-e6f7-a8b9c0d1e2f3",
+    "content": "Sure Ayat, I'm free this evening.",
+    "createdAt": "2023-01-01T02:35:10.000Z",
+    "updatedAt": "2023-01-01T02:35:10.000Z"
+  },
+  {
+    "id": "f6a7b8c9-d0e1-4f2a-b3c4-d5e6f7a8b9c0",
+    "conversationId": "1af7e382-ca54-4c0f-a8b1-3ac45fd1c3bb",
+    "senderId": "e5f6a7b8-c9d0-51e5-f7a8-b9c0d1e2f3a4",
+    "content": "Are you coming to the meeting today?",
+    "createdAt": "2023-01-01T03:45:00.000Z",
+    "updatedAt": "2023-01-01T03:45:00.000Z"
+  },
+  {
+    "id": "a7b8c9d0-e1f2-4a3b-c4d5-e6f7a8b9c0d1",
+    "conversationId": "1af7e382-ca54-4c0f-a8b1-3ac45fd1c3bb",
+    "senderId": "d4e5f6a7-b8c9-50d4-e6f7-a8b9c0d1e2f3",
+    "content": "Yes Jenan, I'll be there at 3 PM.",
+    "createdAt": "2023-01-01T03:46:50.000Z",
+    "updatedAt": "2023-01-01T03:46:50.000Z"
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4b4c-d5e6-f7a8b9c0d1e2",
+    "conversationId": "85ab2a2f-c670-4804-9b29-a9ee8d86c550",
+    "senderId": "f6a7b8c9-d0e1-52f6-a8b9-c0d1e2f3a4b5",
+    "content": "Jenan, have you seen the latest updates?",
+    "createdAt": "2023-01-01T04:20:00.000Z",
+    "updatedAt": "2023-01-01T04:20:00.000Z"
+  },
+  {
+    "id": "c9d0e1f2-a3b4-4c5d-e6f7-a8b9c0d1e2f3",
+    "conversationId": "85ab2a2f-c670-4804-9b29-a9ee8d86c550",
+    "senderId": "e5f6a7b8-c9d0-51e5-f7a8-b9c0d1e2f3a4",
+    "content": "Yes Mohammad, they look great!",
+    "createdAt": "2023-01-01T04:22:15.000Z",
+    "updatedAt": "2023-01-01T04:22:15.000Z"
+  }
+]

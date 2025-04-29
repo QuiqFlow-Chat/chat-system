@@ -2,9 +2,9 @@ import Message from '../models/Message';
 import { IGenericRepository } from './genericRepositoryInterface';
 
 export class MessageRepository implements IGenericRepository<Message> {
-  async addAsync(data: any): Promise<void> {
+  async addAsync(data: any): Promise<Message> {
     try {
-      await Message.create(data);
+      return await Message.create(data);
     } catch (error) {
       console.error('Error in addAsync:', error);
       throw new Error(`Failed to add message`);
@@ -18,7 +18,7 @@ export class MessageRepository implements IGenericRepository<Message> {
       throw new Error(`Failed to get all messages`);
     }
   }
-  async getByIdAsync(id: number): Promise<Message | null> {
+  async getByIdAsync(id: string): Promise<Message | null> {
     try {
       return await Message.findByPk(id);
     } catch (error) {

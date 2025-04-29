@@ -20,7 +20,7 @@ interface UserAttributes {
   fullName: string;
   email: string;
   password: string;
-  lastActivity: number;
+  lastActivity: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,14 +51,13 @@ class User extends Model<User> implements UserAttributes {
   @Column({
     type: DataType.STRING,
   })
-  @Unique
   @AllowNull(false)
   password!: string;
 
   @Column({
-    type: DataType.BIGINT,
+    type: DataType.DATE,
   })
-  lastActivity!: number;
+  lastActivity!: Date;
 
   @CreatedAt
   @Column({ type: DataType.DATE })
