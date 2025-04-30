@@ -14,6 +14,9 @@ export function setupConfirmPasswordValidation(passwordController) {
   const confirmPasswordField = confirmPasswordElement.closest('[data-confirm-password-field]');
   const errorElement = confirmPasswordField?.querySelector('.invalid-feedback');
 
+  confirmController.on('custom-input', validateConfirmPassword);
+  passwordController.on?.('custom-input', validateConfirmPassword); 
+
   function validateConfirmPassword() {
     const confirmPasswordValue = confirmController.getValue().trim();
     const passwordValue = passwordController.getValue().trim();

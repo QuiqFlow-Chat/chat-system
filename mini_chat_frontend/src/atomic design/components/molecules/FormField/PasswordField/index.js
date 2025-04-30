@@ -15,6 +15,14 @@ export function setupPasswordValidation() {
   const field = passwordElement.closest('[data-password-field]');
   const errorElement = field?.querySelector('.invalid-feedback');
 
+
+  const MIN_LENGTH_REGEX = /^.{8,}$/; 
+  const CONTAINS_LETTER_REGEX = /[A-Za-z]/; 
+  const CONTAINS_NUMBER_REGEX = /\d/; 
+  const CONTAINS_SPECIAL_CHAR_REGEX = /[@$!%*#?&]/; 
+
+  controller.on('custom-input', validatePassword);
+
   // Toggle password visibility
   toggleBtn?.addEventListener('click', function () {
     const icon = this.querySelector('i');
@@ -39,25 +47,25 @@ export function setupPasswordValidation() {
       return false;
     }
 
-    if (value.length < 8) {
+    if (!MIN_LENGTH_REGEX.test(value)) {
       showError('Password must be at least 8 characters long');
       controller.setValid(false);
       return false;
     }
 
-    if (!/[A-Za-z]/.test(value)) {
+    if (!CONTAINS_LETTER_REGEX.test(value)) {
       showError('Password must contain at least one letter');
       controller.setValid(false);
       return false;
     }
 
-    if (!/\d/.test(value)) {
+    if (!CONTAINS_NUMBER_REGEX.test(value)) {
       showError('Password must contain at least one number');
       controller.setValid(false);
       return false;
     }
 
-    if (!/[@$!%*#?&]/.test(value)) {
+    if (!CONTAINS_SPECIAL_CHAR_REGEX.test(value)) {
       showError('Password must contain at least one special character (@$!%*#?&)');
       controller.setValid(false);
       return false;
