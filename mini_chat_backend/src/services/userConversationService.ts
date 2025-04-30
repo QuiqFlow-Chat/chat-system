@@ -1,3 +1,4 @@
+import { MESSAGES } from '../constants/message';
 import { UserConversationGetByParameter } from '../dtosInterfaces/userConversationDtos';
 import UserConversation from '../models/UserConversation';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
@@ -8,7 +9,7 @@ export class UserConversationService {
   public getAllUserConversationsAsync = async (): Promise<UserConversation[]> => {
     try {
       const userConversations = await this._userConversationRepository.getAllAsync();
-      if (userConversations.length === 0) throw new Error('user conversations not found');
+      if (userConversations.length === 0) throw new Error(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversations;
     } catch (error) {
       console.log('error in getAllUserConversationsAsync', error);
@@ -21,7 +22,7 @@ export class UserConversationService {
   ): Promise<UserConversation> => {
     try {
       const userConversation = await this._userConversationRepository.getByIdAsync(parameter.id);
-      if (!userConversation) throw new Error('user conversation not found');
+      if (!userConversation) throw new Error(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversation;
     } catch (error) {
       console.log('error in getUserConversationsByIdAsync', error);
@@ -34,7 +35,7 @@ export class UserConversationService {
   ): Promise<void> => {
     try {
       const userConversation = await this._userConversationRepository.getByIdAsync(parameter.id);
-      if (!userConversation) throw new Error('user conversation not found');
+      if (!userConversation) throw new Error(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       await this._userConversationRepository.deleteAsync(userConversation);
     } catch (error) {
       console.log('error in deleteUserConversationsAsync', error);

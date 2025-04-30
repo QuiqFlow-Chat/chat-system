@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { ConversationService } from '../services/conversationService';
 import { ConversaionGetByParameter } from '../dtosInterfaces/conversationDtos';
+import { MESSAGES } from '../constants/message';
 
 export class ConversationController {
   constructor(private _conversationService: ConversationService) {}
   public addConversationAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this._conversationService.addConversationAsync();
-      res.status(200).json({ message: 'Add Conversation Completed Successfuly.' });
+      res.status(200).json({ message: MESSAGES.CONVERSATION.CREATED });
     } catch (error) {
       next(error);
     }
@@ -17,7 +18,7 @@ export class ConversationController {
     try {
       const parameter: ConversaionGetByParameter = req.body;
       await this._conversationService.deleteConversationAsync(parameter);
-      res.status(200).json({ message: 'Delete Conversation Completed Successfully' });
+      res.status(200).json({ message: MESSAGES.CONVERSATION.DELETED });
     } catch (error) {
       next(error);
     }
