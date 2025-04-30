@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserConversationService } from '../services/userConversationService';
 import { UserConversationGetByParameter } from '../dtosInterfaces/userConversationDtos';
+import { MESSAGES } from '../constants/message';
 
 export class UserConversationController {
   constructor(private _userConversationService: UserConversationService) {}
@@ -31,7 +32,7 @@ export class UserConversationController {
     try {
       const parameter: UserConversationGetByParameter = req.body;
       await this._userConversationService.deleteUserConversationsAsync(parameter);
-      res.status(200).json({ message: 'Delete User Conversation Completed Successfully' });
+      res.status(200).json({ message: MESSAGES.USER_CONVERSATION.DELETED });
     } catch (error) {
       next(error);
     }
