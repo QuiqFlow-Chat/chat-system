@@ -10,12 +10,12 @@ export const up = async ({ context }: { context: Sequelize }) => {
       defaultValue: DataType.UUIDV4,
     },
 
-    CreatedAt: {
+    created_at: {
       allowNull: false,
       type: DataType.DATE,
     },
 
-    UpdatedAt: {
+    updated_at: {
       allowNull: false,
       type: DataType.DATE,
     },

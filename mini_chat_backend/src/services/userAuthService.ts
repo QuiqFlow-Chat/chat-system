@@ -1,3 +1,4 @@
+import { MESSAGES } from '../constants/message';
 import {
   UserCreateParameters,
   UserGetByParameter,
@@ -6,7 +7,6 @@ import {
 } from '../dtosInterfaces/userDtos';
 import Conversation from '../models/Conversation';
 import User from '../models/User';
-import UserConversation from '../models/UserConversation';
 import { UserRepository } from './../repositories/userRepository';
 export class UserService {
   constructor(private _userRepository: UserRepository) {}
@@ -19,14 +19,14 @@ export class UserService {
         !parameters.password ||
         !parameters.confirmPassword
       )
-        throw new Error('full name , email , password and confirm password are required');
+        throw new Error(MESSAGES.AUTH.UN_VALID_REGISTER[0]);
       const users = await this._userRepository.getAllAsync();
       const checkedUsers = users.filter(
         (u) => u.fullName === parameters.fullName && u.email === parameters.email
       );
-      if (checkedUsers.length > 0) throw new Error('this user already exist');
+      if (checkedUsers.length > 0) throw new Error(MESSAGES.AUTH.UN_VALID_REGISTER[1]);
       if (parameters.password !== parameters.confirmPassword)
-        throw new Error('password and confirm password must be a same');
+        throw new Error(MESSAGES.AUTH.UN_VALID_REGISTER[2]);
       await this._userRepository.addAsync(parameters);
     } catch (error) {
       console.log('Error in registerAsync', error);
@@ -40,7 +40,7 @@ export class UserService {
       const checkUser = users.filter(
         (u) => u.email === parameters.email && u.password === parameters.password
       );
-      if (checkUser.length === 0) throw new Error('this user can not valid to login');
+      if (checkUser.length === 0) throw new Error(MESSAGES.AUTH.UN_VALID_REGISTER[3]);
       return checkUser[0];
     } catch (error) {
       console.log('Error in loginAsync', error);
@@ -62,7 +62,7 @@ export class UserService {
   public getUserByIdAsync = async (parameter: UserGetByParameter): Promise<User> => {
     try {
       const user = await this._userRepository.getByIdAsync(parameter.id);
-      if (!user) throw new Error('user not found');
+      if (!user) throw new Error(MESSAGES.USER.NOT_FOUND);
       return user;
     } catch (error) {
       console.log('Error in getUserByIdAsync', error);
@@ -73,7 +73,7 @@ export class UserService {
   public deleteUserAsync = async (parameter: UserGetByParameter): Promise<void> => {
     try {
       const user = await this._userRepository.getByIdAsync(parameter.id);
-      if (!user) throw new Error('user not found');
+      if (!user) throw new Error(MESSAGES.USER.NOT_FOUND);
       await this._userRepository.deleteAsync(user);
     } catch (error) {
       console.log('Error in deleteUserAsync', error);
@@ -84,9 +84,9 @@ export class UserService {
   public updateUserAsync = async (parameter: UserUpdateParameters): Promise<void> => {
     try {
       const user = await this._userRepository.getByIdAsync(parameter.id);
-      if (!user) throw new Error('user not found');
+      if (!user) throw new Error(MESSAGES.USER.NOT_FOUND);
       if (!parameter.fullName && !parameter.password)
-        throw new Error('please enter at lest one field');
+        throw new Error(MESSAGES.AUTH.UN_VALID_REGISTER[4]);
       user.fullName = parameter.fullName || user.fullName;
       user.password = parameter.password || user.password;
       await this._userRepository.updateAsync(user);
@@ -99,7 +99,7 @@ export class UserService {
   public LogoutAsync = async (parameter: UserGetByParameter): Promise<Date> => {
     try {
       const user = await this._userRepository.getByIdAsync(parameter.id);
-      if (!user) throw new Error('user not found');
+      if (!user) throw new Error(MESSAGES.USER.NOT_FOUND);
       user.lastActivity = new Date(Date.now());
       await this._userRepository.updateAsync(user);
       return user.lastActivity;
@@ -113,8 +113,8 @@ export class UserService {
     parameter: UserGetByParameter
   ): Promise<Conversation[]> => {
     try {
-      const user = await this._userRepository.getByIdAsync(parameter.id);
-      if (!user) throw new Error('user not found');
+      const user = await this._userRepository.getUserConversationsAsync(parameter.id);
+      if (!user) throw new Error(MESSAGES.USER.NOT_FOUND);
       return user.conversations;
     } catch (error) {
       console.log('Error in getUserConversationsAsync', error);

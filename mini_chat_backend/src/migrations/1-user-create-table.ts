@@ -8,7 +8,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       defaultValue: DataType.UUIDV4,
       primaryKey: true,
     },
-    fullName: {
+    full_name: {
       type: DataType.STRING,
       allowNull: false,
       unique: true,
@@ -21,17 +21,17 @@ export const up = async ({ context }: { context: Sequelize }) => {
     password: {
       type: DataType.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
-    lastActivity: {
+    last_activity: {
       type: DataType.DATE,
       allowNull: false,
     },
-    createdAt: {
+    created_at: {
       type: DataType.DATE,
       allowNull: false,
     },
-    updatedAt: {
+    updated_at: {
       type: DataType.DATE,
       allowNull: false,
     },

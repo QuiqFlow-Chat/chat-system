@@ -6,6 +6,7 @@
   "scripts": {
     "migrate": "ts-node src/migration_control/migrate.ts",
     "migrate:undo": "ts-node src/migration_control/revert.ts",
+    "seed": "ts-node src/seeders/seed.ts",
     "dev": "ts-node-dev src/app.ts",
     "format": "prettier --write ."
   },
