@@ -1,74 +1,89 @@
-// Password Validation Module
+import { InputController } from '../../../atoms/Input/index.js';
+
 export function setupPasswordValidation() {
-  const passwordInput = document.getElementById('password');
-  const passwordToggleBtn = document.querySelector('[data-toggle-btn]');
-//   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  const passwordElement = document.getElementById('password');
+  const toggleBtn = document.querySelector('[data-toggle-btn]');
+
+  if (!passwordElement) {
+    return {
+      validatePassword: () => true,
+      controller: null
+    };
+  }
+
+  const controller = new InputController(passwordElement);
+  const field = passwordElement.closest('[data-password-field]');
+  const errorElement = field?.querySelector('.invalid-feedback');
 
   // Toggle password visibility
-  passwordToggleBtn.addEventListener('click', function() {
-      const icon = this.querySelector('i');
-      const isPassword = passwordInput.type === 'password';
-      
-      passwordInput.type = isPassword ? 'text' : 'password';
-      icon.classList.toggle('fa-eye');
-      icon.classList.toggle('fa-eye-slash');
-      
-      this.setAttribute('aria-label', 
-          isPassword ? 'Hide password' : 'Show password');
+  toggleBtn?.addEventListener('click', function () {
+    const icon = this.querySelector('i');
+    const isPassword = controller.getValue() && controller.input.type === 'password';
+
+    controller.setType(isPassword ? 'text' : 'password');
+    icon?.classList.toggle('fa-eye');
+    icon?.classList.toggle('fa-eye-slash');
+
+    this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
   });
 
   function validatePassword() {
-    const passwordValue = passwordInput.value.trim();
-    const passwordField = passwordInput.closest('[data-password-field]');
-    const errorElement = passwordField.querySelector('.invalid-feedback');
-    
-    // Hide previous message first
-    errorElement.style.display = 'none';
-    passwordField.classList.remove('error');
-    
-    if (!passwordValue) {
-        showError(passwordField, errorElement, 'Password is required');
-        return false;
+    const value = controller.getValue().trim();
+
+    hideError();
+    controller.setValid(null); // Reset any previous state
+
+    if (!value) {
+      showError('Password is required');
+      controller.setValid(false);
+      return false;
     }
-    
-    if (passwordValue.length < 8) {
-        showError(passwordField, errorElement, 'Password must be at least 8 characters long');
-        return false;
+
+    if (value.length < 8) {
+      showError('Password must be at least 8 characters long');
+      controller.setValid(false);
+      return false;
     }
-    
-    if (!/[A-Za-z]/.test(passwordValue)) {
-        showError(passwordField, errorElement, 'Password must contain at least one letter');
-        return false;
+
+    if (!/[A-Za-z]/.test(value)) {
+      showError('Password must contain at least one letter');
+      controller.setValid(false);
+      return false;
     }
-    
-    if (!/\d/.test(passwordValue)) {
-        showError(passwordField, errorElement, 'Password must contain at least one number');
-        return false;
+
+    if (!/\d/.test(value)) {
+      showError('Password must contain at least one number');
+      controller.setValid(false);
+      return false;
     }
-    
-    if (!/[@$!%*#?&]/.test(passwordValue)) {
-        showError(passwordField, errorElement, 'Password must contain at least one special character (@$!%*#?&)');
-        return false;
+
+    if (!/[@$!%*#?&]/.test(value)) {
+      showError('Password must contain at least one special character (@$!%*#?&)');
+      controller.setValid(false);
+      return false;
     }
-    
+
+    controller.setValid(true);
     return true;
-}
-
-
-  function showError(field, errorElement, message) {
-      field.classList.add('error');
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
   }
 
-  function showSuccess(field) {
-      field.classList.remove('error');
-      const errorElement = field.querySelector('.invalid-feedback');
+  function showError(message) {
+    field?.classList.add('error');
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+    }
+  }
+
+  function hideError() {
+    field?.classList.remove('error');
+    if (errorElement) {
       errorElement.style.display = 'none';
+    }
   }
 
   return {
-      validatePassword,
-      passwordInput
+    validatePassword,
+    controller
   };
 }

@@ -1,43 +1,61 @@
+import { InputController } from '../../../atoms/Input/index.js';
+
 export function setupFullNameValidation() {
-    const fullNameInput = document.getElementById('fullName');
-    const wordSeparatorRegex = /\s+/; // Regex لفصل الكلمات
-    const minimumWordCount = 2;       // الحد الأدنى لعدد الكلمات
-  
-    function validateFullName() {
-      const nameValue = fullNameInput.value.trim();
-      const nameField = fullNameInput.closest('[data-fullname-field]');
-      const errorElement = nameField.querySelector('.invalid-feedback');
-  
-      if (!nameValue) {
-        showError(nameField, errorElement, 'Full name is required');
-        return false;
-      }
-  
-      const nameParts = nameValue.split(wordSeparatorRegex);
-      if (nameParts.length < minimumWordCount) {
-        showError(nameField, errorElement, 'Please enter at least first and last name');
-        return false;
-      }
-  
-      showSuccess(nameField);
-      return true;
+  const fullNameElement = document.getElementById('fullName');
+
+  if (!fullNameElement) {
+    return {
+      validateFullName: () => true,
+      controller: null
+    };
+  }
+
+  const controller = new InputController(fullNameElement);
+  const field = fullNameElement.closest('[data-fullname-field]');
+  const errorElement = field?.querySelector('.invalid-feedback');
+
+  const wordSeparatorRegex = /\s+/;
+  const minimumWordCount = 2;
+
+  function validateFullName() {
+    const value = controller.getValue().trim();
+
+    hideError();
+
+    if (!value) {
+      showError('Full name is required');
+      controller.setValid(false);
+      return false;
     }
-  
-    function showError(field, errorElement, message) {
-      field.classList.add('error');
+
+    const nameParts = value.split(wordSeparatorRegex);
+    if (nameParts.length < minimumWordCount) {
+      showError('Please enter at least first and last name');
+      controller.setValid(false);
+      return false;
+    }
+
+    controller.setValid(true);
+    return true;
+  }
+
+  function showError(message) {
+    field?.classList.add('error');
+    if (errorElement) {
       errorElement.textContent = message;
       errorElement.style.display = 'block';
     }
-  
-    function showSuccess(field) {
-      field.classList.remove('error');
-      const errorElement = field.querySelector('.invalid-feedback');
+  }
+
+  function hideError() {
+    field?.classList.remove('error');
+    if (errorElement) {
       errorElement.style.display = 'none';
     }
-  
-    return {
-      validateFullName,
-      fullNameInput
-    };
   }
-  
+
+  return {
+    validateFullName,
+    controller
+  };
+}
