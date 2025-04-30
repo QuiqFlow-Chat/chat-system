@@ -5,7 +5,7 @@ import {
   UserUpdateParameters,
 } from './../dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import { UserService } from '../services/userAuthService';
 
 export class UserController {
   constructor(private _userService: UserService) {}
@@ -72,7 +72,7 @@ export class UserController {
   public logoutUserAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const parameter: UserGetByParameter = req.body;
-      const lastActivity = await this._userService.logOutAsync(parameter);
+      const lastActivity = await this._userService.LogoutAsync(parameter);
       res.status(200).json(lastActivity);
     } catch (error) {
       next(error);
