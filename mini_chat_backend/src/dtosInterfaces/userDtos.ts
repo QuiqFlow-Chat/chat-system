@@ -19,3 +19,13 @@ export interface UserUpdateParameters {
   fullName: string;
   password: string;
 }
+
+export interface AuthResponse {
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+  };
+  token: string;
+}
+
