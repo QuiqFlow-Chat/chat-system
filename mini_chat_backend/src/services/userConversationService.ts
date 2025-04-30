@@ -1,75 +1,44 @@
-import { UserConversationGetByParameter, UserConversationCreateParameters } from '../dtosInterfaces/userConversationDtos';
+import { UserConversationGetByParameter } from '../dtosInterfaces/userConversationDtos';
 import UserConversation from '../models/UserConversation';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
-import { AppError } from '../middlewares/errorMiddlewares';
 
 export class UserConversationService {
-  constructor(private readonly userConversationRepository: UserConversationRepository) {}
+  constructor(private _userConversationRepository: UserConversationRepository) {}
 
-  /**
-   * Gets all user conversations
-   * @returns Array of user conversations
-   */
-  public async getAllUserConversationsAsync(): Promise<UserConversation[]> {
+  public getAllUserConversationsAsync = async (): Promise<UserConversation[]> => {
     try {
-      const userConversations = await this.userConversationRepository.getAllAsync();
-      if (userConversations.length === 0) {
-        throw AppError.notFound('No user conversations found');
-      }
+      const userConversations = await this._userConversationRepository.getAllAsync();
+      if (userConversations.length === 0) throw new Error('user conversations not found');
       return userConversations;
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in getAllUserConversationsAsync:', error);
-        throw AppError.badRequest('Failed to get all user conversations');
-      }
-      throw error;
+      console.log('error in getAllUserConversationsAsync', error);
+      throw new Error('faild to get all user conversations');
     }
-  }
+  };
 
-  /**
-   * Gets a user conversation by ID
-   * @param parameter The user conversation identifier
-   * @returns The user conversation
-   */
-  public async getUserConversationsByIdAsync(
+  public getUserConversationsByIdAsync = async (
     parameter: UserConversationGetByParameter
-  ): Promise<UserConversation> {
+  ): Promise<UserConversation> => {
     try {
-      const userConversation = await this.userConversationRepository.getByIdAsync(parameter.id);
-      if (!userConversation) {
-        throw AppError.notFound(`User conversation with ID ${parameter.id} not found`);
-      }
+      const userConversation = await this._userConversationRepository.getByIdAsync(parameter.id);
+      if (!userConversation) throw new Error('user conversation not found');
       return userConversation;
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in getUserConversationsByIdAsync:', error);
-        throw AppError.badRequest('Failed to get user conversation');
-      }
-      throw error;
+      console.log('error in getUserConversationsByIdAsync', error);
+      throw new Error('faild to get user conversations');
     }
-  }
+  };
 
-  
-  /**
-   * Deletes a user conversation by ID
-   * @param parameter The user conversation identifier
-   */
-  public async deleteUserConversationsAsync(
+  public deleteUserConversationsAsync = async (
     parameter: UserConversationGetByParameter
-  ): Promise<void> {
+  ): Promise<void> => {
     try {
-      const userConversation = await this.userConversationRepository.getByIdAsync(parameter.id);
-      if (!userConversation) {
-        throw AppError.notFound(`User conversation with ID ${parameter.id} not found`);
-      }
-      await this.userConversationRepository.deleteAsync(userConversation);
+      const userConversation = await this._userConversationRepository.getByIdAsync(parameter.id);
+      if (!userConversation) throw new Error('user conversation not found');
+      await this._userConversationRepository.deleteAsync(userConversation);
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in deleteUserConversationsAsync:', error);
-        throw AppError.badRequest('Failed to delete user conversation');
-      }
-      throw error;
+      console.log('error in deleteUserConversationsAsync', error);
+      throw new Error('faild to delete user conversations');
     }
-  }
-  
+  };
 }
