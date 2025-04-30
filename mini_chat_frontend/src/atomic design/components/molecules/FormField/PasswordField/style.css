@@ -19,4 +19,10 @@
     color: var(--quiqflow-color-grey);
     font-size: var(--quiqflow-font-size-xs);
     margin-top: 0.5rem;
+    display: none;
 }
+
+.password-sign-in-hint {
+    display: block;
+}
+
