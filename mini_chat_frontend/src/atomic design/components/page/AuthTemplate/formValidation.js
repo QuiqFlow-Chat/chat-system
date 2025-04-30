@@ -1,14 +1,16 @@
 import { setupEmailValidation } from '../../molecules/FormField/EmailField/index.js';
 import { setupPasswordValidation } from '../../molecules/FormField/PasswordField/index.js';
+import { setupConfirmPasswordValidation } from '../../molecules/FormField/ConfirmPasswordField/index.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
-    const loginForm = document.getElementById('loginForm');
+    // DOM Elements - use registerForm to match HTML
+    const registerForm = document.getElementById('registerForm');
     const submitButton = document.getElementById('submitButton');
     
     // Setup validation modules
     const { validateEmail, emailInput } = setupEmailValidation();
     const { validatePassword, passwordInput } = setupPasswordValidation();
+    const { validateConfirmPassword, confirmPasswordInput } = setupConfirmPasswordValidation(passwordInput);
     
     // Track if form has been submitted at least once
     let hasSubmitted = false;
@@ -16,16 +18,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Activate real-time validation after first submission
     function activateRealTimeValidation() {
         if (!hasSubmitted) {
-            emailInput.addEventListener('input', validateEmail);
-            passwordInput.addEventListener('input', validatePassword);
-            emailInput.addEventListener('blur', validateEmail);
-            passwordInput.addEventListener('blur', validatePassword);
+            emailInput?.addEventListener('input', validateEmail);
+            passwordInput?.addEventListener('input', validatePassword);
+            confirmPasswordInput?.addEventListener('input', validateConfirmPassword);
+            emailInput?.addEventListener('blur', validateEmail);
+            passwordInput?.addEventListener('blur', validatePassword);
+            confirmPasswordInput?.addEventListener('blur', validateConfirmPassword);
             hasSubmitted = true;
         }
     }
     
     // Form submission handler
-    loginForm.addEventListener('submit', function(e) {
+    registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
         // Clear any existing errors first
@@ -37,18 +41,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // Validate all fields
         const isEmailValid = validateEmail();
         const isPasswordValid = validatePassword();
+        // Only validate confirm password if the field exists
+        const isConfirmPasswordValid = confirmPasswordInput ? validateConfirmPassword() : true;
         
-        if (isEmailValid && isPasswordValid) {
+        if (isEmailValid && isPasswordValid && isConfirmPasswordValid) {
             // Form is valid - you can submit data to server here
             submitButton.disabled = true;
-            submitButton.textContent = 'Logging in...';
+            submitButton.textContent = 'Signing up...'; // Changed to match "Sign Up"
             
             // Simulate API call
             setTimeout(() => {
-                alert('Login successful! (This is a demo)');
+                alert('Registration successful! (This is a demo)');
                 submitButton.disabled = false;
-                submitButton.textContent = 'Log In';
-                loginForm.reset();
+                submitButton.textContent = 'Sign Up';
+                registerForm.reset();
             }, 1500);
         } else {
             // Activate real-time validation after first failed submission
