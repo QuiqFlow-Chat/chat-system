@@ -4,7 +4,7 @@ export function setupConfirmPasswordValidation(passwordInput) {
     
     // Check if elements exist before proceeding
     if (!confirmPasswordInput) {
-        console.error('Confirm password input not found');
+        // console.error('Confirm password input not found');
         return {
             validateConfirmPassword: () => true,
             confirmPasswordInput: null
