@@ -57,7 +57,7 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
   @ForeignKey(() => Conversation)
   conversationId!: string;
 
-  @Column({ type: DataType.BOOLEAN, allowNull: false, field: 'is_read' })
+  @Column({ type: DataType.BOOLEAN, allowNull: true, field: 'is_read' })
   isRead!: boolean;
 
   @CreatedAt

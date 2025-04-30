@@ -3,6 +3,7 @@ import { ConversationsRepository } from './../repositories/conversationsReposito
 import { Application } from 'express';
 import { BaseRoute } from './baseRoute';
 import { ConversationController } from '../controller/conversationController';
+import { AuthMiddleware } from '../middlewares/authMiddlewares';
 
 export class ConversationRoute extends BaseRoute {
   conversationRepository: ConversationsRepository;
@@ -18,25 +19,29 @@ export class ConversationRoute extends BaseRoute {
     this.initDeleteHttpMethod();
   }
   private initPostHttpMethod = async () => {
-    this.router.post('/addConversationAsync', this.conversationController.addConversationAsync);
+    this.router.post('/addConversationAsync', AuthMiddleware.authenticate, this.conversationController.addConversationAsync);
     this.router.post(
       '/getConversationByIdAsync',
+      AuthMiddleware.authenticate,
       this.conversationController.getConversationByIdAsync
     );
     this.router.post(
       '/getConversationMessagesAsync',
+      AuthMiddleware.authenticate,
       this.conversationController.getConversationMessagesAsync
     );
   };
   private initGetHttpMethod = async () => {
     this.router.get(
       '/getAllConversationsAsync',
+      AuthMiddleware.authenticate,
       this.conversationController.getAllConversationsAsync
     );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteConversationAsync',
+      AuthMiddleware.authenticate,
       this.conversationController.deleteConversationAsync
     );
   };

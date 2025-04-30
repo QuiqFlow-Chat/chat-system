@@ -53,10 +53,10 @@ export class UserService {
 
   public LoginAsync = async (parameters: UserLoginParameters): Promise<AuthResponse> => {
     try {
+      
       const users = await this._userRepository.getAllAsync();
       const checkUser = users.filter(
-        (u) => u.email === parameters.email && u.password === parameters.password
-      );
+        (u) => u.email === parameters.email);
       if (checkUser.length === 0) throw new Error(MESSAGES.AUTH.UN_VALID_REGISTER[3]);
       
 
