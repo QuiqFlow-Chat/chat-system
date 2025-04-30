@@ -1,11 +1,13 @@
 .form-group {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .invalid-feedback {
+  color: var(--quiqflow-color-error);
   display: none;
   font-size: var(--quiqflow-font-size-xs);
-  color: var(--quiqflow-color-error);
   margin-top: 0.25rem;
 }
 

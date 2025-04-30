@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!-- All styles -->
+    <link rel="stylesheet" href="./styles/app.css" />
+  </head>
+  <body>
+    <div class="register-page">
+      <img
+        class="primary-logo"
+        width="461"
+        height="90"
+        src="https://quiqflow.com/wp-content/uploads/2024/01/logo.png"
+        alt="quiqflow-logo"
+      />
+
+      <div class="register-container">
+        <!-- Header -->
+        <header class="register-header">
+          <h1 class="register-title">Sign Up</h1>
+        </header>
+
+        <!-- Form -->
+        <form id="registerForm" novalidate>
+          <!-- Full Name Field -->
+          <div class="form-group" data-fullname-field>
+            <!-- Label -->
+            <label for="fullName" class="label" data-label>Full Name</label>
+
+            <!-- Input -->
+            <input
+              type="text"
+              id="fullName"
+              class="input auth-input"
+              placeholder="Enter your full name"
+              required
+              data-input
+            />
+            <p class="invalid-feedback">Please enter your name</p>
+          </div>
+          <!-- Email Field -->
+          <div class="form-group" data-email-field>
+            <!-- Label -->
+            <label for="email" class="label" data-label>Email</label>
+
+            <!-- Input -->
+            <input
+              type="email"
+              id="email"
+              class="input auth-input"
+              placeholder="Enter your email"
+              required
+              data-input
+            />
+
+            <p class="invalid-feedback">Please enter a valid email address</p>
+          </div>
+          <!-- Password Field -->
+          <div class="form-group" data-password-field>
+            <!-- Label -->
+            <label for="password" class="label" data-label>Password</label>
+
+            <div class="password-wrapper">
+              <!-- Input -->
+              <input
+                type="password"
+                id="password"
+                class="input auth-input"
+                placeholder="Enter your password"
+                required
+                minlength="8"
+                data-input
+              />
+
+              <!-- Toggle -->
+              <button
+                type="button"
+                class="password-toggle"
+                aria-label="Toggle password visibility"
+                data-toggle-btn
+              >
+                <i class="fa-regular fa-eye-slash"></i>
+              </button>
+            </div>
+
+            <!-- error message -->
+            <p class="invalid-feedback">
+              Password must be at least 8 characters
+            </p>
+          </div>
+          <!-- confirm password -->
+          <div class="form-group" data-confirm-password-field>
+            <!-- Label -->
+            <label for="confirm-password" class="label" data-label
+              >Confirm Password</label
+            >
+
+            <div class="password-wrapper">
+              <!-- Input -->
+              <input
+                type="password"
+                id="confirm-password"
+                class="input auth-input"
+                placeholder="Re-enter your password"
+                required
+                minlength="8"
+                data-input
+              />
+
+              <!-- error message -->
+              <p class="invalid-feedback">Passwords do not match</p>
+            </div>
+            <!-- Hint -->
+            <p class="password-hint password-sign-up-hint">
+              Use 8 or more characters with a mix of letters, numbers & symbols
+            </p>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="button-container">
+            <button
+              type="submit"
+              class="button button-primary"
+              id="submitButton"
+            >
+              Sign Up
+            </button>
+          </div>
+
+          <p class="register-subtext">
+            Already have an account?
+            <a href="/login" class="register-link">Log in</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <script
+      type="module"
+      src="./components/page/AuthTemplate/formValidation.js"
+    ></script>
+  </body>
+</html>

@@ -1,61 +1,97 @@
-import { InputController } from '../components/atoms/Input/index.js';
-import { LabelController } from '../components/atoms/Lable/index.js';
+import { InputController } from '../../../atoms/Input/index.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // input
-  const passwordInputEl = document.getElementById('password');
-  const passwordInput = new InputController(passwordInputEl);
+export function setupPasswordValidation() {
+  const passwordElement = document.getElementById('password');
+  const toggleBtn = document.querySelector('[data-toggle-btn]');
 
-  // label
-  const passwordLabelEl = document.querySelector('label[for="password"]');
-  const passwordLabel = new LabelController(passwordLabelEl);
-
-  // button toggle
-  const toggleBtnEl = document.querySelector('.password-toggle');
-  const toggleBtn = toggleBtnEl;
-
-  const strengthBars = document.querySelectorAll('.password-strength .strength-bar');
-
-  const passwordHint = document.querySelector('.password-hint');
-  const invalidFeedback = document.querySelector('.invalid-feedback');
-
-  toggleBtn.addEventListener('click', () => {
-    const type = passwordInput.getValue() && passwordInput.input.type === 'password' ? 'text' : 'password';
-    passwordInput.setType(type);
-  });
-
-  passwordInput.on('input', (e) => {
-    const value = e.detail;
-    updatePasswordStrength(value);
-    validatePassword(value);
-  });
-
-  function updatePasswordStrength(password) {
-    let strength = 0;
-
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-    strengthBars.forEach((bar, index) => {
-      if (index < strength) {
-        bar.style.backgroundColor = 'green';
-      } else {
-        bar.style.backgroundColor = 'lightgray';
-      }
-    });
+  if (!passwordElement) {
+    return {
+      validatePassword: () => true,
+      controller: null
+    };
   }
 
-  function validatePassword(password) {
-    if (password.length < 8) {
-      passwordInput.setValid(false);
-      invalidFeedback.style.display = 'block';
-    } else {
-      passwordInput.setValid(true);
-      invalidFeedback.style.display = 'none';
+  const controller = new InputController(passwordElement);
+  const field = passwordElement.closest('[data-password-field]');
+  const errorElement = field?.querySelector('.invalid-feedback');
+
+
+  const MIN_LENGTH_REGEX = /^.{8,}$/; 
+  const CONTAINS_LETTER_REGEX = /[A-Za-z]/; 
+  const CONTAINS_NUMBER_REGEX = /\d/; 
+  const CONTAINS_SPECIAL_CHAR_REGEX = /[@$!%*#?&]/; 
+
+  controller.on('custom-input', validatePassword);
+
+  // Toggle password visibility
+  toggleBtn?.addEventListener('click', function () {
+    const icon = this.querySelector('i');
+    const isPassword = controller.getValue() && controller.input.type === 'password';
+
+    controller.setType(isPassword ? 'text' : 'password');
+    icon?.classList.toggle('fa-eye');
+    icon?.classList.toggle('fa-eye-slash');
+
+    this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+  });
+
+  function validatePassword() {
+    const value = controller.getValue().trim();
+
+    hideError();
+    controller.setValid(null); // Reset any previous state
+
+    if (!value) {
+      showError('Password is required');
+      controller.setValid(false);
+      return false;
+    }
+
+    if (!MIN_LENGTH_REGEX.test(value)) {
+      showError('Password must be at least 8 characters long');
+      controller.setValid(false);
+      return false;
+    }
+
+    if (!CONTAINS_LETTER_REGEX.test(value)) {
+      showError('Password must contain at least one letter');
+      controller.setValid(false);
+      return false;
+    }
+
+    if (!CONTAINS_NUMBER_REGEX.test(value)) {
+      showError('Password must contain at least one number');
+      controller.setValid(false);
+      return false;
+    }
+
+    if (!CONTAINS_SPECIAL_CHAR_REGEX.test(value)) {
+      showError('Password must contain at least one special character (@$!%*#?&)');
+      controller.setValid(false);
+      return false;
+    }
+
+    controller.setValid(true);
+    return true;
+  }
+
+  function showError(message) {
+    field?.classList.add('error');
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
     }
   }
 
-});
+  function hideError() {
+    field?.classList.remove('error');
+    if (errorElement) {
+      errorElement.style.display = 'none';
+    }
+  }
+
+  return {
+    validatePassword,
+    controller
+  };
+}
