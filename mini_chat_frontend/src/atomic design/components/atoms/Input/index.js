@@ -1,5 +1,3 @@
-// components/atoms/Input/InputController.js
-
 class InputController {
   constructor(inputElement) {
     this.input = inputElement;
@@ -15,17 +13,17 @@ class InputController {
 
   // Handle input events
   handleInput(event) {
-    this.emit('input', event.target.value);
+    this.emit('custom-input', event.target.value); // ✅ تم تغيير الاسم لتفادي التكرار
   }
 
   handleFocus() {
     this.input.classList.add('is-focused');
-    this.emit('focus');
+    // this.emit('custom-focus');
   }
 
   handleBlur() {
     this.input.classList.remove('is-focused');
-    this.emit('blur');
+    // this.emit('custom-blur');
   }
 
   // Custom event listeners
@@ -42,7 +40,7 @@ class InputController {
   // Control input value
   setValue(value) {
     this.input.value = value;
-    this.emit('change', value);
+    this.emit('custom-change', value); // ✅ تم تغيير الاسم
     return this;
   }
 
@@ -99,8 +97,3 @@ function initInputs() {
 
 // Export for use in other files
 export { InputController, initInputs };
-
-// Auto-initialize on DOM load
-document.addEventListener('DOMContentLoaded', () => {
-  window.inputs = initInputs(); // For console access
-});

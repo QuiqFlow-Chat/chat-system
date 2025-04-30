@@ -1,10 +1,16 @@
-.auth-container {
+.register-page {
     background-color: var(--quiqflow-color-white);
     box-sizing: border-box;
     display: grid;
+    grid-template-rows: 0fr  1fr;
     min-height: 100vh;
-    padding: 2rem var(--quiqflow-spacing-xs);
+    padding: 1rem ;
     place-items: center;
     width: 100%;
 }
 
+.primary-logo {
+    height: auto; 
+    margin: 1rem;
+    width: 240px; 
+  }
