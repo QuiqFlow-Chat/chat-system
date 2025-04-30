@@ -3,6 +3,7 @@ import { BaseRoute } from './baseRoute';
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { MessageService } from '../services/messageService';
 import { MessageController } from '../controller/messageController';
+import { AuthMiddleware } from '../middlewares/authMiddlewares';
 
 export class MessageRoute extends BaseRoute {
   messageRepository: MessageRepository;
@@ -18,15 +19,16 @@ export class MessageRoute extends BaseRoute {
     this.initDeleteHttpMethod();
   }
   private initPostHttpMethod = async () => {
-    this.router.post('/addMessageAsync', this.messageController.addMessageAsync);
-    this.router.post('/updateMessageStatusAsync', this.messageController.updateMessageStatusAsync);
+    this.router.post('/addMessageAsync', AuthMiddleware.authenticate, this.messageController.addMessageAsync);
+    this.router.post('/updateMessageStatusAsync', AuthMiddleware.authenticate, this.messageController.updateMessageStatusAsync);
   };
   private initDeleteHttpMethod = async () => {
-    this.router.delete('/deleteMessageAsync', this.messageController.deleteMessageAsync);
+    this.router.delete('/deleteMessageAsync', AuthMiddleware.authenticate, this.messageController.deleteMessageAsync);
   };
   private initUpdateHttpMethod = async () => {
     this.router.patch(
       '/updateMessageContentAsync',
+      AuthMiddleware.authenticate,
       this.messageController.updateMessageContentAsync
     );
   };
