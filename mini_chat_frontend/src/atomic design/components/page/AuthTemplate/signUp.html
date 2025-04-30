@@ -6,7 +6,24 @@
     </header>
 
     <!-- Form -->
-    <form id="loginForm" novalidate>
+    <form id="registerForm" novalidate>
+      <!-- Full Name Field -->
+      <div class="form-group" data-fullname-field>
+        <!-- Label -->
+        <label for="fullName" class="label" data-label>Email</label>
+        
+        <!-- Input -->
+        <input 
+          type="text"
+          id="fullName" 
+          class="input auth-input" 
+          placeholder="Enter your full name" 
+          required
+          data-input
+        >
+        <p class="invalid-feedback">Please enter a valid email address</p>
+      </div>
+
       <!-- Email Field -->
       <div class="form-group" data-email-field>
         <!-- Label -->
@@ -49,7 +66,7 @@
             aria-label="Toggle password visibility"
             data-toggle-btn
           >
-            <i class="fa-regular fa-eye"></i>
+            <i class="fa-regular fa-eye-slash"></i>
           </button>
         </div>
 
