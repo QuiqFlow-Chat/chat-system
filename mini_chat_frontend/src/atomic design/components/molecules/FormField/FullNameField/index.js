@@ -14,8 +14,10 @@ export function setupFullNameValidation() {
   const field = fullNameElement.closest('[data-fullname-field]');
   const errorElement = field?.querySelector('.invalid-feedback');
 
-  const wordSeparatorRegex = /\s+/;
-  const minimumWordCount = 2;
+  const WORD_SEPARATOR_REGEX = /\s+/; 
+  const MINIMUM_WORD_COUNT = 2; 
+
+  controller.on('custom-input', validateFullName);
 
   function validateFullName() {
     const value = controller.getValue().trim();
@@ -28,8 +30,8 @@ export function setupFullNameValidation() {
       return false;
     }
 
-    const nameParts = value.split(wordSeparatorRegex);
-    if (nameParts.length < minimumWordCount) {
+    const nameParts = value.split(WORD_SEPARATOR_REGEX);
+    if (nameParts.length < MINIMUM_WORD_COUNT) {
       showError('Please enter at least first and last name');
       controller.setValid(false);
       return false;

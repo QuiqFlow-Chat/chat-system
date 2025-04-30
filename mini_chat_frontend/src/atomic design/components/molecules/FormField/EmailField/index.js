@@ -3,44 +3,51 @@ import { InputController } from '../../../atoms/Input/index.js';
 export function setupEmailValidation() {
   const emailElement = document.getElementById('email');
   const controller = new InputController(emailElement);
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const emailField = emailElement.closest('[data-email-field]');
+  const errorElement = emailField?.querySelector('.invalid-feedback');
+
+  controller.on('custom-input', validateEmail);
 
   function validateEmail() {
     const emailValue = controller.getValue().trim();
-    const emailField = emailElement.closest('[data-email-field]');
-    const errorElement = emailField.querySelector('.invalid-feedback');
 
     if (!emailValue) {
-      showError(emailField, errorElement, 'Email is required');
+      showError('Email is required');
       controller.setValid(false);
       return false;
     }
 
-    if (!emailRegex.test(emailValue)) {
-      showError(emailField, errorElement, 'Please enter a valid email address');
+    if (!EMAIL_REGEX.test(emailValue)) {
+      showError('Please enter a valid email address');
       controller.setValid(false);
       return false;
     }
 
-    showSuccess(emailField);
+    showSuccess();
     controller.setValid(true);
     return true;
   }
 
-  function showError(field, errorElement, message) {
-    field.classList.add('error');
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
+  function showError(message) {
+    emailField?.classList.add('error');
+    if (errorElement) {
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+    }
   }
 
-  function showSuccess(field) {
-    field.classList.remove('error');
-    const errorElement = field.querySelector('.invalid-feedback');
-    errorElement.style.display = 'none';
+  function showSuccess() {
+    emailField?.classList.remove('error');
+    if (errorElement) {
+      errorElement.style.display = 'none';
+    }
   }
 
   return {
     validateEmail,
-    controller 
+    controller
   };
 }
