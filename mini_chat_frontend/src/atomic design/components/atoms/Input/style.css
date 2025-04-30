@@ -23,7 +23,6 @@ input:focus{
 
 .auth-input:focus {
   background-color: var(--quiqflow-color-bg-secondary);
-  box-shadow: var(--quiqflow-box-shadow-focus);
   outline: none;
 }
 
