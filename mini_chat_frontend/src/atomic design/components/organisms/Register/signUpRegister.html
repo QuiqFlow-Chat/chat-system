@@ -6,6 +6,22 @@
 
   <!-- Form -->
   <form id="registerForm" novalidate>
+    <!-- Full Name Field -->
+    <div class="form-group" data-fullname-field>
+      <!-- Label -->
+      <label for="fullName" class="label" data-label>Full Name</label>
+
+      <!-- Input -->
+      <input
+        type="text"
+        id="fullName"
+        class="input auth-input"
+        placeholder="Enter your full name"
+        required
+        data-input
+      />
+      <p class="invalid-feedback">Please enter a valid email address</p>
+    </div>
     <!-- Email Field -->
     <div class="form-group" data-email-field>
       <!-- Label -->
@@ -48,50 +64,57 @@
           aria-label="Toggle password visibility"
           data-toggle-btn
         >
-          <i class="fa-regular fa-eye"></i>
+          <i class="fa-regular fa-eye-slash"></i>
         </button>
       </div>
 
       <!-- error message -->
-      <p class="invalid-feedback">Password must be at least 8 characters</p>
+      <p class="invalid-feedback">
+        Password must be at least 8 characters
+      </p>
+    </div>
 
+    <div class="form-group" data-confirm-password-field>
+      <!-- Label -->
+      <label for="confirm-password" class="label" data-label
+        >Confirm Password</label
+      >
+
+      <div class="password-wrapper">
+        <!-- Input -->
+        <input
+          type="password"
+          id="confirm-password"
+          class="input auth-input"
+          placeholder="Re-enter your password"
+          required
+          minlength="8"
+          data-input
+        />
+
+        <!-- error message -->
+        <p class="invalid-feedback">Passwords do not match</p>
+      </div>
       <!-- Hint -->
-      <p class="password-hint password-sign-in-hint">
+      <p class="password-hint password-sign-up-hint">
         Use 8 or more characters with a mix of letters, numbers & symbols
       </p>
     </div>
 
-    <!-- confirm-password -->
-    <div class="form-group" data-confirm-password-field>
-        <!-- Label -->
-        <label for="confirm-password" class="label" data-label>Confirm Password</label>
-      
-        <div class="password-wrapper">
-          <!-- Input -->
-          <input 
-            type="password" 
-            id="confirm-password" 
-            class="input auth-input" 
-            placeholder="Re-enter your password" 
-            required 
-            minlength="8" 
-            data-input
-          >
-    
-      <!-- error message -->
-      <p class="invalid-feedback">Passwords do not match</p>
-    </div>    
-  </div>
-
     <!-- Submit Button -->
     <div class="button-container">
-      <button type="submit" class="button button-primary" id="submitButton">
+      <button
+        type="submit"
+        class="button button-primary"
+        id="submitButton"
+      >
         Sign Up
       </button>
     </div>
 
     <p class="register-subtext">
-        Already have an account? <a href="/login" class="register-link">Log in</a>
-      </p>
+      Already have an account?
+      <a href="/login" class="register-link">Log in</a>
+    </p>
   </form>
 </div>

@@ -1,10 +1,14 @@
 .register-page {
     background-color: var(--quiqflow-color-white);
     box-sizing: border-box;
-    display: grid;
     min-height: 100vh;
-    padding: 2rem var(--quiqflow-spacing-xs);
+    padding: 1rem ;
     place-items: center;
     width: 100%;
 }
 
+.primary-logo {
+    width: 280px; 
+    height: auto; 
+    margin: 1rem;
+  }

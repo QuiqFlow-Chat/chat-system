@@ -13,8 +13,14 @@
     width: 100%;
 }
 
+#registerForm{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .register-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     text-align: center;
 }
 
