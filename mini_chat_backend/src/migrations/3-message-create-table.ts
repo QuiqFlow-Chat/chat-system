@@ -13,8 +13,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       allowNull: false,
       type: DataType.STRING,
     },
-    senderId: {
-      // Changed from userId to senderId
+    sender_id: {
       allowNull: false,
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
@@ -23,8 +22,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
         key: 'id',
       },
     },
-
-    conversationId: {
+    conversation_id: {
       allowNull: false,
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
@@ -33,16 +31,15 @@ export const up = async ({ context }: { context: Sequelize }) => {
         key: 'id',
       },
     },
-
-    createdAt: {
-      // Changed from CreatedAt
+    is_read: {
+      allowNull: true,
+      type: DataType.BOOLEAN,
+    },
+    created_at: {
       allowNull: false,
       type: DataType.DATE,
     },
-
-    updatedAt: {
-      // Changed from UpdatedAt
-      allowNull: false,
+    updated_at: {
       type: DataType.DATE,
     },
   });

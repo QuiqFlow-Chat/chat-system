@@ -1,5 +1,4 @@
 import {
-  AllowNull,
   BelongsToMany,
   Column,
   CreatedAt,
@@ -26,7 +25,7 @@ interface UserAttributes {
 }
 
 @Table({ tableName: 'Users', timestamps: true })
-class User extends Model<User> implements UserAttributes {
+class User extends Model<UserAttributes> implements UserAttributes {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
@@ -36,37 +35,37 @@ class User extends Model<User> implements UserAttributes {
 
   @Column({
     type: DataType.STRING,
+    allowNull: false,
+    field: 'full_name',
   })
-  @Unique
-  @AllowNull(false)
   fullName!: string;
 
   @Column({
     type: DataType.STRING,
+    allowNull: false,
+    unique: true, // جعل البريد الإلكتروني فريدًا
   })
-  @Unique
-  @AllowNull(false)
   email!: string;
 
   @Column({
     type: DataType.STRING,
+    allowNull: false,
   })
-  @AllowNull(false)
   password!: string;
 
   @Column({
     type: DataType.DATE,
+    field: 'last_activity',
+    allowNull: true,
   })
   lastActivity!: Date;
 
   @CreatedAt
-  @Column({ type: DataType.DATE })
-  @AllowNull(false)
+  @Column({ type: DataType.DATE, allowNull: false, field: 'created_at' })
   createdAt!: Date;
 
   @UpdatedAt
-  @Column({ type: DataType.DATE })
-  @AllowNull(false)
+  @Column({ type: DataType.DATE, allowNull: false, field: 'updated_at' })
   updatedAt!: Date;
 
   @HasMany(() => Message)
@@ -75,4 +74,5 @@ class User extends Model<User> implements UserAttributes {
   @BelongsToMany(() => Conversation, () => UserConversation)
   conversations!: Conversation[];
 }
+
 export default User;

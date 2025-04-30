@@ -8,7 +8,7 @@ export class AuthMiddleware {
   /**
    * Middleware to verify JWT token and attach user data to the request object.
    */
-  static authenticate(req: Request, res: Response, next: NextFunction): void {
+  static authenticate = (req: Request, res: Response, next: NextFunction): void => {
     try {
       const authHeader = req.headers.authorization;
 
@@ -31,5 +31,5 @@ export class AuthMiddleware {
         next(err);
       }
     }
-  }
+  };
 }

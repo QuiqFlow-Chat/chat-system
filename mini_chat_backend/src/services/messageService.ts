@@ -4,29 +4,30 @@ import { MessageCreateParameters, MessageGetByParameter } from '../dtosInterface
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';
-import UserConversation from '../models/UserConversation';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
-import { waitForDebugger } from 'inspector';
+import { MESSAGES } from '../constants/message';
 
 export class MessageService {
-  constructor(
-    private _messageRepository: MessageRepository,
-    private _userRepository: UserRepository,
-    private _conversationRepositpry: ConversationsRepository,
-    private _userConversationRepository: UserConversationRepository
-  ) {}
+  _userRepository: UserRepository;
+  _conversationRepositpry: ConversationsRepository;
+  _userConversationRepository: UserConversationRepository;
+  constructor(private _messageRepository: MessageRepository) {
+    this._userRepository = new UserRepository();
+    this._conversationRepositpry = new ConversationsRepository();
+    this._userConversationRepository = new UserConversationRepository();
+  }
 
   public addMessageAsync = async (parameters: MessageCreateParameters): Promise<void> => {
     try {
       if (!parameters.content || !parameters.conversationId || !parameters.senderId)
-        throw new Error('senderId , conversationId and message content are required');
-      if (parameters.content.length === 0) throw new Error('you can not send empty message');
+        throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[0]);
+      if (parameters.content.length === 0) throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[1]);
       const sender = await this._userRepository.getByIdAsync(parameters.senderId);
-      if (!sender) throw new Error('sender not found');
+      if (!sender) throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
       const conversation = await this._conversationRepositpry.getByIdAsync(
         parameters.conversationId
       );
-      if (!conversation) throw new Error('conversation not found');
+      if (!conversation) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       const message = await this._messageRepository.addAsync(parameters);
       message.isRead = false;
       await this._messageRepository.updateAsync(message);
@@ -51,7 +52,7 @@ export class MessageService {
   public deleteMessageAsync = async (parameter: MessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameter.id);
-      if (!message) throw new Error('message not found');
+      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       await this._messageRepository.deleteAsync(message);
     } catch (error) {
       console.log('error in deleteMessageAsync', error);
@@ -62,7 +63,7 @@ export class MessageService {
   public updateMessageContentAsync = async (parameters: MessageUpdateParameters): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameters.id);
-      if (!message) throw new Error('message not found');
+      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       message.content = parameters.content || message.content;
       await this._messageRepository.updateAsync(message);
     } catch (error) {
@@ -74,7 +75,7 @@ export class MessageService {
   public updateMessageStatusAsync = async (parameter: MessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameter.id);
-      if (!message) throw new Error('message not found');
+      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       message.isRead = true;
       await this._messageRepository.updateAsync(message);
     } catch (error) {

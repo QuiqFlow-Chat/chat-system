@@ -11,28 +11,32 @@ interface UserConversationCreateAttributes {
 @Table({
   tableName: 'UserConversations',
 })
-class UserConversation extends Model<UserConversation> implements UserConversationCreateAttributes {
+class UserConversation
+  extends Model<UserConversationCreateAttributes>
+  implements UserConversationCreateAttributes
+{
+  @PrimaryKey
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
-  @PrimaryKey
   id!: string;
 
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
     allowNull: false,
+    field: 'user_id',
   })
   @ForeignKey(() => User)
   userId!: string;
 
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
     allowNull: false,
+    field: 'conversation_id',
   })
   @ForeignKey(() => Conversation)
   conversationId!: string;
 }
+
 export default UserConversation;

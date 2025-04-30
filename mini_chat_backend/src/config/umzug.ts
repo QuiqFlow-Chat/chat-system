@@ -1,6 +1,5 @@
 import { SequelizeStorage, Umzug } from 'umzug';
 import DataBase from './database';
-import path from 'path';
 
 const sequelize = DataBase.getDbInstance();
 const umzug = new Umzug({

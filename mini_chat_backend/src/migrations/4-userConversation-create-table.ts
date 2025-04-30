@@ -10,7 +10,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       defaultValue: DataType.UUIDV4,
     },
 
-    userId: {
+    user_id: {
       allowNull: false,
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
@@ -20,7 +20,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       },
     },
 
-    conversationId: {
+    conversation_id: {
       allowNull: false,
       type: DataType.UUID,
       defaultValue: DataType.UUIDV4,
@@ -30,12 +30,12 @@ export const up = async ({ context }: { context: Sequelize }) => {
       },
     },
 
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: DataType.DATE,
     },
 
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: DataType.DATE,
     },
