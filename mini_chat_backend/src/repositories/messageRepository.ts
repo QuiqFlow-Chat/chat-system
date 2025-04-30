@@ -1,4 +1,5 @@
 import Message from '../models/Message';
+import User from '../models/User';
 import { IGenericRepository } from './genericRepositoryInterface';
 
 export class MessageRepository implements IGenericRepository<Message> {
@@ -44,4 +45,6 @@ export class MessageRepository implements IGenericRepository<Message> {
       throw new Error(`Failed to update message`);
     }
   }
+
+
 }

@@ -1,65 +1,112 @@
-import { ConversaionGetByParameter } from './../dtosInterfaces/conversationDtos';
+import { ConversaionGetByParameter } from '../dtosInterfaces/conversationDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import Conversation from '../models/Conversation';
 import Message from '../models/Message';
+import { AppError } from '../middlewares/errorMiddlewares';
 
 export class ConversationService {
-  constructor(private _conversationRepository: ConversationsRepository) {}
+  constructor(private readonly conversationRepository: ConversationsRepository) {}
 
-  public addConversationAsync = async (): Promise<void> => {
+  /**
+   * Creates a new conversation
+   */
+  public async addConversationAsync(): Promise<void> {
     try {
-      await this._conversationRepository.addAsync();
+      await this.conversationRepository.addAsync();
     } catch (error) {
-      console.log('error in addConversationAsync', error);
-      throw new Error('faild to add new conversation');
+      console.error('Error in addConversationAsync:', error);
+      throw AppError.badRequest('Failed to add new conversation');
     }
-  };
+  }
 
-  public deleteConversationAsync = async (parameter: ConversaionGetByParameter): Promise<void> => {
+  /**
+   * Deletes a conversation by its ID
+   * @param parameter The conversation identifier
+   */
+  public async deleteConversationAsync(parameter: ConversaionGetByParameter): Promise<void> {
     try {
-      const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
-      if (!conversation) throw new Error('conversation not found');
-      await this._conversationRepository.deleteAsync(conversation);
+      const conversation = await this.conversationRepository.getByIdAsync(parameter.id);
+      if (!conversation) {
+        throw AppError.notFound(`Conversation with ID ${parameter.id} not found`);
+      }
+      await this.conversationRepository.deleteAsync(conversation);
     } catch (error) {
-      console.log('error in deleteConversationAsync', error);
-      throw new Error('faild to delete conversation');
+      if (!(error instanceof AppError)) {
+        console.error('Error in deleteConversationAsync:', error);
+        throw AppError.badRequest(`Failed to delete conversation ${parameter.id}`);
+      }
+      throw error;
     }
-  };
+  }
 
-  public getAllConversationsAsync = async (): Promise<Conversation[]> => {
+  /**
+   * Gets all conversations
+   * @returns Array of all conversations
+   */
+  public async getAllConversationsAsync(): Promise<Conversation[]> {
     try {
-      const conversations = await this._conversationRepository.getAllAsync();
-      if (!conversations) throw new Error('conversations not found');
+      const conversations = await this.conversationRepository.getAllAsync();
+      if (conversations.length === 0) {
+        throw AppError.notFound('No conversations found');
+      }
       return conversations;
     } catch (error) {
-      console.log('error in getAllConversationsAsync', error);
-      throw new Error('faild to get all conversations');
+      if (!(error instanceof AppError)) {
+        console.error('Error in getAllConversationsAsync:', error);
+        throw AppError.badRequest('Failed to get all conversations');
+      }
+      throw error;
     }
-  };
+  }
 
-  public getConversationByIdAsync = async (
+  /**
+   * Gets a conversation by its ID
+   * @param parameter The conversation identifier
+   * @returns The specified conversation
+   */
+  public async getConversationByIdAsync(
     parameter: ConversaionGetByParameter
-  ): Promise<Conversation> => {
+  ): Promise<Conversation> {
     try {
-      const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
-      if (!conversation) throw new Error('conversation not found');
+      const conversation = await this.conversationRepository.getByIdAsync(parameter.id);
+      if (!conversation) {
+        throw AppError.notFound(`Conversation with ID ${parameter.id} not found`);
+      }
       return conversation;
     } catch (error) {
-      console.log('error in getConversationByIdAsync', error);
-      throw new Error('faild to get conversation');
+      if (!(error instanceof AppError)) {
+        console.error('Error in getConversationByIdAsync:', error);
+        throw AppError.badRequest(`Failed to get conversation ${parameter.id}`);
+      }
+      throw error;
     }
-  };
+  }
 
-  public getConversationMessagesAsync = async (
+  /**
+   * Gets all messages for a specific conversation
+   * @param parameter The conversation identifier
+   * @returns Array of messages in the conversation
+   */
+  public async getConversationMessagesAsync(
     parameter: ConversaionGetByParameter
-  ): Promise<Message[]> => {
+  ): Promise<Message[]> {
     try {
-      const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
-      if (!conversation) throw new Error('conversation not found');
+      const conversation = await this.conversationRepository.getByIdAsync(parameter.id);
+      if (!conversation) {
+        throw AppError.notFound(`Conversation with ID ${parameter.id} not found`);
+      }
+      
+      if (!conversation.messages || conversation.messages.length === 0) {
+        throw AppError.notFound(`No messages found in conversation ${parameter.id}`);
+      }
+      
       return conversation.messages;
     } catch (error) {
-      console.log('error in getConversationMessagesAsync', error);
-      throw new Error('faild to get conversation messages');
+      if (!(error instanceof AppError)) {
+        console.error('Error in getConversationMessagesAsync:', error);
+        throw AppError.badRequest(`Failed to get messages for conversation ${parameter.id}`);
+      }
+      throw error;
     }
-  };
+  }
 }
