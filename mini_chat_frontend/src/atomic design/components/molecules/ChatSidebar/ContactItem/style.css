@@ -1,0 +1,38 @@
+.contact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem ;
+    border-bottom: 1px dashed #eee;
+}
+
+.contact-details {
+    display: flex;
+    align-items: center;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-name {
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.contact-name:hover{
+    color: var(--quiqflow-color-primary);
+}
+
+.contact-email {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.contact-time {
+    font-size: 0.85rem;
+    color: #888;
+}
