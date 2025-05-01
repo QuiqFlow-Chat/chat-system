@@ -17,6 +17,7 @@
 
   /* === Colors: Brand & UI Backgrounds === */
   --quiqflow-color-blue-900: #172b4d;
+  --quiqflow-color-chat-bg: #f9fcff;/**/
   --quiqflow-color-bg: var(--quiqflow-color-white);
   --quiqflow-color-bg-dark: var(--quiqflow-color-blue-900);
   --quiqflow-color-bg-secondary: #e5eaf1;

@@ -9,7 +9,7 @@
   width: 100%;
 }
 
-input:focus{
+.input:focus{
   border-color: var(--quiqflow-color-primary);
   outline: none;
 }
