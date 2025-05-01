@@ -4,9 +4,13 @@ export const MESSAGES = {
       'full name , email , password and confirm password are required',
       'this user already exist',
       'password and confirm password must be a same',
+    ],
+    UN_VALID_LOGIN: [
+      'Invalid password',
       'this user can not valid to login',
       'please enter at lest one field',
     ],
+    UN_VALID_UPDATE: ['please enter at lest one field'],
     UN_VALID_MESSAGE: [
       'senderId , conversationId and message content are required',
       'you can not send empty message',

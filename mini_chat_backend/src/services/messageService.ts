@@ -6,6 +6,8 @@ import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
 import { MESSAGES } from '../constants/message';
+import { AppError } from '../middlewares/errorMiddlewares';
+import { App } from '../app';
 
 export class MessageService {
   _userRepository: UserRepository;
@@ -20,14 +22,15 @@ export class MessageService {
   public addMessageAsync = async (parameters: MessageCreateParameters): Promise<void> => {
     try {
       if (!parameters.content || !parameters.conversationId || !parameters.senderId)
-        throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[0]);
-      if (parameters.content.length === 0) throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[1]);
+        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_MESSAGE[0]);
+      if (parameters.content.length === 0)
+        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_MESSAGE[1]);
       const sender = await this._userRepository.getByIdAsync(parameters.senderId);
-      if (!sender) throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
+      if (!sender) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
       const conversation = await this._conversationRepositpry.getByIdAsync(
         parameters.conversationId
       );
-      if (!conversation) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
+      if (!conversation) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       const message = await this._messageRepository.addAsync(parameters);
       message.isRead = false;
       await this._messageRepository.updateAsync(message);
@@ -52,7 +55,7 @@ export class MessageService {
   public deleteMessageAsync = async (parameter: MessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameter.id);
-      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
+      if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       await this._messageRepository.deleteAsync(message);
     } catch (error) {
       console.log('error in deleteMessageAsync', error);
@@ -63,7 +66,7 @@ export class MessageService {
   public updateMessageContentAsync = async (parameters: MessageUpdateParameters): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameters.id);
-      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
+      if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       message.content = parameters.content || message.content;
       await this._messageRepository.updateAsync(message);
     } catch (error) {
@@ -75,7 +78,7 @@ export class MessageService {
   public updateMessageStatusAsync = async (parameter: MessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameter.id);
-      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
+      if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       message.isRead = true;
       await this._messageRepository.updateAsync(message);
     } catch (error) {

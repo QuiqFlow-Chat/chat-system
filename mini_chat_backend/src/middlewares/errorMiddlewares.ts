@@ -15,7 +15,7 @@ export class AppError extends Error {
 
   static notFound = (message: string): AppError => {
     return new AppError(message, 404);
-  }
+  };
 
   static unauthorized(message: string): AppError {
     return new AppError(message, 401);

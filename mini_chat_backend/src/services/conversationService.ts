@@ -3,6 +3,7 @@ import { ConversationsRepository } from '../repositories/conversationsRepository
 import Conversation from '../models/Conversation';
 import Message from '../models/Message';
 import { MESSAGES } from '../constants/message';
+import { AppError } from '../middlewares/errorMiddlewares';
 
 export class ConversationService {
   constructor(private _conversationRepository: ConversationsRepository) {}
@@ -19,7 +20,7 @@ export class ConversationService {
   public deleteConversationAsync = async (parameter: ConversaionGetByParameter): Promise<void> => {
     try {
       const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
-      if (!conversation) throw new Error(MESSAGES.CONVERSATION.NOT_FOUND);
+      if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       await this._conversationRepository.deleteAsync(conversation);
     } catch (error) {
       console.log('error in deleteConversationAsync', error);
@@ -30,7 +31,7 @@ export class ConversationService {
   public getAllConversationsAsync = async (): Promise<Conversation[]> => {
     try {
       const conversations = await this._conversationRepository.getAllAsync();
-      if (!conversations) throw new Error(MESSAGES.CONVERSATION.NOT_FOUND);
+      if (!conversations) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       return conversations;
     } catch (error) {
       console.log('error in getAllConversationsAsync', error);
@@ -43,7 +44,7 @@ export class ConversationService {
   ): Promise<Conversation> => {
     try {
       const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
-      if (!conversation) throw new Error(MESSAGES.CONVERSATION.NOT_FOUND);
+      if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       return conversation;
     } catch (error) {
       console.log('error in getConversationByIdAsync', error);
@@ -56,7 +57,7 @@ export class ConversationService {
   ): Promise<Message[]> => {
     try {
       const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
-      if (!conversation) throw new Error(MESSAGES.CONVERSATION.NOT_FOUND);
+      if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       return conversation.messages;
     } catch (error) {
       console.log('error in getConversationMessagesAsync', error);

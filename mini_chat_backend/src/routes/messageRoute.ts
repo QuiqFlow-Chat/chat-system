@@ -19,11 +19,23 @@ export class MessageRoute extends BaseRoute {
     this.initDeleteHttpMethod();
   }
   private initPostHttpMethod = async () => {
-    this.router.post('/addMessageAsync', AuthMiddleware.authenticate, this.messageController.addMessageAsync);
-    this.router.post('/updateMessageStatusAsync', AuthMiddleware.authenticate, this.messageController.updateMessageStatusAsync);
+    this.router.post(
+      '/addMessageAsync',
+      AuthMiddleware.authenticate,
+      this.messageController.addMessageAsync
+    );
+    this.router.post(
+      '/updateMessageStatusAsync',
+      AuthMiddleware.authenticate,
+      this.messageController.updateMessageStatusAsync
+    );
   };
   private initDeleteHttpMethod = async () => {
-    this.router.delete('/deleteMessageAsync', AuthMiddleware.authenticate, this.messageController.deleteMessageAsync);
+    this.router.delete(
+      '/deleteMessageAsync',
+      AuthMiddleware.authenticate,
+      this.messageController.deleteMessageAsync
+    );
   };
   private initUpdateHttpMethod = async () => {
     this.router.patch(

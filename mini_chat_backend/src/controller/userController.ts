@@ -5,7 +5,7 @@ import {
   UserUpdateParameters,
 } from './../dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../services/userAuthService';
+import { UserService } from '../services/userService';
 import { MESSAGES } from '../constants/message';
 
 export class UserController {
