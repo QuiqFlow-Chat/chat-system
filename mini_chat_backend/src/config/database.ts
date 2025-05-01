@@ -23,7 +23,7 @@ class DataBase {
         define: {
           underscored: true,
         },
-        models: [User, Message, Conversation, UserConversation],
+        models: [__dirname + '/../models'],
       });
     }
     return DataBase.db_instance;

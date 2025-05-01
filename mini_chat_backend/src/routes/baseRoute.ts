@@ -8,4 +8,3 @@ export class BaseRoute {
     this.app.use('/api/miniChat', this.router);
   }
 }
-//http://localhost:3777/api/minichat

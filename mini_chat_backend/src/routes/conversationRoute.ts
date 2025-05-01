@@ -19,7 +19,11 @@ export class ConversationRoute extends BaseRoute {
     this.initDeleteHttpMethod();
   }
   private initPostHttpMethod = async () => {
-    this.router.post('/addConversationAsync', AuthMiddleware.authenticate, this.conversationController.addConversationAsync);
+    this.router.post(
+      '/addConversationAsync',
+      AuthMiddleware.authenticate,
+      this.conversationController.addConversationAsync
+    );
     this.router.post(
       '/getConversationByIdAsync',
       AuthMiddleware.authenticate,

@@ -7,7 +7,6 @@ import {
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt,
 } from 'sequelize-typescript';
 import Message from './Message';
@@ -43,7 +42,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    unique: true, // جعل البريد الإلكتروني فريدًا
+    unique: true,
   })
   email!: string;
 
