@@ -13,22 +13,26 @@ class InputController {
 
   // Handle input events
   handleInput(event) {
-    this.emit('custom-input', event.target.value); // ✅ تم تغيير الاسم لتفادي التكرار
+    this.emit('custom-input', event.target.value);
   }
 
   handleFocus() {
     this.input.classList.add('is-focused');
-    // this.emit('custom-focus');
   }
 
   handleBlur() {
     this.input.classList.remove('is-focused');
-    // this.emit('custom-blur');
   }
 
-  // Custom event listeners
-  on(eventName, callback) {
+
+  addEventListener(eventName, callback) {
     this.input.addEventListener(eventName, callback);
+    return this; 
+  }
+
+
+  removeEventListener(eventName, callback) {
+    this.input.removeEventListener(eventName, callback);
     return this;
   }
 
@@ -40,7 +44,7 @@ class InputController {
   // Control input value
   setValue(value) {
     this.input.value = value;
-    this.emit('custom-change', value); // ✅ تم تغيير الاسم
+    this.emit('custom-change', value);
     return this;
   }
 

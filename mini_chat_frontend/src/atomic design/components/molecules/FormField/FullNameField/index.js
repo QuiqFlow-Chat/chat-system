@@ -17,7 +17,8 @@ export function setupFullNameValidation() {
   const WORD_SEPARATOR_REGEX = /\s+/; 
   const MINIMUM_WORD_COUNT = 2; 
 
-  controller.on('custom-input', validateFullName);
+  fullNameElement.addEventListener('input', validateFullName);
+  fullNameElement.addEventListener('blur', validateFullName);
 
   function validateFullName() {
     const value = controller.getValue().trim();
@@ -56,8 +57,14 @@ export function setupFullNameValidation() {
     }
   }
 
+  function cleanup() {
+    fullNameElement.removeEventListener('input', validateFullName);
+    fullNameElement.removeEventListener('blur', validateFullName);
+  }
+
   return {
     validateFullName,
-    controller
+    controller,
+    cleanup 
   };
 }

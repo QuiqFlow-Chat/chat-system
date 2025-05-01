@@ -9,7 +9,7 @@ export function setupEmailValidation() {
   const emailField = emailElement.closest('[data-email-field]');
   const errorElement = emailField?.querySelector('.invalid-feedback');
 
-  controller.on('custom-input', validateEmail);
+  emailElement.addEventListener('input', validateEmail);
 
   function validateEmail() {
     const emailValue = controller.getValue().trim();
