@@ -2,43 +2,32 @@ import { UserConversationCreateParameters } from './../dtosInterfaces/userConver
 import { MessageUpdateParameters } from './../dtosInterfaces/messageDtos';
 import { MessageCreateParameters, MessageGetByParameter } from '../dtosInterfaces/messageDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
-import { MessageRepository } from '../repositories/messageRepository';
+import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';
-import UserConversation from '../models/UserConversation';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
-import { AppError } from '../middlewares/errorMiddlewares';
+import { MESSAGES } from '../constants/message';
 
 export class MessageService {
-  constructor(
-    private _messageRepository: MessageRepository,
-    private _userRepository: UserRepository,
-    private _conversationRepositpry: ConversationsRepository,
-    private _userConversationRepository: UserConversationRepository
-  ) {}
+  _userRepository: UserRepository;
+  _conversationRepositpry: ConversationsRepository;
+  _userConversationRepository: UserConversationRepository;
+  constructor(private _messageRepository: MessageRepository) {
+    this._userRepository = new UserRepository();
+    this._conversationRepositpry = new ConversationsRepository();
+    this._userConversationRepository = new UserConversationRepository();
+  }
 
-  /**
-   * Adds a new message to a conversation
-   * @param parameters The message creation parameters
-   * @throws AppError if validation fails or repository operations fail
-   */
   public addMessageAsync = async (parameters: MessageCreateParameters): Promise<void> => {
     try {
       if (!parameters.content || !parameters.conversationId || !parameters.senderId)
-        throw AppError.badRequest('senderId, conversationId and message content are required');
-      
-      if (parameters.content.length === 0) 
-        throw AppError.badRequest('You cannot send an empty message');
-      
+        throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[0]);
+      if (parameters.content.length === 0) throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[1]);
       const sender = await this._userRepository.getByIdAsync(parameters.senderId);
-      if (!sender) 
-        throw AppError.notFound(`Sender with ID ${parameters.senderId} not found`);
-      
+      if (!sender) throw new Error(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
       const conversation = await this._conversationRepositpry.getByIdAsync(
         parameters.conversationId
       );
-      if (!conversation) 
-        throw AppError.notFound(`Conversation with ID ${parameters.conversationId} not found`);
-      
+      if (!conversation) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       const message = await this._messageRepository.addAsync(parameters);
       message.isRead = false;
       await this._messageRepository.updateAsync(message);
@@ -55,85 +44,46 @@ export class MessageService {
         await this._userConversationRepository.addAsync(userConv_parameter);
       }
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in addMessageAsync:', error);
-        throw AppError.badRequest('Failed to add new message');
-      }
-      throw error;
+      console.log('error in addMessageAsync', error);
+      throw new Error('faild to add new message');
     }
   };
 
-  /**
-   * Deletes a message by its ID
-   * @param parameter The message identifier
-   * @throws AppError if the message is not found or deletion fails
-   */
   public deleteMessageAsync = async (parameter: MessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameter.id);
-      if (!message) 
-        throw AppError.notFound(`Message with ID ${parameter.id} not found`);
-      
+      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       await this._messageRepository.deleteAsync(message);
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in deleteMessageAsync:', error);
-        throw AppError.badRequest('Failed to delete message');
-      }
-      throw error;
+      console.log('error in deleteMessageAsync', error);
+      throw new Error('faild to delete message');
     }
   };
 
-  /**
-   * Updates a message's content
-   * @param parameters The message update parameters
-   * @throws AppError if the message is not found or update fails
-   */
   public updateMessageContentAsync = async (parameters: MessageUpdateParameters): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameters.id);
-      if (!message) 
-        throw AppError.notFound(`Message with ID ${parameters.id} not found`);
-      
+      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       message.content = parameters.content || message.content;
       await this._messageRepository.updateAsync(message);
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in updateMessageContentAsync:', error);
-        throw AppError.badRequest('Failed to update message content');
-      }
-      throw error;
+      console.log('error in updateMessageContentAsync', error);
+      throw new Error('faild to update message content');
     }
   };
 
-  /**
-   * Marks a message as read
-   * @param parameter The message identifier
-   * @throws AppError if the message is not found or update fails
-   */
   public updateMessageStatusAsync = async (parameter: MessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getByIdAsync(parameter.id);
-      if (!message) 
-        throw AppError.notFound(`Message with ID ${parameter.id} not found`);
-      
+      if (!message) throw new Error(MESSAGES.MESSAGE.NOT_FOUND);
       message.isRead = true;
       await this._messageRepository.updateAsync(message);
     } catch (error) {
-      if (!(error instanceof AppError)) {
-        console.error('Error in updateMessageStatusAsync:', error);
-        throw AppError.badRequest('Failed to update message status');
-      }
-      throw error;
+      console.log('error in updateMessageStatusAsync', error);
+      throw new Error('faild to update message status');
     }
   };
 
-  /**
-   * Checks if a user is already in a conversation
-   * @param userId The user ID
-   * @param conversationId The conversation ID
-   * @returns true if the user should be added to the conversation, false if already a member
-   */
   public checkUserConversationAsync = async (
     userId: string,
     conversationId: string

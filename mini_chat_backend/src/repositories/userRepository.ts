@@ -5,15 +5,15 @@ import Conversation from '../models/Conversation';
 import { Op } from 'sequelize';
 
 export class UserRepository implements IGenericRepository<User> {
-  async addAsync(data: any): Promise<void> {
+  public addAsync = async (data: any): Promise<void> => {
     try {
       await User.create(data);
     } catch (error) {
       console.error('Error in addAsync:', error);
       throw new Error(`Failed to add user:`);
     }
-  }
-  async getAllAsync(): Promise<User[]> {
+  };
+  public getAllAsync = async (): Promise<User[]> => {
     try {
       return await User.findAll({
         include: [
@@ -32,8 +32,8 @@ export class UserRepository implements IGenericRepository<User> {
       console.error('Error in getAllAsync:', error);
       throw new Error(`Failed to get all users:`);
     }
-  }
-  async getByIdAsync(id: string): Promise<User | null> {
+  };
+  public getByIdAsync = async (id: string): Promise<User | null> => {
     try {
       return await User.findByPk(id, {
         include: [
@@ -52,8 +52,8 @@ export class UserRepository implements IGenericRepository<User> {
       console.error('Error in getByIdAsync:', error);
       throw new Error(`Failed to get the user `);
     }
-  }
-  async getUserConversationsAsync(id: string): Promise<User | null> {
+  };
+  public getUserConversationsAsync = async (id: string): Promise<User | null> => {
     try {
       return await User.findByPk(id, {
         include: [
@@ -85,8 +85,8 @@ export class UserRepository implements IGenericRepository<User> {
       console.error('Error in getByIdAsync:', error);
       throw new Error(`Failed to get the user `);
     }
-  }
-  async deleteAsync(entity: User): Promise<void> {
+  };
+  public deleteAsync = async (entity: User): Promise<void> => {
     try {
       await User.destroy({
         where: { id: (entity as any).id },
@@ -95,13 +95,13 @@ export class UserRepository implements IGenericRepository<User> {
       console.error('Error in deleteAsync:', error);
       throw new Error(`Failed to destroy user`);
     }
-  }
-  async updateAsync(entity: User): Promise<void> {
+  };
+  public updateAsync = async (entity: User): Promise<void> => {
     try {
       await entity.save();
     } catch (error) {
       console.error('Error in updateAsync:', error);
       throw new Error(`Failed to update user`);
     }
-  }
+  };
 }

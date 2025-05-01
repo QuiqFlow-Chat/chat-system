@@ -1,5 +1,4 @@
 import {
-  AllowNull,
   BelongsToMany,
   Column,
   CreatedAt,
@@ -24,22 +23,23 @@ interface ConversationCreateAttributes {
   tableName: 'Conversations',
   timestamps: true,
 })
-class Conversation extends Model<Conversation> implements ConversationCreateAttributes {
+class Conversation
+  extends Model<ConversationCreateAttributes>
+  implements ConversationCreateAttributes
+{
+  @PrimaryKey
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
-  @PrimaryKey
   id!: string;
 
   @CreatedAt
-  @Column({ type: DataType.DATE })
-  @AllowNull(false)
+  @Column({ type: DataType.DATE, allowNull: false, field: 'created_at' })
   createdAt!: Date;
 
   @UpdatedAt
-  @Column({ type: DataType.DATE })
-  @AllowNull(false)
+  @Column({ type: DataType.DATE, allowNull: false, field: 'updated_at' })
   updatedAt!: Date;
 
   @HasMany(() => Message)

@@ -1,35 +1,53 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { AppError } from './errorMiddlewares';
+import { AuthUtils } from '../utils/authUtils';
+
+// Extend Express Request to include user property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        email: string;
+      };
+    }
+  }
+}
 
 export class AuthMiddleware {
-  private static readonly JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
-
   /**
    * Middleware to verify JWT token and attach user data to the request object.
    */
-  static authenticate(req: Request, res: Response, next: NextFunction): void {
+  static authenticate = (req: Request, res: Response, next: NextFunction): void => {
     try {
       const authHeader = req.headers.authorization;
 
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw AppError.badRequest('Authorization token is missing or invalid');
+        throw AppError.unauthorized('Authorization token is missing or invalid');
       }
 
       const token = authHeader.split(' ')[1];
-      const decoded = jwt.verify(token, AuthMiddleware.JWT_SECRET) as JwtPayload;
+      
+      try {
+        const decoded = AuthUtils.verifyToken(token);
+        
+        // Attach user data to the request
+        req.user = {
+          id: decoded.id,
+          email: decoded.email
+        };
 
-      // Attach user data to the request object for further use
-      // @ts-expect-error Extending Express Request
-      req.user = decoded;
-
-      next();
-    } catch (err) {
-      if (err instanceof jwt.JsonWebTokenError) {
-        next(AppError.badRequest('Invalid or expired token'));
-      } else {
-        next(err);
+        next();
+      } catch (err) {
+        if (err instanceof jwt.JsonWebTokenError) {
+          throw AppError.unauthorized('Invalid token');
+        } else {
+          throw err;
+        }
       }
+    } catch (err) {
+      next(err);
     }
-  }
+  };
 }

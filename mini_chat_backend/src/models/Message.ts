@@ -1,5 +1,4 @@
 import {
-  AllowNull,
   BelongsTo,
   Column,
   CreatedAt,
@@ -27,47 +26,46 @@ interface MessageCreateAttributes {
   tableName: 'Messages',
   timestamps: true,
 })
-class Message extends Model<Message> implements MessageCreateAttributes {
+class Message extends Model<MessageCreateAttributes> implements MessageCreateAttributes {
+  @PrimaryKey
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
   })
-  @PrimaryKey
   id!: string;
 
   @Column({
     type: DataType.STRING,
+    allowNull: false,
   })
-  @AllowNull(false)
   content!: string;
 
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
+    allowNull: false,
+    field: 'sender_id',
   })
-  @AllowNull(false)
   @ForeignKey(() => User)
   senderId!: string;
 
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
+    field: 'conversation_id',
   })
   @ForeignKey(() => Conversation)
   conversationId!: string;
 
-  @Column({ type: DataType.BOOLEAN })
-  @AllowNull(false)
+  @Column({ type: DataType.BOOLEAN, allowNull: true, field: 'is_read' })
   isRead!: boolean;
 
   @CreatedAt
-  @Column({ type: DataType.DATE })
-  @AllowNull(false)
+  @Column({ type: DataType.DATE, allowNull: false, field: 'created_at' })
   createdAt!: Date;
 
   @UpdatedAt
-  @Column({ type: DataType.DATE })
-  @AllowNull(false)
+  @Column({ type: DataType.DATE, allowNull: false, field: 'updated_at' })
   updatedAt!: Date;
 
   @BelongsTo(() => User)

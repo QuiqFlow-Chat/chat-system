@@ -9,12 +9,16 @@ export class AppError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 
-  static badRequest(message: string): AppError {
+  static badRequest = (message: string): AppError => {
     return new AppError(message, 400);
+  };
+
+  static notFound = (message: string): AppError => {
+    return new AppError(message, 404);
   }
 
-  static notFound(message: string): AppError {
-    return new AppError(message, 404);
+  static unauthorized(message: string): AppError {
+    return new AppError(message, 401);
   }
 }
 
@@ -32,7 +36,7 @@ export class ErrorMiddleware {
     });
   }
 
-  static handleNotFound(req: Request, _res: Response, next: NextFunction): void {
+  static handleNotFound = (req: Request, _res: Response, next: NextFunction): void => {
     next(AppError.notFound(`Route not found: ${req.originalUrl}`));
-  }
+  };
 }

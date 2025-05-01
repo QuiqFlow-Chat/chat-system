@@ -5,7 +5,8 @@ import {
   UserUpdateParameters,
 } from './../dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import { UserService } from '../services/userAuthService';
+import { MESSAGES } from '../constants/message';
 
 export class UserController {
   constructor(private _userService: UserService) {}
@@ -14,7 +15,7 @@ export class UserController {
     try {
       const parameters: UserCreateParameters = req.body;
       await this._userService.registerAsync(parameters);
-      res.status(200).json({ message: 'Registration completed successfully' });
+      res.status(200).json({ message: MESSAGES.USER.CREATED });
     } catch (error) {
       next(error);
     }
@@ -23,8 +24,8 @@ export class UserController {
   public loginAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const parameters: UserLoginParameters = req.body;
-      await this._userService.LoginAsync(parameters);
-      res.status(200).json({ message: 'Login completed successfully' });
+      const user = await this._userService.LoginAsync(parameters);
+      res.status(200).json(user);
     } catch (error) {
       next(error);
     }
@@ -53,7 +54,7 @@ export class UserController {
     try {
       const parameter: UserGetByParameter = req.body;
       await this._userService.deleteUserAsync(parameter);
-      res.status(200).json({ message: 'Delete User Completed Successfully' });
+      res.status(200).json({ message: MESSAGES.USER.DELETED });
     } catch (error) {
       next(error);
     }
@@ -63,7 +64,7 @@ export class UserController {
     try {
       const parameters: UserUpdateParameters = req.body;
       await this._userService.updateUserAsync(parameters);
-      res.status(200).json({ message: 'Update User Completed Successfully' });
+      res.status(200).json({ message: MESSAGES.USER.UPDATED });
     } catch (error) {
       next(error);
     }
@@ -72,7 +73,7 @@ export class UserController {
   public logoutUserAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const parameter: UserGetByParameter = req.body;
-      const lastActivity = await this._userService.logOutAsync(parameter);
+      const lastActivity = await this._userService.LogoutAsync(parameter);
       res.status(200).json(lastActivity);
     } catch (error) {
       next(error);
