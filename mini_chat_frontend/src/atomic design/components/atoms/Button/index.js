@@ -1,13 +1,6 @@
-// components/atoms/Button/button.js
-
 class ButtonController {
   constructor(buttonElement) {
     this.button = buttonElement;
-    this.initEvents();
-  }
-
-  initEvents() {
-    //event listeners
   }
 
   setText(text) {
@@ -67,13 +60,22 @@ class ButtonController {
   }
 }
 
-function initButtons() {
-  const buttons = document.querySelectorAll('.button');
-  return Array.from(buttons).map(button => new ButtonController(button));
+function createButton() {
+  const form = document.createElement('form');
+
+  form.innerHTML = `
+    <button type="submit" id="submitButton" class="button button-primary">
+      Log In
+    </button>
+  `;
+
+  document.body.appendChild(form);
+
+  const button = form.querySelector('#submitButton');
+  return new ButtonController(button);
 }
 
-export { ButtonController, initButtons };
-
 document.addEventListener('DOMContentLoaded', () => {
-  window.buttons = initButtons();
+  const loginButton = createButton();
+
 });

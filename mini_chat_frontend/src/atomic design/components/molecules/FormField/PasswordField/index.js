@@ -15,13 +15,13 @@ export function setupPasswordValidation() {
   const field = passwordElement.closest('[data-password-field]');
   const errorElement = field?.querySelector('.invalid-feedback');
 
-
   const MIN_LENGTH_REGEX = /^.{8,}$/; 
   const CONTAINS_LETTER_REGEX = /[A-Za-z]/; 
   const CONTAINS_NUMBER_REGEX = /\d/; 
   const CONTAINS_SPECIAL_CHAR_REGEX = /[@$!%*#?&]/; 
 
-  controller.on('custom-input', validatePassword);
+  passwordElement.addEventListener('input', validatePassword);
+  passwordElement.addEventListener('blur', validatePassword);
 
   // Toggle password visibility
   toggleBtn?.addEventListener('click', function () {
@@ -90,8 +90,14 @@ export function setupPasswordValidation() {
     }
   }
 
+  function cleanup() {
+    passwordElement.removeEventListener('input', validatePassword);
+    passwordElement.removeEventListener('blur', validatePassword);
+  }
+
   return {
     validatePassword,
-    controller
+    controller,
+    cleanup
   };
 }
