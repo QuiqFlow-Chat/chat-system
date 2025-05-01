@@ -1,42 +1,58 @@
-import { Server } from "socket.io";
-import { TypedSocket } from "../types/socketType";
-import { UserRepository } from "../repositories/userRepository";
-import { UserService } from "../services/userAuthService";
-import { MessageService } from "../services/messageService";
+import { Server } from 'socket.io';
+import { TypedSocket } from '../types/socketType';
+import { UserService } from '../services/userService';
+import { MessageService } from '../services/messageService';
 
-export const registerChatHandlers = (io: Server, socket: TypedSocket ,
-    userService:UserService,
-    messageService:MessageService
-) =>{
-    // لما المستخدم يصير أونلاين
-  socket.on("userOnline", (user) => {
-    console.log(`🟢 User online: ${user.id}`);
-    socket.broadcast.emit("userOnline", user);
+export const registerChatHandlers = (
+  io: Server,
+  socket: TypedSocket,
+  userService: UserService,
+  messageService: MessageService
+) => {
+  socket.on('userOnline', (user) => {
+    try {
+      console.log(`🟢 User online: ${user.id}`);
+      socket.broadcast.emit('userOnline', user);
+    } catch (error) {
+      console.error('Error in userOnline:', error);
+    }
   });
 
-  socket.on("userOffline",async (user) => {
-   await userService.LogoutAsync(user);
-    console.log(`🔴 User offline: ${user.id}`);
-    socket.broadcast.emit("userOffline", user);
+  socket.on('userOffline', async (user) => {
+    try {
+      await userService.LogoutAsync(user);
+      console.log(`🔴 User offline: ${user.id}`);
+      socket.broadcast.emit('userOffline', user);
+    } catch (error) {
+      console.error('Error in userOffline:', error);
+    }
   });
 
-  socket.on("sendMessage", async (message) => {
-    console.log(`✉️ New message from ${message.senderId} in conversation ${message.conversationId}`);
+  socket.on('sendMessage', async (message) => {
+    try {
+      console.log(
+        `✉️ New message from ${message.senderId} in conversation ${message.conversationId}`
+      );
 
-    await messageService.addMessageAsync(message);
-    const createdAt = new Date().toISOString();
+      await messageService.addMessageAsync(message);
+      const createdAt = new Date().toISOString();
 
-    // إرسال الرسالة لبقية المستخدمين بالغرفة
-    io.to(message.conversationId).emit("receiveMessage", {
-      conversationId: message.conversationId,
-      senderId: message.senderId,
-      content: message.content,
-      createdAt,
-    });
+      io.to(message.conversationId).emit('receiveMessage', {
+        conversationId: message.conversationId,
+        senderId: message.senderId,
+        content: message.content,
+        createdAt,
+      });
+    } catch (error) {
+      console.error('Error in sendMessage:', error);
+    }
   });
 
-  socket.on("isTyping", (data) => {
-    socket.to(data.conversationId.id).emit("isTyping", data.userId);
+  socket.on('isTyping', (data) => {
+    try {
+      socket.to(data.conversationId.id).emit('isTyping', data.userId);
+    } catch (error) {
+      console.error('Error in isTyping:', error);
+    }
   });
-
-}
+};

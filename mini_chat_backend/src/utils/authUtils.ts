@@ -20,7 +20,10 @@ export class AuthUtils {
   /**
    * Compares a plain password with a hashed password
    */
-  public static async comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+  public static async comparePassword(
+    plainPassword: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 

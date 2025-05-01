@@ -1,3 +1,4 @@
+import { ErrorMiddleware } from './middlewares/errorMiddlewares';
 import { Application } from 'express';
 import express from 'express';
 import { ConversationRoute } from './routes/conversationRoute';
@@ -5,8 +6,8 @@ import { MessageRoute } from './routes/messageRoute';
 import { UserConversationRoute } from './routes/userConversationRoute';
 import { UserRoute } from './routes/userRoute';
 import DataBase from './config/database';
-import http from "http";
-import { Server as SocketIOServer } from "socket.io"; // تغيير اسم الكلاس لتجنب التضارب
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io'; // تغيير اسم الكلاس لتجنب التضارب
 import { configureSocket } from './config/socket';
 
 export class Server {
@@ -20,6 +21,7 @@ export class Server {
     this.initMiddleware();
     this.initSocket();
     this.initRoutes();
+    this.initErrorHandler();
   }
 
   private authSequelize = async () => {
@@ -33,11 +35,11 @@ export class Server {
   };
 
   private initSocket = async () => {
-    const server = http.createServer(this.app); 
-    const io = new SocketIOServer(server, { 
+    const server = http.createServer(this.app);
+    const io = new SocketIOServer(server, {
       cors: {
-        origin: "*", 
-        methods: ["GET", "POST"], 
+        origin: '*',
+        methods: ['GET', 'POST'],
       },
     });
 
@@ -54,7 +56,9 @@ export class Server {
     new MessageRoute(this.app);
     new UserConversationRoute(this.app);
   };
-
+  private initErrorHandler = async () => {
+    this.app.use(ErrorMiddleware.handleError);
+  };
   public start = async () => {
     this.app.listen(this.port, () => {
       console.log(`Server running on http://localhost:${this.port}`);

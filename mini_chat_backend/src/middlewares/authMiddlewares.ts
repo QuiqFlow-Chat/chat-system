@@ -28,14 +28,14 @@ export class AuthMiddleware {
       }
 
       const token = authHeader.split(' ')[1];
-      
+
       try {
         const decoded = AuthUtils.verifyToken(token);
-        
+
         // Attach user data to the request
         req.user = {
           id: decoded.id,
-          email: decoded.email
+          email: decoded.email,
         };
 
         next();
