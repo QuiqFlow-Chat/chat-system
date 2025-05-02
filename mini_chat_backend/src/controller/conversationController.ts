@@ -5,6 +5,7 @@ import { MESSAGES } from '../constants/message';
 
 export class ConversationController {
   constructor(private _conversationService: ConversationService) {}
+
   public addConversationAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this._conversationService.addConversationAsync();
@@ -26,7 +27,15 @@ export class ConversationController {
 
   public getAllConversationsAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const conversations = await this._conversationService.getAllConversationsAsync();
+      // Extract pagination parameters from query string
+      const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
+      const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
+
+      const conversations = await this._conversationService.getAllConversationsAsync({
+        page: page || 1,
+        limit: limit || 10,
+      });
+
       res.status(200).json(conversations);
     } catch (error) {
       next(error);
@@ -46,9 +55,17 @@ export class ConversationController {
   public getConversationMessagesAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const parameter: ConversaionGetByParameter = req.body;
-      const conversationMessages =
-        await this._conversationService.getConversationMessagesAsync(parameter);
-      res.status(200).json(conversationMessages);
+      
+      // Extract pagination parameters from query string
+      const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
+      const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
+      
+      const messages = await this._conversationService.getConversationMessagesAsync(parameter, { 
+        page: page || 1, 
+        limit: limit || 10 
+      });
+      
+      res.status(200).json(messages);
     } catch (error) {
       next(error);
     }

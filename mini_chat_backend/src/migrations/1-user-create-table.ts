@@ -11,7 +11,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
     full_name: {
       type: DataType.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     email: {
       type: DataType.STRING,

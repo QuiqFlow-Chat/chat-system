@@ -16,7 +16,7 @@
     "updated_at": "2023-01-01T00:06:30.000Z"
   },
   {
-    "id": "b2c3d4e5-f6a7-4b8c-d9e0-f1a2b3c4d5e6",
+    "id": "b2c3d4e5-f6a7-4b8c-d9e0-f1a2b3c4d5e5",
     "conversation_id": "b0e8ef25-8c35-4218-8c71-25c5e2a7a373",
     "sender_id": "f6a7b8c9-d0e1-52f6-a8b9-c0d1e2f3a4b5",
     "content": "Fares, did you finish the project?",
@@ -24,7 +24,7 @@
     "updated_at": "2023-01-01T01:15:00.000Z"
   },
   {
-    "id": "c3d4e5f6-a7b8-4c9d-e0f1-a2b3c4d5e6f7",
+    "id": "c3d4e5f6-a7b8-4c9d-e0f1-a2b3c4d5e6f8",
     "conversation_id": "b0e8ef25-8c35-4218-8c71-25c5e2a7a373",
     "sender_id": "a1b2c3d4-e5f6-47a1-b3c4-d5e6f7a8b9c0",
     "content": "Almost done Mohammad, I'll send it to you tomorrow.",
@@ -78,5 +78,261 @@
     "content": "Yes Mohammad, they look great!",
     "created_at": "2023-01-01T04:22:15.000Z",
     "updated_at": "2023-01-01T04:22:15.000Z"
+  },
+  {
+    "id": "d0e1f2a3-b4c5-4d6e-f7a8-b9c0d1e2f3a4",
+    "conversation_id": "5e6f7a8b-9c0d-4e5f-a6b7-c8d9e0f1a2b3",
+    "sender_id": "a7b8c9d0-e1f2-53a7-b9c0-d1e2f3a4b5c6",
+    "content": "Hey Ahmed, did you see the new movie last night?",
+    "created_at": "2023-01-01T05:10:00.000Z",
+    "updated_at": "2023-01-01T05:10:00.000Z"
+  },
+  {
+    "id": "e1f2a3b4-c5d6-4e7f-a8b9-c0d1e2f3a4b5",
+    "conversation_id": "5e6f7a8b-9c0d-4e5f-a6b7-c8d9e0f1a2b3",
+    "sender_id": "b8c9d0e1-f2a3-54b8-c0d1-e2f3a4b5c6d7",
+    "content": "Yes Sarah, it was amazing! We should go see it again sometime.",
+    "created_at": "2023-01-01T05:15:20.000Z",
+    "updated_at": "2023-01-01T05:15:20.000Z"
+  },
+  {
+    "id": "f2a3b4c5-d6e7-4f8a-b9c0-d1e2f3a4b5c6",
+    "conversation_id": "2a3b4c5d-6e7f-4a2b-b3c4-d5e6f7a8b9c0",
+    "sender_id": "c9d0e1f2-a3b4-55c9-d1e2-f3a4b5c6d7e8",
+    "content": "Omar, can you share the document you were working on?",
+    "created_at": "2023-01-01T06:30:00.000Z",
+    "updated_at": "2023-01-01T06:30:00.000Z"
+  },
+  {
+    "id": "a3b4c5d6-e7f8-4a9b-c0d1-e2f3a4b5c6d7",
+    "conversation_id": "2a3b4c5d-6e7f-4a2b-b3c4-d5e6f7a8b9c0",
+    "sender_id": "d0e1f2a3-b4c5-56d0-e2f3-a4b5c6d7e8f9",
+    "content": "Sure Lina, I'll email it to you in a moment.",
+    "created_at": "2023-01-01T06:32:45.000Z",
+    "updated_at": "2023-01-01T06:32:45.000Z"
+  },
+  {
+    "id": "b4c5d6e7-f8a9-4b0c-d1e2-f3a4b5c6d7e8",
+    "conversation_id": "3b4c5d6e-7f8a-4b3c-c4d5-e6f7a8b9c0d1",
+    "sender_id": "a1b2c3d4-e5f6-47a1-b3c4-d5e6f7a8b9c0",
+    "content": "Lina, are you free for a coffee tomorrow?",
+    "created_at": "2023-01-01T07:40:00.000Z",
+    "updated_at": "2023-01-01T07:40:00.000Z"
+  },
+  {
+    "id": "c5d6e7f8-a9b0-4c1d-e2f3-a4b5c6d7e8f9",
+    "conversation_id": "3b4c5d6e-7f8a-4b3c-c4d5-e6f7a8b9c0d1",
+    "sender_id": "c9d0e1f2-a3b4-55c9-d1e2-f3a4b5c6d7e8",
+    "content": "Hi Fares! Yes, I'm available around 3 PM.",
+    "created_at": "2023-01-01T07:42:30.000Z",
+    "updated_at": "2023-01-01T07:42:30.000Z"
+  },
+  {
+    "id": "d6e7f8a9-b0c1-4d2e-f3a4-b5c6d7e8f9a0",
+    "conversation_id": "3b4c5d6e-7f8a-4b3c-c4d5-e6f7a8b9c0d1",
+    "sender_id": "a1b2c3d4-e5f6-47a1-b3c4-d5e6f7a8b9c0",
+    "content": "Great! Let's meet at the usual cafe at 3.",
+    "created_at": "2023-01-01T07:45:10.000Z",
+    "updated_at": "2023-01-01T07:45:10.000Z"
+  },
+  {
+    "id": "e7f8a9b0-c1d2-4e3f-a4b5-c6d7e8f9a0b1",
+    "conversation_id": "4c5d6e7f-8a9b-4c4d-d5e6-f7a8b9c0d1e2",
+    "sender_id": "a1a2a3a4-b1b2-59a1-c1c2-d1d2e1e2f1f2",
+    "content": "Nour, did you check the report I sent?",
+    "created_at": "2023-01-01T08:20:00.000Z",
+    "updated_at": "2023-01-01T08:20:00.000Z"
+  },
+  {
+    "id": "f8a9b0c1-d2e3-4f4a-b5c6-d7e8f9a0b1c2",
+    "conversation_id": "4c5d6e7f-8a9b-4c4d-d5e6-f7a8b9c0d1e2",
+    "sender_id": "b2b3b4b5-c2c3-60b2-d2d3-e2e3f2f3a2a3",
+    "content": "Yes Kareem, it looks good but I have some suggestions.",
+    "created_at": "2023-01-01T08:22:45.000Z",
+    "updated_at": "2023-01-01T08:22:45.000Z"
+  },
+  {
+    "id": "a9b0c1d2-e3f4-4a5b-c6d7-e8f9a0b1c2d3",
+    "conversation_id": "4c5d6e7f-8a9b-4c4d-d5e6-f7a8b9c0d1e2",
+    "sender_id": "a1a2a3a4-b1b2-59a1-c1c2-d1d2e1e2f1f2",
+    "content": "Great! Can you share your thoughts in the meeting tomorrow?",
+    "created_at": "2023-01-01T08:25:10.000Z",
+    "updated_at": "2023-01-01T08:25:10.000Z"
+  },
+  {
+    "id": "b0c1d2e3-f4a5-4b6c-d7e8-f9a0b1c2d3e4",
+    "conversation_id": "5d6e7f8a-9b0c-4d5e-e6f7-a8b9c0d1e2f3",
+    "sender_id": "c3c4c5c6-d3d4-61c3-e3e4-f3f4a3a4b3b4",
+    "content": "Hana, have you finished the design mockups?",
+    "created_at": "2023-01-01T09:10:00.000Z",
+    "updated_at": "2023-01-01T09:10:00.000Z"
+  },
+  {
+    "id": "c1d2e3f4-a5b6-4c7d-e8f9-a0b1c2d3e4f5",
+    "conversation_id": "5d6e7f8a-9b0c-4d5e-e6f7-a8b9c0d1e2f3",
+    "sender_id": "d4d5d6d7-e4e5-62d4-f4f5-a4a5b4b5c4c5",
+    "content": "Almost done Zaid, I'll send them to you by end of day.",
+    "created_at": "2023-01-01T09:12:35.000Z",
+    "updated_at": "2023-01-01T09:12:35.000Z"
+  },
+  {
+    "id": "d2e3f4a5-b6c7-4d8e-f9a0-b1c2d3e4f5a6",
+    "conversation_id": "6e7f8a9b-0c1d-4e6f-f7a8-b9c0d1e2f3a4",
+    "sender_id": "e5e6e7e8-f5f6-63e5-a5a6-b5b6c5c6d5d6",
+    "content": "Rania, are you coming to the conference next week?",
+    "created_at": "2023-01-01T10:05:00.000Z",
+    "updated_at": "2023-01-01T10:05:00.000Z"
+  },
+  {
+    "id": "e3f4a5b6-c7d8-4e9f-a0b1-c2d3e4f5a6b7",
+    "conversation_id": "6e7f8a9b-0c1d-4e6f-f7a8-b9c0d1e2f3a4",
+    "sender_id": "f6f7f8f9-a6a7-64f6-b6b7-c6c7d6d7e6e7",
+    "content": "Yes Youssef, I've already booked my ticket.",
+    "created_at": "2023-01-01T10:07:45.000Z",
+    "updated_at": "2023-01-01T10:07:45.000Z"
+  },
+  {
+    "id": "f4a5b6c7-d8e9-4f0a-b1c2-d3e4f5a6b7c8",
+    "conversation_id": "7f8a9b0c-1d2e-4f7a-a8b9-c0d1e2f3a4b5",
+    "sender_id": "a7a8a9a0-b7b8-65a7-c7c8-d7d8e7e8f7f8",
+    "content": "Salma, what do you think about the new project proposal?",
+    "created_at": "2023-01-01T11:15:00.000Z",
+    "updated_at": "2023-01-01T11:15:00.000Z"
+  },
+  {
+    "id": "a5b6c7d8-e9f0-4a1b-c2d3-e4f5a6b7c8d9",
+    "conversation_id": "7f8a9b0c-1d2e-4f7a-a8b9-c0d1e2f3a4b5",
+    "sender_id": "b8b9b0b1-c8c9-66b8-d8d9-e8e9f8f9a8a9",
+    "content": "I think it has potential Jamal, but we need to refine the timeline.",
+    "created_at": "2023-01-01T11:18:30.000Z",
+    "updated_at": "2023-01-01T11:18:30.000Z"
+  },
+  {
+    "id": "b6c7d8e9-f0a1-4b2c-d3e4-f5a6b7c8d9e0",
+    "conversation_id": "8a9b0c1d-2e3f-4a8b-b9c0-d1e2f3a4b5c6",
+    "sender_id": "c9c0c1c2-d9d0-67c9-e9e0-f9f0a9a0b9b0",
+    "content": "Yasmine, did you receive the budget approval?",
+    "created_at": "2023-01-01T12:25:00.000Z",
+    "updated_at": "2023-01-01T12:25:00.000Z"
+  },
+  {
+    "id": "c7d8e9f0-a1b2-4c3d-e4f5-a6b7c8d9e0f1",
+    "conversation_id": "8a9b0c1d-2e3f-4a8b-b9c0-d1e2f3a4b5c6",
+    "sender_id": "d0d1d2d3-e0e1-68d0-f0f1-a0a1b0b1c0c1",
+    "content": "Not yet Hassan, still waiting for the finance team.",
+    "created_at": "2023-01-01T12:27:15.000Z",
+    "updated_at": "2023-01-01T12:27:15.000Z"
+  },
+  {
+    "id": "d8e9f0a1-b2c3-4d4e-f5a6-b7c8d9e0f1a2",
+    "conversation_id": "9b0c1d2e-3f4a-4b9c-c0d1-e2f3a4b5c6d7",
+    "sender_id": "e1e2e3e4-f1f2-69e1-a1a2-b1b2c1c2d1d2",
+    "content": "Dana, can you review my presentation before tomorrow?",
+    "created_at": "2023-01-01T13:35:00.000Z",
+    "updated_at": "2023-01-01T13:35:00.000Z"
+  },
+  {
+    "id": "e9f0a1b2-c3d4-4e5f-a6b7-c8d9e0f1a2b3",
+    "conversation_id": "9b0c1d2e-3f4a-4b9c-c0d1-e2f3a4b5c6d7",
+    "sender_id": "f2f3f4f5-a2a3-70f2-b2b3-c2c3d2d3e2e3",
+    "content": "Sure Karim, send it over and I'll take a look tonight.",
+    "created_at": "2023-01-01T13:38:45.000Z",
+    "updated_at": "2023-01-01T13:38:45.000Z"
+  },
+  {
+    "id": "f0a1b2c3-d4e5-4f6a-b7c8-d9e0f1a2b3c4",
+    "conversation_id": "0c1d2e3f-4a5b-4c0d-d1e2-f3a4b5c6d7e8",
+    "sender_id": "a3a4a5a6-b3b4-71a3-c3c4-d3d4e3e4f3f4",
+    "content": "Rana, do you have the client meeting notes?",
+    "created_at": "2023-01-01T14:10:00.000Z",
+    "updated_at": "2023-01-01T14:10:00.000Z"
+  },
+  {
+    "id": "a1b2c3d4-e5f6-4a7b-c8d9-e0f1a2b3c4d6",
+    "conversation_id": "0c1d2e3f-4a5b-4c0d-d1e2-f3a4b5c6d7e8",
+    "sender_id": "b4b5b6b7-c4c5-72b4-d4d5-e4e5f4f5a4a5",
+    "content": "Yes Mahmoud, I just emailed them to you.",
+    "created_at": "2023-01-01T14:12:30.000Z",
+    "updated_at": "2023-01-01T14:12:30.000Z"
+  },
+  {
+    "id": "b2c3d4e5-f6a7-4b8c-d9e0-f1a2b3c4d5e6",
+    "conversation_id": "1d2e3f4a-5b6c-4d1e-e2f3-a4b5c6d7e8f9",
+    "sender_id": "c5c6c7c8-d5d6-73c5-e5e6-f5f6a5a6b5b6",
+    "content": "Mariam, are we still on for lunch tomorrow?",
+    "created_at": "2023-01-01T15:20:00.000Z",
+    "updated_at": "2023-01-01T15:20:00.000Z"
+  },
+  {
+    "id": "c3d4e5f6-a7b8-4c9d-e0f1-a2b3c4d5e6f7",
+    "conversation_id": "1d2e3f4a-5b6c-4d1e-e2f3-a4b5c6d7e8f9",
+    "sender_id": "d6d7d8d9-e6e7-74d6-f6f7-a6a7b6b7c6c7",
+    "content": "Definitely Samir, looking forward to it!",
+    "created_at": "2023-01-01T15:22:45.000Z",
+    "updated_at": "2023-01-01T15:22:45.000Z"
+  },
+  {
+    "id": "2e3f4a5b-6c7d-4e2f-f3a4-b5c6d7e8f9a1",
+    "conversation_id": "2e3f4a5b-6c7d-4e2f-f3a4-b5c6d7e8f9a0",
+    "sender_id": "e7e8e9e0-f7f8-75e7-a7a8-b7b8c7c8d7d8",
+    "content": "Lara, how's the research paper coming along?",
+    "created_at": "2023-01-01T16:30:00.000Z",
+    "updated_at": "2023-01-01T16:30:00.000Z"
+  },
+  {
+    "id": "e5f6a7b8-c9d0-4e1f-a2b3-c4d5e6f7a8b8",
+    "conversation_id": "2e3f4a5b-6c7d-4e2f-f3a4-b5c6d7e8f9a0",
+    "sender_id": "f8f9f0f1-a8a9-76f8-b8b9-c8c9d8d9e8e9",
+    "content": "Making good progress Tarek, should be done by next week.",
+    "created_at": "2023-01-01T16:33:15.000Z",
+    "updated_at": "2023-01-01T16:33:15.000Z"
+  },
+  {
+    "id": "f6a7b8c9-d0e1-4f2a-b3c4-d5e6f7a8b9d1",
+    "conversation_id": "3f4a5b6c-7d8e-4f3a-a4b5-c6d7e8f9a0b1",
+    "sender_id": "a1b2c3d4-e5f6-47a1-b3c4-d5e6f7a8b9c0",
+    "content": "Ayat, did you get my email about the project deadline?",
+    "created_at": "2023-01-01T17:15:00.000Z",
+    "updated_at": "2023-01-01T17:15:00.000Z"
+  },
+  {
+    "id": "a7b8c9d0-e1f2-4a3b-c4d5-e6f7a8b9d0e2",
+    "conversation_id": "3f4a5b6c-7d8e-4f3a-a4b5-c6d7e8f9a0b1",
+    "sender_id": "c3d4e5f6-a7b8-49c3-d5e6-f7a8b9c0d1e2",
+    "content": "Yes Fares, I'm working on it now and will submit by tomorrow.",
+    "created_at": "2023-01-01T17:17:30.000Z",
+    "updated_at": "2023-01-01T17:17:30.000Z"
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4b4c-d5e6-f7a8b9c0e1f3",
+    "conversation_id": "4a5b6c7d-8e9f-4a4b-b5c6-d7e8f9a0b1c2",
+    "sender_id": "b2c3d4e5-f6a7-48b2-c4d5-e6f7a8b9c0d1",
+    "content": "Minas, have you looked at the system requirements?",
+    "created_at": "2023-01-01T18:25:00.000Z",
+    "updated_at": "2023-01-01T18:25:00.000Z"
+  },
+  {
+    "id": "c9d0e1f2-a3b4-4c5d-e6f7-a8b9c0d1f2a4",
+    "conversation_id": "4a5b6c7d-8e9f-4a4b-b5c6-d7e8f9a0b1c2",
+    "sender_id": "d4e5f6a7-b8c9-50d4-e6f7-a8b9c0d1e2f3",
+    "content": "Yes Ayah, I've prepared a preliminary analysis.",
+    "created_at": "2023-01-01T18:28:45.000Z",
+    "updated_at": "2023-01-01T18:28:45.000Z"
+  },
+  {
+    "id": "d0e1f2a3-b4c5-4d6e-f7a8-b9c0d1e2a3b5",
+    "conversation_id": "4a5b6c7d-8e9f-4a4b-b5c6-d7e8f9a0b1c2",
+    "sender_id": "b2c3d4e5-f6a7-48b2-c4d5-e6f7a8b9c0d1",
+    "content": "Great! Can we discuss it in tomorrow's meeting?",
+    "created_at": "2023-01-01T18:30:15.000Z",
+    "updated_at": "2023-01-01T18:30:15.000Z"
+  },
+  {
+    "id": "e1f2a3b4-c5d6-4e7f-a8b9-c0d1e2f3b4c6",
+    "conversation_id": "5b6c7d8e-9fa0-4b5c-c6d7-e8f9a0b1c2d3",
+    "sender_id": "a3a4a5a6-b3b4-71a3-c3c4-d3d4e3e4f3f4",
+    "content": "Everyone, reminder about the team building event on Friday!",
+    "created_at": "2023-01-01T19:00:00.000Z",
+    "updated_at": "2023-01-01T19:00:00.000Z"
   }
 ]
