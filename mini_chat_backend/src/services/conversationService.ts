@@ -4,6 +4,7 @@ import Conversation from '../models/Conversation';
 import Message from '../models/Message';
 import { MESSAGES } from '../constants/message';
 import { AppError } from '../middlewares/errorMiddlewares';
+import { PaginatedResult, PaginationParams, paginate } from '../utils/paginationUtils';
 
 export class ConversationService {
   constructor(private _conversationRepository: ConversationsRepository) {}
@@ -28,14 +29,22 @@ export class ConversationService {
     }
   };
 
-  public getAllConversationsAsync = async (): Promise<Conversation[]> => {
+  public getAllConversationsAsync = async (
+    paginationParams?: PaginationParams
+  ): Promise<PaginatedResult<Conversation>> => {
     try {
       const conversations = await this._conversationRepository.getAllAsync();
-      if (!conversations) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
-      return conversations;
+      if (!conversations || conversations.length === 0) {
+        throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
+      }
+
+      // Apply pagination
+      const page = paginationParams?.page || 1;
+      const limit = paginationParams?.limit || 10;
+      return paginate(conversations, page, limit);
     } catch (error) {
       console.log('error in getAllConversationsAsync', error);
-      throw new Error('faild to get all conversations');
+      throw new Error('Failed to get all conversations');
     }
   };
 
@@ -53,12 +62,27 @@ export class ConversationService {
   };
 
   public getConversationMessagesAsync = async (
-    parameter: ConversaionGetByParameter
-  ): Promise<Message[]> => {
+    parameter: ConversaionGetByParameter,
+    paginationParams?: PaginationParams
+  ): Promise<PaginatedResult<Message>> => {
     try {
       const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
-      return conversation.messages;
+      
+      // Get all messages from the conversation
+      const messages = conversation.messages;
+      
+      // Sort messages by createdAt (newest first)
+      const sortedMessages = [...messages].sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      
+      // Apply pagination
+      const page = paginationParams?.page || 1;
+      const limit = paginationParams?.limit || 10;
+      
+      return paginate(sortedMessages, page, limit);
+
     } catch (error) {
       console.log('error in getConversationMessagesAsync', error);
       throw new Error('faild to get conversation messages');
