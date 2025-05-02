@@ -1,0 +1,37 @@
+/* تنسيق الـ RegisterForm */
+.registerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--quiqflow-color-bg);
+  border-radius: var(--quiqflow-radius-lg);
+  box-shadow: var(--quiqflow-box-shadow-1);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.registerHeader {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.registerTitle {
+  font-size: var(--quiqflow-font-size-xl);
+  font-weight: var(--quiqflow-font-weight-bold);
+  color: var(--quiqflow-color-primary-font);
+}
+
+.form {
+  width: 100%;
+}
+
+.form .field {
+  margin-bottom: 1rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

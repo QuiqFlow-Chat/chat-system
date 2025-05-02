@@ -1,0 +1,28 @@
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: var(--quiqflow-font-size-sm);
+  color: var(--quiqflow-color-primary-font);
+}
+
+.input {
+  padding: 0.75rem;
+  border: 1px solid var(--quiqflow-color-border);
+  border-radius: var(--quiqflow-radius-sm);
+  font-size: var(--quiqflow-font-size-base);
+}
+
+.invalidFeedback {
+  color: var(--quiqflow-color-error);
+  font-size: var(--quiqflow-font-size-xs);
+  margin-top: 0.25rem;
+}
+
+.error .input {
+  border-color: var(--quiqflow-color-error);
+}

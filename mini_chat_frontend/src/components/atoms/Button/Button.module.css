@@ -1,0 +1,36 @@
+/* src/components/atoms/Button/Button.module.css */
+
+.button {
+  align-items: center;
+  /* 3px */
+  border-radius: var(--quiqflow-radius-button);
+  border: none;
+  /* box-shadow: var(--quiqflow-box-shadow-1); */
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--quiqflow-font-primary);
+  font-size: var(--quiqflow-font-size-md);
+  font-weight: bold;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.button-primary {
+  background-color: var(--quiqflow-color-primary);
+  color: var(--quiqflow-color-white);
+  transition: all 0.3s ease-in-out;
+  border-radius: 3px;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.button-primary:hover {
+  background-color: var(--quiqflow-color-primary-hover);
+}
+
+/* .button-secondary {
+} */
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

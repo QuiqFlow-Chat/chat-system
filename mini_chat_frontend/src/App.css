@@ -40,3 +40,127 @@
 .read-the-docs {
   color: #888;
 }
+
+
+/*
+ * QuiqFlow Design Tokens
+ * Organized by category for readability and maintainability
+ * ============================================================
+ */
+
+/* === Core Theme Variables (Light Mode) === */
+:root {
+  /* === Colors: Greyscale & Basics === */
+  --quiqflow-color-white: #ffffff;
+  --quiqflow-color-black: #000000;
+  --quiqflow-color-light-grey: #f1f5f9;
+  --quiqflow-color-border-muted: #e4e6ea;
+  --quiqflow-color-modal-overlay: rgba(0, 0, 0, 0.5);
+  --quiqflow-color-info: #0288d1;
+  --quiqflow-color-black-lightest: rgba(0, 0, 0, 0.04);
+
+  /* === Colors: Brand & UI Backgrounds === */
+  --quiqflow-color-blue-900: #172b4d;
+  --quiqflow-color-bg: var(--quiqflow-color-white);
+  --quiqflow-color-bg-dark: var(--quiqflow-color-blue-900);
+  --quiqflow-color-bg-secondary: #e5eaf1;
+
+  /* === Colors: Typography === */
+  --quiqflow-color-primary-font: var(--quiqflow-color-blue-900);
+  --quiqflow-color-primary-font-dark: var(--quiqflow-color-blue-900);
+
+  /* === Colors: Brand & State === */
+  --quiqflow-color-primary: #0c66e4;
+  --quiqflow-color-primary-hover: #0a55bd;
+  --quiqflow-color-primary-light: #e9f2ff;
+  --quiqflow-color-error: #e53935;
+  --quiqflow-color-success: #4caf50;
+  --quiqflow-color-warn: #f59e0b;
+  --quiqflow-color-completed: #000563;
+  --quiqflow-color-reOpen: #554feb;
+
+  /* === Colors: UI Interactions === */
+  --quiqflow-color-header-hover-grey: #e9f2ff33;
+  --quiqflow-color-grey: #12121280;
+  --quiqflow-color-nav-active: #788ca5;
+  --quiqflow-color-selected-bg: #e0e7ff;
+  --quiqflow-color-selected-border: #444aeb;
+  --quiqflow-color-grey-border: #091e4224;
+
+  /* === Colors: Components (Derived) === */
+  --quiqflow-badge-bg: var(--quiqflow-color-primary);
+  --quiqflow-badge-text: var(--quiqflow-color-white);
+
+  /* === Typography === */
+  --quiqflow-font-primary: 'Roboto';
+  --quiqflow-font-secondary: 'Noto Kufi Arabic';
+
+  --quiqflow-font-weight-normal: 400;
+  --quiqflow-font-weight-bold: 700;
+
+  /* === Font Sizes === */
+  --quiqflow-font-size-5xl: 50px;
+  --quiqflow-font-size-4xl: 40px;
+  --quiqflow-font-size-3xl: 30px;
+  --quiqflow-font-size-2xl: 24px;
+  --quiqflow-font-size-xl: 20px;
+  --quiqflow-font-size-lg: 18px;
+  --quiqflow-font-size-md: 16px;
+  --quiqflow-font-size-sm: 14px;
+  --quiqflow-font-size-xs: 12px;
+
+  /* === Layout Dimensions === */
+  --quiqflow-height-header: 66px;
+  --quiqflow-sidebar-width: 280px;
+
+  /* === Elevation & Effects === */
+  --quiqflow-box-shadow-1: 0 1px 4px rgba(0, 0, 0, 0.1);
+  --quiqflow-box-shadow-2:0 .5rem 1.5rem .5rem rgba(0, 0, 0, .075)/**/
+  --quiqflow-box-shadow-focus: 0 0 0 2px rgba(52, 120, 246, 0.3);
+  --quiqflow-box-shadow-error: 0 0 0 2px rgba(229, 57, 53, 0.3);
+  --quiqflow-box-shadow-success: 0 0 0 2px rgba(76, 175, 80, 0.3);
+  --quiqflow-box-shadow-dark: 0 0 0 2px rgba(255, 255, 255, 0.3);
+
+  /* === Z-Index === */
+  --quiqflow-z-index-1: 1;
+  --quiqflow-z-index-5: 5;
+  --quiqflow-z-index-10: 10;
+  --quiqflow-z-index-100: 100;
+  --quiqflow-z-index-1000: 1000;
+  --quiqflow-z-index-modal: 1000;
+}
+
+/* === Dark Mode Overrides === */
+[data-theme='dark'] {
+  --quiqflow-color-bg: var(--quiqflow-color-blue-900);
+  --quiqflow-color-bg-secondary: #1a3a5d;
+  --quiqflow-color-primary: #5ba5ff;
+  --quiqflow-color-primary-light: #82bfff;
+  --quiqflow-color-grey: #fff;
+
+  --quiqflow-color-primary-font: var(--quiqflow-color-white);
+  --quiqflow-color-grey-border: var(--quiqflow-color-primary-font);
+
+  --quiqflow-badge-bg: var(--quiqflow-color-primary-light);
+  --quiqflow-badge-text: #001b3a;
+  --quiqflow-color-error: #ef5350;
+  --quiqflow-color-header-hover-grey: #bad2f0;
+  --quiqflow-color-nav-active: #3b82f6;
+  --quiqflow-color-selected-bg: #1e3a8a;
+
+  /* === Component Specific Tokens === */
+  --quiqflow-radius-chip: 1rem;
+  --quiqflow-spacing-xs: 0.5rem; /* 8px */
+  --quiqflow-spacing-2xs: 0.25rem; /* 4px */
+
+  --quiqflow-icon-size-sm: 1rem;
+  --quiqflow-icon-size-md: 1.5rem;
+  --quiqflow-icon-size-lg: 2rem;
+
+  --quiqflow-chip-height-sm: 1.5rem; /* 24px */
+  --quiqflow-chip-height-md: 2rem; /* 32px */
+
+  --quiqflow-color-error-bg: rgba(229, 57, 53, 0.12);
+  --quiqflow-color-success-bg: rgba(76, 175, 80, 0.12);
+  --quiqflow-color-warn-bg: rgba(245, 158, 11, 0.12);
+}

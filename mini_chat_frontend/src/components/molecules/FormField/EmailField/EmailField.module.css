@@ -1,0 +1,11 @@
+/* src/components/molecules/FormField/EmailField/EmailField.module.css */
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.invalid-feedback {
+  font-size: var(--quiqflow-font-size-xs);
+  color: var(--quiqflow-color-error);
+  margin-top: 0.25rem;
+}
