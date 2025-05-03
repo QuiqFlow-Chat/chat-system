@@ -1,0 +1,5 @@
+.user-name {
+    color: var(--quiqflow-color-bg-dark);
+    font-size: var(--quiqflow-font-size-md);
+    font-weight: bold;
+}

@@ -28,6 +28,7 @@
 
 .search-input:focus {
     outline: none;
-    border-color: var(--quiqflow-color-selected-border);
+    border-color: transparent ;
     color: var(--quiqflow-color-bg-dark);
+    box-shadow: var(--quiqflow-box-shadow-focus);
 }

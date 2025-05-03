@@ -1,0 +1,6 @@
+.message-text {
+    border-radius: var(--quiqflow-radius-chat-bubble);
+    font-weight: var(--quiqflow-font-weight-normal);
+    padding: 1rem;
+    word-wrap: break-word;
+}

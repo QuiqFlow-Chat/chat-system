@@ -1,0 +1,8 @@
+.message.incoming {
+    align-self: flex-start;
+}
+
+.message.incoming .message-text {
+    background-color: var(--quiqflow-color-primary-light);
+    color: var(--quiqflow-color-black);
+}

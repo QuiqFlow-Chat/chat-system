@@ -36,6 +36,12 @@
   --quiqflow-color-completed: #000563;
   --quiqflow-color-reOpen: #554feb;
 
+  /* user status *//**/
+  --quiqflow-color-dnd: #e53935; /* do-not-disturb */
+  --quiqflow-color-active: #4caf50;
+  --quiqflow-color-idle: #f59e0b;
+  --quiqflow-color-offline: #565656;
+
   /* === Colors: UI Interactions === */
   --quiqflow-color-header-hover-grey: #e9f2ff33;
   --quiqflow-color-grey: #12121280;
@@ -77,7 +83,10 @@
   --quiqflow-box-shadow-error: 0 0 0 2px rgba(229, 57, 53, 0.3);
   --quiqflow-box-shadow-success: 0 0 0 2px rgba(76, 175, 80, 0.3);
   --quiqflow-box-shadow-dark: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  
   --quiqflow-radius-button: 3px; /**/
+  --quiqflow-radius-chat-bubble: 0.5rem; /**/
+
 
   /* === Z-Index === */
   --quiqflow-z-index-1: 1;

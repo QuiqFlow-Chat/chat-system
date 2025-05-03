@@ -58,24 +58,22 @@ class ButtonController {
     this.button.addEventListener('click', callback);
     return this;
   }
+
+  getElement() {
+    return this.button;
+  }
 }
 
-function createButton() {
-  const form = document.createElement('form');
+function createButton({ text = 'Click', variant = 'primary', size = 'md', type = 'button' } = {}) {
+  const button = document.createElement('button');
+  button.type = type;
+  button.className = `button button-${variant}`;
+  button.textContent = text;
 
-  form.innerHTML = `
-    <button type="submit" id="submitButton" class="button button-primary">
-      Log In
-    </button>
-  `;
+  const controller = new ButtonController(button);
+  controller.setSize(size);
 
-  document.body.appendChild(form);
-
-  const button = form.querySelector('#submitButton');
-  return new ButtonController(button);
+  return controller;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const loginButton = createButton();
-
-});
+export { ButtonController, createButton };

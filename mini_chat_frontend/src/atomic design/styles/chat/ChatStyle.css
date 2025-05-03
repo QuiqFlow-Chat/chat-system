@@ -1,4 +1,24 @@
+/* atoms */
 @import url('../../components/atoms/Avatar/style.css');
+@import url('../../components/atoms/Message/style.css');
+@import url('../../components/atoms/UsarName/style.css');
+
+/* molecules */
 @import url('../../components/molecules/ChatSidebar/ContactItem/style.css');
 @import url('../../components/molecules/ChatSidebar/Search/style.css');
+
+@import url('../../components/molecules/ChatMessagebar/MessengerBody/IncomingMessage/style.css');
+@import url('../../components/molecules/ChatMessagebar/MessengerBody/OutgoingMessage/style.css');
+@import url('../../components/molecules/ChatMessagebar/MessengerBody/SenderData/style.css');
+@import url('../../components/molecules/ChatMessagebar/MessengerBody/style.css');
+
+@import url('../../components/molecules/ChatMessagebar/MessengerFooter/style.css');
+
+@import url('../../components/molecules/ChatMessagebar/MessengerHeader/style.css');
+
+/* organisms */
 @import url('../../components/organisms/Chat/Sidebar/style.css');
+@import url('../../components/organisms/Chat/Messagebar/style.css');
+
+/* page  */
+@import url('../../components/page/MessengerChat/style.css');
