@@ -5,7 +5,8 @@ class ButtonController {
   
     setText(text) {
       const textNode = Array.from(this.button.childNodes).find(
-        node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ''
+        (node) =>
+          node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== ""
       );
   
       if (textNode) {
@@ -17,13 +18,13 @@ class ButtonController {
     }
   
     setVariant(variant) {
-      Array.from(this.button.classList).forEach(className => {
-        if (className.startsWith('button-')) {
+      Array.from(this.button.classList).forEach((className) => {
+        if (className.startsWith("button-")) {
           this.button.classList.remove(className);
         }
       });
   
-      this.button.classList.add('button', `button-${variant}`);
+      this.button.classList.add("button", `button-${variant}`);
       return this;
     }
   
@@ -34,18 +35,18 @@ class ButtonController {
   
     setLoading(loading) {
       if (loading) {
-        this.button.classList.add('button-loading');
+        this.button.classList.add("button-loading");
       } else {
-        this.button.classList.remove('button-loading');
+        this.button.classList.remove("button-loading");
       }
       return this;
     }
   
     setSize(size) {
       const sizes = {
-        'sm': '0.5rem 1rem',
-        'md': '0.75rem 1.5rem',
-        'lg': '1rem 2rem'
+        sm: "0.5rem 1rem",
+        md: "0.75rem 1.5rem",
+        lg: "1rem 2rem",
       };
   
       if (sizes[size]) {
@@ -55,25 +56,26 @@ class ButtonController {
     }
   
     onClick(callback) {
-      this.button.addEventListener('click', callback);
+      this.button.addEventListener("click", callback);
       return this;
     }
-  
-    getElement() {
-      return this.button;
-    }
   }
   
-  function createButton({ text = 'Click', variant = 'primary', size = 'md', type = 'button' } = {}) {
-    const button = document.createElement('button');
-    button.type = type;
-    button.className = `button button-${variant}`;
-    button.textContent = text;
+  function createButton() {
+    const form = document.createElement("form");
   
-    const controller = new ButtonController(button);
-    controller.setSize(size);
+    form.innerHTML = `
+      <button type="submit" id="submitButton" class="button button-primary">
+        Log In
+      </button>
+    `;
   
-    return controller;
+    document.body.appendChild(form);
+  
+    const button = form.querySelector("#submitButton");
+    return new ButtonController(button);
   }
-
-  export { ButtonController, createButton };
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    const loginButton = createButton();
+  });
