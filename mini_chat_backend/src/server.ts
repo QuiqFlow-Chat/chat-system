@@ -46,7 +46,7 @@ export class Server {
     configureSocket(io); // تهيئة أحداث Socket.IO
 
     server.listen(this.port, () => {
-      console.log(`Socket.IO server running on http://localhost:${this.port}`);
+      console.log(`✨ Socket.IO server running on http://localhost:${this.port}`);
     });
   };
 
@@ -61,7 +61,7 @@ export class Server {
   };
   public start = async () => {
     this.app.listen(this.port, () => {
-      console.log(`Server running on http://localhost:${this.port}`);
+      console.log(`❤ Server running on http://localhost:${this.port}`);
     });
   };
 }

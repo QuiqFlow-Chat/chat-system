@@ -1,19 +1,4 @@
-export interface PaginationParams {
-  page: number;
-  limit: number;
-}
-
-export interface PaginatedResult<T> {
-  data: T[];
-  pagination: {
-    total: number;
-    currentPage: number;
-    totalPages: number;
-    limit: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
-}
+import {PaginationParams, PaginatedResult} from '../dtosInterfaces/paginationDtos';
 
 export function paginate<T>(items: T[], page: number = 1, limit: number = 10): PaginatedResult<T> {
   // Ensure valid parameters
