@@ -75,7 +75,22 @@ class ButtonController {
     const button = form.querySelector("#submitButton");
     return new ButtonController(button);
   }
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    const loginButton = createButton();
-  });
+
+  getElement() {
+    return this.button;
+  }
+}
+
+function createButton({ text = 'Click', variant = 'primary', size = 'md', type = 'button' } = {}) {
+  const button = document.createElement('button');
+  button.type = type;
+  button.className = `button button-${variant}`;
+  button.textContent = text;
+
+  const controller = new ButtonController(button);
+  controller.setSize(size);
+
+  return controller;
+}
+
+export { ButtonController, createButton };
