@@ -9,7 +9,7 @@
     "seed": "ts-node src/seeders/seed.ts",
     "dev": "ts-node-dev src/app.ts",
     "format": "prettier --write .",
-    "chat-system": "ts-node src/terminal/terminalMessaging.ts"
+    "chat": "ts-node src/terminal/terminalMessaging.ts"
   },
   "dependencies": {
     "@types/express": "^5.0.1",

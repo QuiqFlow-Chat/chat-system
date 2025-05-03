@@ -4,7 +4,8 @@ import Conversation from '../models/Conversation';
 import Message from '../models/Message';
 import { MESSAGES } from '../constants/message';
 import { AppError } from '../middlewares/errorMiddlewares';
-import { PaginatedResult, PaginationParams, paginate } from '../utils/paginationUtils';
+import { PaginatedResult, PaginationParams} from '../dtosInterfaces/paginationDtos';
+import { paginate } from '../utils/paginationUtils';
 
 export class ConversationService {
   constructor(private _conversationRepository: ConversationsRepository) {}
