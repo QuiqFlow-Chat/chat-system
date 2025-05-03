@@ -1,29 +1,31 @@
 .messenger-footer {
-    padding: 1.5rem;
     border-top: 1px solid var(--quiqflow-color-light-grey);
+    margin-top: 1rem;
+    padding: 1.5rem;
 }
 
 .message-input {
-    width: 100%;
-    border: none;
-    resize:vertical;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border-radius: var(--quiqflow-radius-chat-bubble);
     background-color: var(--quiqflow-color-black-lightest);
+    border-radius: var(--quiqflow-radius-chat-bubble);
+    border: none;
     font-size: var(--quiqflow-font-size-lg);
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    resize:vertical;
+    width: 100%;
 }
 
 .message-input:focus {
-    outline: none;
     background-color: var(--quiqflow-color-chat-bg);
     box-shadow: var(--quiqflow-box-shadow-focus);
+    outline: none;
 }
 
 .message-toolbar {
-    display: flex;
     align-items: end;
+    display: flex;
     justify-content: end;
 }
+
 /* .send-button {
 } */

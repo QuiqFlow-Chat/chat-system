@@ -20,33 +20,31 @@ const messages = [
   },
 ];
 
-const formattedTime = new Date().toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
 const header = createMessengerHeader({ name: "Farah", status: "Online" });
 const body = createMessagesContainer(messages);
 
 const footer = createMessengerFooter((newMessage) => {
-    const formattedTime = new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  
-    const newMessageElement = createOutgoingMessage({
-      name: "You",
-      time: formattedTime,
-      color: "#0984e3",
-      message: newMessage,
-    });
-  
-    const messagesContainer = body.querySelector(".messages-container");
-    messagesContainer.appendChild(newMessageElement);
-    newMessageElement.scrollIntoView({ behavior: "smooth", block: "end" });
+  const formattedTime = new Date().toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
   });
-  
 
+  const newMessageElement = createOutgoingMessage({
+    name: "You",
+    time: formattedTime,
+    color: "#0984e3",
+    message: newMessage,
+  });
+
+  const messagesContainer = body.querySelector(".messages-container");
+  const typingIndicator = messagesContainer.querySelector("#typing-indicator");
+
+  messagesContainer.insertBefore(newMessageElement, typingIndicator);
+
+  newMessageElement.scrollIntoView({ behavior: "smooth", block: "end" });
+  
+});
+  
 export function renderMessengerPage() {
   const messengerCard = document.querySelector(".messenger-card");
   if (!messengerCard) return;

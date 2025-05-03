@@ -28,10 +28,22 @@ export function createMessagesContainer(messages = []) {
     }
   });
 
+  const typingWrapper = document.createElement("div");
+  typingWrapper.className = "typing-indicator";
+  typingWrapper.id = "typing-indicator";
+  typingWrapper.style.display = "none";
+  typingWrapper.innerHTML = `
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  `;
+
+  container.appendChild(typingWrapper);
+
   const messagesBody = document.createElement("div");
   messagesBody.className = "messenger-body";
-
   messagesBody.appendChild(container);
 
   return messagesBody;
 }
+

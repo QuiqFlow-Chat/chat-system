@@ -8,6 +8,35 @@ export function createMessengerFooter(onSendCallback) {
   textarea.className = "message-input";
   textarea.placeholder = "Type a message";
 
+  const sendMessage = () => {
+    const message = textarea.value.trim();
+    if (message && typeof onSendCallback === "function") {
+
+      // const popSound = new Audio('pop-in-message.mp3');
+      // popSound.play();
+
+      onSendCallback(message);
+      textarea.value = "";
+
+      const typingIndicator = document.getElementById("typing-indicator");
+      if (typingIndicator) {
+        typingIndicator.style.display = "none";
+      }
+    }
+  };
+
+  textarea.addEventListener("input", () => {
+    const typingIndicator = document.getElementById("typing-indicator");
+    if (typingIndicator) {
+      const shouldShow = textarea.value.trim() !== "";
+      typingIndicator.style.display = shouldShow ? "flex" : "none";
+  
+      if (shouldShow) {
+        typingIndicator.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }
+  });
+
   const button = document.createElement("button");
   button.className = "send-button";
   const buttonController = new ButtonController(button)
@@ -17,10 +46,13 @@ export function createMessengerFooter(onSendCallback) {
 
   buttonController.onClick((e) => {
     e.preventDefault();
-    const message = textarea.value.trim(); 
-    if (message && typeof onSendCallback === "function") {
-      onSendCallback(message);
-      textarea.value = ""; 
+    sendMessage();
+  });
+
+  textarea.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
   });
 
