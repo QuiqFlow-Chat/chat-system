@@ -75,5 +75,5 @@ class ButtonController {
   
     return controller;
   }
-  
+
   export { ButtonController, createButton };
