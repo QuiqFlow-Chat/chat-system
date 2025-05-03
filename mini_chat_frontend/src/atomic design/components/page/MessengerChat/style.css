@@ -1,0 +1,15 @@
+.chat-container {
+    background-color: var(--quiqflow-color-chat-bg);
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 0fr 2fr;
+    height: 100vh;
+    padding: 1.5rem;
+}
+
+.chat-main {
+    background-color: var(--quiqflow-color-white);
+    border-radius: 0.5rem;
+    box-shadow: var(--quiqflow-box-shadow-1);
+    display: flex;
+}

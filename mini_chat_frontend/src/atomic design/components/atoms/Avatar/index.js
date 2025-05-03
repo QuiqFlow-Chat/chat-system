@@ -11,7 +11,7 @@ class Avatar {
   
   export function createAvatar(initial = 'M') {
     const div = document.createElement('div');
-    div.className = 'contact-avatar';
+    div.className = 'avatar';
     div.textContent = initial.toUpperCase();
   
     return new Avatar(div);

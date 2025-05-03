@@ -3,12 +3,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem ;
-    border-bottom: 1px dashed #eee;
+    gap: 2rem;
+    border-bottom: 1px dashed var(--quiqflow-color-light-grey);
 }
 
 .contact-details {
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
 .contact-info {
@@ -19,7 +21,7 @@
 .contact-name {
     cursor: pointer;
     font-weight: bold;
-    color: #333;
+    color: var(--quiqflow-color-bg-dark);
     margin-bottom: 0.25rem;
 }
 
@@ -28,11 +30,13 @@
 }
 
 .contact-email {
-    font-size: 0.85rem;
-    color: #888;
+    font-size: var(--quiqflow-font-size-sm);
+    color: var(--quiqflow-color-modal-overlay);
 }
 
 .contact-time {
-    font-size: 0.85rem;
-    color: #888;
+    font-size: var(--quiqflow-font-size-sm);
+    /* font-weight: var(--quiqflow-font-weight-bold); */
+    color: var(--quiqflow-color-modal-overlay);
+    width: 50px;
 }
