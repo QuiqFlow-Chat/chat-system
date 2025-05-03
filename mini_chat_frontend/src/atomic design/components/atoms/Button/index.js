@@ -76,4 +76,3 @@ function createButton({ text = 'Click', variant = 'primary', size = 'md', type =
   return controller;
 }
 
-export { ButtonController, createButton };
