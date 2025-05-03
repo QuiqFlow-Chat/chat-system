@@ -12,7 +12,7 @@ interface PasswordFieldProps {
 }
 
 const PasswordField: React.FC<PasswordFieldProps> = ({ name }) => {
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(true); // State to toggle password visibility
   const [field, meta] = useField(name); // Use Formik's useField hook to manage state
   const isInvalid = meta.touched && !!meta.error; // Check if field is invalid based on touch and error
 
@@ -41,7 +41,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ name }) => {
             className={styles["password-toggle"]}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />{" "}
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />{" "}
             {/* Toggle icon based on visibility */}
           </Button>
         </div>

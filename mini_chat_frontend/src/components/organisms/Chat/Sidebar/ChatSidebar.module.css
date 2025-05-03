@@ -1,0 +1,25 @@
+.chatSidebar {
+  max-width: 350px;
+  height: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--quiqflow-color-white);
+  box-shadow: var(--quiqflow-box-shadow-1);
+}
+
+.contactsCard {
+  background-color: var(--quiqflow-color-white);
+  border-radius: 0.5rem;
+}
+
+.contactsBody {
+  /* Add styles for contacts body if needed */
+}
+
+.contactsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
