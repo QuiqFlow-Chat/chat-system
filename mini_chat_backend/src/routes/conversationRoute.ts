@@ -29,11 +29,6 @@ export class ConversationRoute extends BaseRoute {
       AuthMiddleware.authenticate,
       this.conversationController.getConversationByIdAsync
     );
-    this.router.post(
-      '/getConversationMessagesAsync',
-      AuthMiddleware.authenticate,
-      this.conversationController.getConversationMessagesAsync
-    );
   };
   private initGetHttpMethod = async () => {
     this.router.get(
@@ -41,6 +36,27 @@ export class ConversationRoute extends BaseRoute {
       AuthMiddleware.authenticate,
       this.conversationController.getAllConversationsAsync
     );
+    
+    // Update this route to use GET method instead of POST for better RESTful practice
+    this.router.get(
+      '/conversations/:id/messages',
+      AuthMiddleware.authenticate,
+      (req, res, next) => {
+        // Initialize req.body if it's undefined
+        if (!req.body) {
+          req.body = {};
+        }
+        req.body.id = req.params.id;
+        this.conversationController.getConversationMessagesAsync(req, res, next);
+      }
+    );
+    
+    // Keep the original route for backward compatibility
+    // this.router.post(
+    //   '/getConversationMessagesAsync',
+    //   AuthMiddleware.authenticate,
+    //   this.conversationController.getConversationMessagesAsync
+    // );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
