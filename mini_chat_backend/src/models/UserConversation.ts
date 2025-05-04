@@ -10,6 +10,18 @@ interface UserConversationCreateAttributes {
 
 @Table({
   tableName: 'UserConversations',
+  timestamps:true,
+  indexes:[{
+    name:'idx_userConversation_userId',
+    fields: ['userId']
+  },{
+    name:'idx_userConversation_conversationId',
+    fields: ['userId']
+  },{
+    name:'idx_userConversation_userId_conversationId',
+    fields: ['userId','conversationId']
+  }
+]
 })
 class UserConversation
   extends Model<UserConversationCreateAttributes>

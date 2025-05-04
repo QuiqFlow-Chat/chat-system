@@ -33,6 +33,19 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to get all users:`);
     }
   };
+  public getByEmailAsync = async (email:string) => {
+    return await User.findOne({
+      where:{email},
+      include:[{
+        model:Message,
+        as:'messages'
+      }, {
+         model:Conversation,
+         as:'conversations',
+         through:{attributes:[]}
+      }]
+    })
+  }
   public getByIdAsync = async (id: string): Promise<User | null> => {
     try {
       return await User.findByPk(id, {

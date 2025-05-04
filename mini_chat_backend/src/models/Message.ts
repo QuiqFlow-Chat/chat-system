@@ -25,6 +25,16 @@ interface MessageCreateAttributes {
 @Table({
   tableName: 'Messages',
   timestamps: true,
+  indexes:[{
+    name:'idx_message_senderId',
+    fields:['senderId']
+  },{
+    name:'idx_message_conversationId',
+    fields:['conversationId']
+  },{
+    name:'idx_message_senderId_conversationId',
+    fields:['sernderId','conversationId']
+  }]
 })
 class Message extends Model<MessageCreateAttributes> implements MessageCreateAttributes {
   @PrimaryKey
@@ -42,7 +52,6 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
 
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
     allowNull: false,
     field: 'sender_id',
   })
@@ -51,13 +60,12 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
 
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
     field: 'conversation_id',
   })
   @ForeignKey(() => Conversation)
   conversationId!: string;
 
-  @Column({ type: DataType.BOOLEAN, allowNull: true, field: 'is_read' })
+  @Column({ type: DataType.BOOLEAN, allowNull: true, field: 'is_read' ,defaultValue:false})
   isRead!: boolean;
 
   @CreatedAt

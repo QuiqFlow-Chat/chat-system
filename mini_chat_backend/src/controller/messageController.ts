@@ -13,7 +13,7 @@ export class MessageController {
     try {
       const parameters: MessageCreateParameters = req.body;
       await this._messageService.addMessageAsync(parameters);
-      res.status(200).json({ message: MESSAGES.MESSAGE.CREATED });
+      res.status(201).json({ message: MESSAGES.MESSAGE.CREATED });
     } catch (error) {
       next(error);
     }

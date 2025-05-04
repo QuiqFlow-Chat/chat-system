@@ -9,6 +9,7 @@ import DataBase from './config/database';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io'; // تغيير اسم الكلاس لتجنب التضارب
 import { configureSocket } from './config/socket';
+import { AuthRoute } from './routes/authRoute';
 
 export class Server {
   port: number;
@@ -51,10 +52,12 @@ export class Server {
   };
 
   private initRoutes = async () => {
+    new AuthRoute(this.app);
     new UserRoute(this.app);
     new ConversationRoute(this.app);
     new MessageRoute(this.app);
     new UserConversationRoute(this.app);
+
   };
   private initErrorHandler = async () => {
     this.app.use(ErrorMiddleware.handleError);

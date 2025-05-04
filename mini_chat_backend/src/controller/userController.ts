@@ -11,25 +11,7 @@ import { MESSAGES } from '../constants/message';
 export class UserController {
   constructor(private _userService: UserService) {}
 
-  public registerAsync = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const parameters: UserCreateParameters = req.body;
-      await this._userService.registerAsync(parameters);
-      res.status(200).json({ message: MESSAGES.USER.CREATED });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public loginAsync = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const parameters: UserLoginParameters = req.body;
-      const user = await this._userService.LoginAsync(parameters);
-      res.status(200).json(user);
-    } catch (error) {
-      next(error);
-    }
-  };
+  
 
   public getAllUsersAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -70,23 +52,4 @@ export class UserController {
     }
   };
 
-  public logoutUserAsync = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const parameter: UserGetByParameter = req.body;
-      const lastActivity = await this._userService.LogoutAsync(parameter);
-      res.status(200).json(lastActivity);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public getUserConversationsAsync = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const parameter: UserGetByParameter = req.body;
-      const userConversations = await this._userService.getUserConversationsAsync(parameter);
-      res.status(200).json(userConversations);
-    } catch (error) {
-      next(error);
-    }
-  };
 }

@@ -8,7 +8,10 @@ import { PaginatedResult, PaginationParams} from '../dtosInterfaces/paginationDt
 import { paginate } from '../utils/paginationUtils';
 
 export class ConversationService {
-  constructor(private _conversationRepository: ConversationsRepository) {}
+  _userRepository:UserRepository
+  constructor(private _conversationRepository: ConversationsRepository) {
+    this._userRepository = new UserRepository();
+  }
 
   public addConversationAsync = async (): Promise<void> => {
     try {
@@ -87,6 +90,19 @@ export class ConversationService {
     } catch (error) {
       console.log('error in getConversationMessagesAsync', error);
       throw new Error('faild to get conversation messages');
+    }
+  };
+  
+  public getUserConversationsAsync = async (
+    parameter: UserGetByParameter
+  ): Promise<Conversation[]> => {
+    try {
+      const user = await this._userRepository.getUserConversationsAsync(parameter.id);
+      if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
+      return user.conversations;
+    } catch (error) {
+      console.log('Error in getUserConversationsAsync', error);
+      throw new Error('Faild to get user conversations');
     }
   };
 }

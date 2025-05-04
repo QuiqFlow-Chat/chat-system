@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ConversationService } from '../services/conversationService';
 import { ConversaionGetByParameter } from '../dtosInterfaces/conversationDtos';
 import { MESSAGES } from '../constants/message';
+import { UserGetByParameter } from '../dtosInterfaces/userDtos';
 
 export class ConversationController {
   constructor(private _conversationService: ConversationService) {}
@@ -9,7 +10,7 @@ export class ConversationController {
   public addConversationAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this._conversationService.addConversationAsync();
-      res.status(200).json({ message: MESSAGES.CONVERSATION.CREATED });
+      res.status(201).json({ message: MESSAGES.CONVERSATION.CREATED });
     } catch (error) {
       next(error);
     }
@@ -70,4 +71,15 @@ export class ConversationController {
       next(error);
     }
   };
+  
+  public getUserConversationsAsync = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const parameter: UserGetByParameter = req.body;
+      const userConversations = await this._conversationService.getUserConversationsAsync(parameter);
+      res.status(200).json(userConversations);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
+
