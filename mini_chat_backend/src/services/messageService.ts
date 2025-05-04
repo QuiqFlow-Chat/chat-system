@@ -90,7 +90,10 @@ export class MessageService {
     userId: string,
     conversationId: string
   ): Promise<boolean> => {
-    const userConversation = await this._userConversationRepository.getByUser_IdAndConversation_Id(userId,conversationId);
+    const userConversation = await this._userConversationRepository.getByUser_IdAndConversation_Id(
+      userId,
+      conversationId
+    );
     if (!userConversation) return true;
     return false;
   };

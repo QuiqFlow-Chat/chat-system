@@ -26,14 +26,14 @@ export class UserConversationRepository implements IGenericRepository<UserConver
       throw new Error(`Failed to get the userConversation`);
     }
   };
-  public getByUser_IdAndConversation_Id = async (userId:string , conversationId:string) => {
+  public getByUser_IdAndConversation_Id = async (userId: string, conversationId: string) => {
     return await UserConversation.findOne({
-      where:{
+      where: {
         userId,
-        conversationId
-      }
-    })
-   }
+        conversationId,
+      },
+    });
+  };
   public deleteAsync = async (entity: UserConversation): Promise<void> => {
     try {
       await UserConversation.destroy({

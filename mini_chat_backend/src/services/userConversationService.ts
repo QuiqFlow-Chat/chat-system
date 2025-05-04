@@ -19,9 +19,7 @@ export class UserConversationService {
     }
   };
 
-  public getUserConversationsByIdAsync = async (
-    id: string
-  ): Promise<UserConversation> => {
+  public getUserConversationsByIdAsync = async (id: string): Promise<UserConversation> => {
     try {
       const userConversation = await this._userConversationRepository.getByIdAsync(id);
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);

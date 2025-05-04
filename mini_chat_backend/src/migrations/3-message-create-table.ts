@@ -16,7 +16,14 @@ export const up = async ({ context }: { context: Sequelize }) => {
     sender_id: {
       allowNull: false,
       type: DataType.UUID,
-      defaultValue: DataType.UUIDV4,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+    },
+    receiver_id: {
+      allowNull: false,
+      type: DataType.UUID,
       references: {
         model: 'Users',
         key: 'id',
@@ -25,7 +32,6 @@ export const up = async ({ context }: { context: Sequelize }) => {
     conversation_id: {
       allowNull: false,
       type: DataType.UUID,
-      defaultValue: DataType.UUIDV4,
       references: {
         model: 'Conversations',
         key: 'id',

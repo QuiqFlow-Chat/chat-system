@@ -24,10 +24,16 @@ interface UserAttributes {
   updatedAt: Date;
 }
 
-@Table({ tableName: 'Users', timestamps: true , indexes : [{
-name:'idx_user_email',
-fields:['email']
-}]})
+@Table({
+  tableName: 'Users',
+  timestamps: true,
+  indexes: [
+    {
+      name: 'idx_user_email',
+      fields: ['email'],
+    },
+  ],
+})
 class User extends Model<UserAttributes> implements UserAttributes {
   @PrimaryKey
   @Column({
@@ -71,8 +77,11 @@ class User extends Model<UserAttributes> implements UserAttributes {
   @Column({ type: DataType.DATE, allowNull: false, field: 'updated_at' })
   updatedAt!: Date;
 
-  @HasMany(() => Message)
-  messages!: Message[];
+  @HasMany(() => Message, 'senderId')
+  sentMessages!: Message[];
+
+  @HasMany(() => Message, 'receiverId')
+  receivedMessages!: Message[];
 
   @BelongsToMany(() => Conversation, () => UserConversation)
   conversations!: Conversation[];

@@ -13,7 +13,6 @@ export const up = async ({ context }: { context: Sequelize }) => {
     user_id: {
       allowNull: false,
       type: DataType.UUID,
-      defaultValue: DataType.UUIDV4,
       references: {
         model: 'Users',
         key: 'id',
@@ -23,7 +22,6 @@ export const up = async ({ context }: { context: Sequelize }) => {
     conversation_id: {
       allowNull: false,
       type: DataType.UUID,
-      defaultValue: DataType.UUIDV4,
       references: {
         model: 'Conversations',
         key: 'id',

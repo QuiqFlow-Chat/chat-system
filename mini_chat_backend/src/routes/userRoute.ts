@@ -18,7 +18,7 @@ export class UserRoute extends BaseRoute {
     this.initDeleteHttpMethod();
     this.initUpdateHttpMethod();
   }
- 
+
   private initGetHttpMethod = async () => {
     this.router.get(
       '/getAllUsersAsync',

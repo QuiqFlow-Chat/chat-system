@@ -7,8 +7,7 @@ import { UserConversationRoute } from './routes/userConversationRoute';
 import { UserRoute } from './routes/userRoute';
 import DataBase from './config/database';
 import http from 'http';
-import { Server as SocketIOServer } from 'socket.io'; // تغيير اسم الكلاس لتجنب التضارب
-import { configureSocket } from './config/socket';
+import { DefaultEventsMap, Server as SocketIOServer } from 'socket.io'; // تغيير اسم الكلاس لتجنب التضارب
 import { AuthRoute } from './routes/authRoute';
 
 export class Server {
@@ -57,7 +56,6 @@ export class Server {
     new ConversationRoute(this.app);
     new MessageRoute(this.app);
     new UserConversationRoute(this.app);
-
   };
   private initErrorHandler = async () => {
     this.app.use(ErrorMiddleware.handleError);
@@ -68,3 +66,7 @@ export class Server {
     });
   };
 }
+function configureSocket(io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) {
+  throw new Error('Function not implemented.');
+}
+
