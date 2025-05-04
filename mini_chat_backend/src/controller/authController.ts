@@ -27,8 +27,8 @@ export class AuthController{
     
       public logoutUserAsync = async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const parameter: UserGetByParameter = req.body;
-          const lastActivity = await this._authService.logoutAsync(parameter);
+          const { id } = req.params;
+          const lastActivity = await this._authService.logoutAsync(id);
           res.status(200).json(lastActivity);
         } catch (error) {
           next(error);

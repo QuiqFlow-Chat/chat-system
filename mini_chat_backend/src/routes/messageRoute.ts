@@ -17,17 +17,20 @@ export class MessageRoute extends BaseRoute {
     this.initPostHttpMethod();
     this.initUpdateHttpMethod();
     this.initDeleteHttpMethod();
+    this.initGetHttpMethod();
+  }
+  initGetHttpMethod() {
+    this.router.get(
+      '/:id/updateMessageStatusAsync',
+      AuthMiddleware.authenticate,
+      this.messageController.updateMessageStatusAsync
+    );
   }
   private initPostHttpMethod = async () => {
     this.router.post(
       '/addMessageAsync',
       AuthMiddleware.authenticate,
       this.messageController.addMessageAsync
-    );
-    this.router.post(
-      '/updateMessageStatusAsync',
-      AuthMiddleware.authenticate,
-      this.messageController.updateMessageStatusAsync
     );
   };
   private initDeleteHttpMethod = async () => {

@@ -55,10 +55,10 @@ export class ConversationService {
   };
 
   public getConversationByIdAsync = async (
-    parameter: ConversaionGetByParameter
+    id: string
   ): Promise<Conversation> => {
     try {
-      const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
+      const conversation = await this._conversationRepository.getByIdAsync(id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       return conversation;
     } catch (error) {
@@ -68,11 +68,11 @@ export class ConversationService {
   };
 
   public getConversationMessagesAsync = async (
-    parameter: ConversaionGetByParameter,
+    id: string,
     paginationParams?: PaginationParams
   ): Promise<PaginatedResult<Message>> => {
     try {
-      const conversation = await this._conversationRepository.getByIdAsync(parameter.id);
+      const conversation = await this._conversationRepository.getByIdAsync(id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       
       // Get all messages from the conversation
@@ -96,10 +96,10 @@ export class ConversationService {
   };
   
   public getUserConversationsAsync = async (
-    parameter: UserGetByParameter
+    id: string
   ): Promise<Conversation[]> => {
     try {
-      const user = await this._userRepository.getUserConversationsAsync(parameter.id);
+      const user = await this._userRepository.getUserConversationsAsync(id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return user.conversations;
     } catch (error) {

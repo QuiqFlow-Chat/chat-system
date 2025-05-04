@@ -25,9 +25,9 @@ export class UserService {
     }
   };
 
-  public getUserByIdAsync = async (parameter: UserGetByParameter): Promise<User> => {
+  public getUserByIdAsync = async (id: string): Promise<User> => {
     try {
-      const user = await this._userRepository.getByIdAsync(parameter.id);
+      const user = await this._userRepository.getByIdAsync(id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return user;
     } catch (error) {

@@ -74,9 +74,9 @@ export class MessageService {
     }
   };
 
-  public updateMessageStatusAsync = async (parameter: MessageGetByParameter): Promise<void> => {
+  public updateMessageStatusAsync = async (id: string): Promise<void> => {
     try {
-      const message = await this._messageRepository.getByIdAsync(parameter.id);
+      const message = await this._messageRepository.getByIdAsync(id);
       if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       message.isRead = true;
       await this._messageRepository.updateAsync(message);

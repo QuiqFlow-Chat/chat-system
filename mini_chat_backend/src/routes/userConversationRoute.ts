@@ -14,22 +14,20 @@ export class UserConversationRoute extends BaseRoute {
     this.userConversationRepository = new UserConversationRepository();
     this.userConversationService = new UserConversationService(this.userConversationRepository);
     this.userConversationController = new UserConversationController(this.userConversationService);
-    this.initPostHttpMethod();
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
   }
-  private initPostHttpMethod = async () => {
-    this.router.post(
-      '/getUserConversationsByIdAsync',
-      AuthMiddleware.authenticate,
-      this.userConversationController.getUserConversationsByIdAsync
-    );
-  };
+ 
   private initGetHttpMethod = async () => {
     this.router.get(
       '/getAllUserConversationsAsync',
       AuthMiddleware.authenticate,
       this.userConversationController.getAllUserConversationsAsync
+    );
+    this.router.get(
+      '/:id/getUserConversationsByIdAsync',
+      AuthMiddleware.authenticate,
+      this.userConversationController.getUserConversationsByIdAsync
     );
   };
   private initDeleteHttpMethod = async () => {
