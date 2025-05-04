@@ -14,24 +14,21 @@ export class UserRoute extends BaseRoute {
     this.userRepository = new UserRepository();
     this.userService = new UserService(this.userRepository);
     this.userController = new UserController(this.userService);
-    this.initPostHttpMethod();
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
     this.initUpdateHttpMethod();
   }
-  private initPostHttpMethod = async () => {
-    // Protected routes - require authentication
-    this.router.post(
-      '/getUserByIdAsync',
-      AuthMiddleware.authenticate,
-      this.userController.getUserByIdAsync
-    );
-  };
+ 
   private initGetHttpMethod = async () => {
     this.router.get(
       '/getAllUsersAsync',
       AuthMiddleware.authenticate,
       this.userController.getAllUsersAsync
+    );
+    this.router.get(
+      '/:id/getUserByIdAsync',
+      AuthMiddleware.authenticate,
+      this.userController.getUserByIdAsync
     );
   };
   private initDeleteHttpMethod = async () => {

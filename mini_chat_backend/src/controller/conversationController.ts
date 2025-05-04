@@ -45,8 +45,8 @@ export class ConversationController {
 
   public getConversationByIdAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const parameter: ConversaionGetByParameter = req.body;
-      const conversation = await this._conversationService.getConversationByIdAsync(parameter);
+      const {id}= req.params;
+      const conversation = await this._conversationService.getConversationByIdAsync(id);
       res.status(200).json(conversation);
     } catch (error) {
       next(error);
@@ -55,13 +55,13 @@ export class ConversationController {
 
   public getConversationMessagesAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const parameter: ConversaionGetByParameter = req.body;
+      const {id}= req.params;
       
       // Extract pagination parameters from query string
       const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
       const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
       
-      const messages = await this._conversationService.getConversationMessagesAsync(parameter, { 
+      const messages = await this._conversationService.getConversationMessagesAsync(id, { 
         page: page || 1, 
         limit: limit || 10 
       });
@@ -74,8 +74,8 @@ export class ConversationController {
   
   public getUserConversationsAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const parameter: UserGetByParameter = req.body;
-      const userConversations = await this._conversationService.getUserConversationsAsync(parameter);
+      const {id} = req.params;
+      const userConversations = await this._conversationService.getUserConversationsAsync(id);
       res.status(200).json(userConversations);
     } catch (error) {
       next(error);

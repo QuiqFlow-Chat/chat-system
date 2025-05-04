@@ -75,9 +75,9 @@ export class AuthService{
           throw new Error('Faild to login user');
         }
       };
-      public logoutAsync = async (parameter: UserGetByParameter): Promise<Date> => {
+      public logoutAsync = async (id: string): Promise<Date> => {
         try {
-          const user = await this._userRepository.getByIdAsync(parameter.id);
+          const user = await this._userRepository.getByIdAsync(id);
           if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
           user.lastActivity = new Date(Date.now());
           await this._userRepository.updateAsync(user);

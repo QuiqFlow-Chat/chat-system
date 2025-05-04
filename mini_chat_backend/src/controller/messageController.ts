@@ -40,8 +40,8 @@ export class MessageController {
 
   public updateMessageStatusAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const parameters: MessageGetByParameter = req.body;
-      await this._messageService.updateMessageStatusAsync(parameters);
+      const {id} = req.params;
+      await this._messageService.updateMessageStatusAsync(id);
       res.status(200).json({ message: MESSAGES.MESSAGE.UPDATED[1] });
     } catch (error) {
       next(error);
