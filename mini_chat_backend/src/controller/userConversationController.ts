@@ -20,7 +20,7 @@ export class UserConversationController {
     next: NextFunction
   ) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       const userConversation =
         await this._userConversationService.getUserConversationsByIdAsync(id);
       res.status(200).json(userConversation);

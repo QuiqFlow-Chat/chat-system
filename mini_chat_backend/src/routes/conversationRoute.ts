@@ -46,7 +46,7 @@ export class ConversationRoute extends BaseRoute {
       AuthMiddleware.authenticate,
       this.conversationController.getUserConversationsAsync
     );
-  }
+  };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteConversationAsync',

@@ -11,8 +11,6 @@ import { MESSAGES } from '../constants/message';
 export class UserController {
   constructor(private _userService: UserService) {}
 
-  
-
   public getAllUsersAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await this._userService.getAllUsersAsync();
@@ -51,5 +49,4 @@ export class UserController {
       next(error);
     }
   };
-
 }

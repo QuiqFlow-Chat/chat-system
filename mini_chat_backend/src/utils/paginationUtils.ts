@@ -1,15 +1,15 @@
-import {PaginationParams, PaginatedResult} from '../dtosInterfaces/paginationDtos';
+import { PaginationParams, PaginatedResult } from '../dtosInterfaces/paginationDtos';
 
 export function paginate<T>(items: T[], page: number = 1, limit: number = 10): PaginatedResult<T> {
   // Ensure valid parameters
   const validPage = Math.max(1, page);
   const validLimit = Math.max(1, limit);
-  
+
   const total = items.length;
   const totalPages = Math.ceil(total / validLimit);
   const startIndex = (validPage - 1) * validLimit;
   const endIndex = Math.min(startIndex + validLimit, total);
-  
+
   return {
     data: items.slice(startIndex, endIndex),
     pagination: {
@@ -18,7 +18,7 @@ export function paginate<T>(items: T[], page: number = 1, limit: number = 10): P
       totalPages,
       limit: validLimit,
       hasNextPage: validPage < totalPages,
-      hasPrevPage: validPage > 1
-    }
+      hasPrevPage: validPage > 1,
+    },
   };
 }

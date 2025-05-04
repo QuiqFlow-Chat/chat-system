@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import readline from 'readline';
 
 // Connect to the server
-const SERVER_URL = 'http://localhost:3777'; 
+const SERVER_URL = 'http://localhost:3777';
 const socket = io(SERVER_URL);
 
 // Create a readline interface for user input
@@ -60,7 +60,7 @@ const main = async () => {
 
   // Join the conversation room
   socket.emit('joinConversation', { conversationId });
-  
+
   // Notify the server that the user is online
   socket.emit('userOnline', { id: userId });
 

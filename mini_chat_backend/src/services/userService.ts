@@ -66,5 +66,4 @@ export class UserService {
       throw new Error('Faild to update user');
     }
   }
-
 }

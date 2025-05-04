@@ -45,7 +45,7 @@ export class ConversationController {
 
   public getConversationByIdAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {id}= req.params;
+      const { id } = req.params;
       const conversation = await this._conversationService.getConversationByIdAsync(id);
       res.status(200).json(conversation);
     } catch (error) {
@@ -55,26 +55,26 @@ export class ConversationController {
 
   public getConversationMessagesAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {id}= req.params;
-      
+      const { id } = req.params;
+
       // Extract pagination parameters from query string
       const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
       const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
-      
-      const messages = await this._conversationService.getConversationMessagesAsync(id, { 
-        page: page || 1, 
-        limit: limit || 10 
+
+      const messages = await this._conversationService.getConversationMessagesAsync(id, {
+        page: page || 1,
+        limit: limit || 10,
       });
-      
+
       res.status(200).json(messages);
     } catch (error) {
       next(error);
     }
   };
-  
+
   public getUserConversationsAsync = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       const userConversations = await this._conversationService.getUserConversationsAsync(id);
       res.status(200).json(userConversations);
     } catch (error) {
@@ -82,4 +82,3 @@ export class ConversationController {
     }
   };
 }
-

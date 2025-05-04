@@ -15,6 +15,7 @@ import Conversation from './Conversation';
 interface MessageCreateAttributes {
   id: string;
   senderId: string;
+  receiverId: string;
   conversationId: string;
   isRead: boolean;
   content: string;
@@ -25,16 +26,6 @@ interface MessageCreateAttributes {
 @Table({
   tableName: 'Messages',
   timestamps: true,
-  indexes:[{
-    name:'idx_message_senderId',
-    fields:['senderId']
-  },{
-    name:'idx_message_conversationId',
-    fields:['conversationId']
-  },{
-    name:'idx_message_senderId_conversationId',
-    fields:['sernderId','conversationId']
-  }]
 })
 class Message extends Model<MessageCreateAttributes> implements MessageCreateAttributes {
   @PrimaryKey
@@ -60,12 +51,20 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
 
   @Column({
     type: DataType.UUID,
+    allowNull: false,
+    field: 'receiver_id',
+  })
+  @ForeignKey(() => User)
+  receiverId!: string;
+
+  @Column({
+    type: DataType.UUID,
     field: 'conversation_id',
   })
   @ForeignKey(() => Conversation)
   conversationId!: string;
 
-  @Column({ type: DataType.BOOLEAN, allowNull: true, field: 'is_read' ,defaultValue:false})
+  @Column({ type: DataType.BOOLEAN, allowNull: true, field: 'is_read', defaultValue: false })
   isRead!: boolean;
 
   @CreatedAt
@@ -81,5 +80,8 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
 
   @BelongsTo(() => Conversation)
   conversation!: Conversation;
+
+  @BelongsTo(() => User)
+  receiver!: User;
 }
 export default Message;

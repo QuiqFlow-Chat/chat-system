@@ -5,7 +5,6 @@ import { MessageService } from '../services/messageService';
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { registerChatHandlers } from '../sockets/chatSocket';
 
-
 const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
 

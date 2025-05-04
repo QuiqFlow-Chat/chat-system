@@ -17,7 +17,7 @@ export class UserConversationRoute extends BaseRoute {
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
   }
- 
+
   private initGetHttpMethod = async () => {
     this.router.get(
       '/getAllUserConversationsAsync',
