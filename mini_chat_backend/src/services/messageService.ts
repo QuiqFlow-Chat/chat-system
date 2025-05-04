@@ -90,11 +90,8 @@ export class MessageService {
     userId: string,
     conversationId: string
   ): Promise<boolean> => {
-    const userConversations = await this._userConversationRepository.getAllAsync();
-    const userConversationChecked = userConversations.filter(
-      (uc) => uc.userId === userId && uc.conversationId === conversationId
-    );
-    if (userConversationChecked.length > 0) return false;
-    return true;
+    const userConversation = await this._userConversationRepository.getByUser_IdAndConversation_Id(userId,conversationId);
+    if (!userConversation) return true;
+    return false;
   };
 }

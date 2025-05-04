@@ -6,6 +6,8 @@ import { MESSAGES } from '../constants/message';
 import { AppError } from '../middlewares/errorMiddlewares';
 import { PaginatedResult, PaginationParams} from '../dtosInterfaces/paginationDtos';
 import { paginate } from '../utils/paginationUtils';
+import { UserGetByParameter } from '../dtosInterfaces/userDtos';
+import { UserRepository } from '../repositories/userRepository';
 
 export class ConversationService {
   _userRepository:UserRepository
