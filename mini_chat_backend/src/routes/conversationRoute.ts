@@ -29,6 +29,16 @@ export class ConversationRoute extends BaseRoute {
       AuthMiddleware.authenticate,
       this.conversationController.getConversationByIdAsync
     );
+    this.router.post(
+      '/getConversationMessagesAsync',
+      AuthMiddleware.authenticate,
+      this.conversationController.getConversationMessagesAsync
+    );
+    this.router.post(
+      '/getUserConversationsAsync',
+      AuthMiddleware.authenticate,
+      this.conversationController.getUserConversationsAsync
+    );
   };
   private initGetHttpMethod = async () => {
     this.router.get(

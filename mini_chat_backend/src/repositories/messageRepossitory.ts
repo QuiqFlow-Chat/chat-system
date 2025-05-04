@@ -1,4 +1,5 @@
 import Message from '../models/Message';
+import UserConversation from '../models/UserConversation';
 import { IGenericRepository } from './genericRepositoryInterface';
 
 export class MessageRepository implements IGenericRepository<Message> {

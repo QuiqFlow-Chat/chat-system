@@ -7,15 +7,14 @@ import { UserRepository } from '../repositories/userRepository';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
 import { MESSAGES } from '../constants/message';
 import { AppError } from '../middlewares/errorMiddlewares';
-import { App } from '../app';
 
 export class MessageService {
   _userRepository: UserRepository;
-  _conversationRepositpry: ConversationsRepository;
+  _conversationRepository: ConversationsRepository;
   _userConversationRepository: UserConversationRepository;
   constructor(private _messageRepository: MessageRepository) {
     this._userRepository = new UserRepository();
-    this._conversationRepositpry = new ConversationsRepository();
+    this._conversationRepository = new ConversationsRepository();
     this._userConversationRepository = new UserConversationRepository();
   }
 
@@ -27,7 +26,7 @@ export class MessageService {
         throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_MESSAGE[1]);
       const sender = await this._userRepository.getByIdAsync(parameters.senderId);
       if (!sender) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
-      const conversation = await this._conversationRepositpry.getByIdAsync(
+      const conversation = await this._conversationRepository.getByIdAsync(
         parameters.conversationId
       );
       if (!conversation) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
@@ -35,7 +34,7 @@ export class MessageService {
       message.isRead = false;
       await this._messageRepository.updateAsync(message);
 
-      const resultOfUserConversationCheck = await this.checkUserConversationAsync(
+      const resultOfUserConversationCheck = await this.shouldCreateUserConversation(
         parameters.senderId,
         parameters.conversationId
       );
@@ -87,15 +86,12 @@ export class MessageService {
     }
   };
 
-  public checkUserConversationAsync = async (
+  public shouldCreateUserConversation = async (
     userId: string,
     conversationId: string
   ): Promise<boolean> => {
-    const userConversations = await this._userConversationRepository.getAllAsync();
-    const userConversationChecked = userConversations.filter(
-      (uc) => uc.userId === userId && uc.conversationId === conversationId
-    );
-    if (userConversationChecked.length > 0) return false;
-    return true;
+    const userConversation = await this._userConversationRepository.getByUser_IdAndConversation_Id(userId,conversationId);
+    if (!userConversation) return true;
+    return false;
   };
 }

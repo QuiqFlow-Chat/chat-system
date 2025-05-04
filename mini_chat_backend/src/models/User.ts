@@ -4,6 +4,7 @@ import {
   CreatedAt,
   DataType,
   HasMany,
+  Index,
   Model,
   PrimaryKey,
   Table,
@@ -23,7 +24,10 @@ interface UserAttributes {
   updatedAt: Date;
 }
 
-@Table({ tableName: 'Users', timestamps: true })
+@Table({ tableName: 'Users', timestamps: true , indexes : [{
+name:'idx_user_email',
+fields:['email']
+}]})
 class User extends Model<UserAttributes> implements UserAttributes {
   @PrimaryKey
   @Column({
