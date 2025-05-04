@@ -75,13 +75,13 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
   @Column({ type: DataType.DATE, allowNull: false, field: 'updated_at' })
   updatedAt!: Date;
 
-  @BelongsTo(() => User)
-  sender!: User;
+  @BelongsTo(() => User, 'senderId')
+sender!: User;
 
-  @BelongsTo(() => Conversation)
-  conversation!: Conversation;
+@BelongsTo(() => User, 'receiverId')
+receiver!: User;
 
-  @BelongsTo(() => User)
-  receiver!: User;
+@BelongsTo(() => Conversation)
+conversation!: Conversation;
 }
 export default Message;
