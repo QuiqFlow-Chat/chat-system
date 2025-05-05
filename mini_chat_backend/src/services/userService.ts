@@ -2,7 +2,7 @@ import { MESSAGES } from '../constants/message';
 import {
   UserGetByParameter,
   UserUpdateParameters,
-} from '../dtosInterfaces/userDtos';
+} from '../shared/dtosInterfaces/userDtos';
 import User from '../models/User';
 import { UserRepository } from '../repositories/userRepository';
 import { AppError } from '../middlewares/errorMiddlewares';

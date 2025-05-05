@@ -1,7 +1,7 @@
 import {
   UserGetByParameter,
   UserUpdateParameters,
-} from './../dtosInterfaces/userDtos';
+} from '../shared/dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/userService';
 import { MESSAGES } from '../constants/message';
