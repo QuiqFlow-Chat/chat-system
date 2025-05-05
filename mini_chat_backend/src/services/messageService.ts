@@ -1,5 +1,11 @@
-import { MessageCreateFullParameters, MessageUpdateParameters } from '../shared/dtosInterfaces/messageDtos';
-import { MessageCreateParameters, MessageGetByParameter } from '../shared/dtosInterfaces/messageDtos';
+import {
+  MessageCreateFullParameters,
+  MessageUpdateParameters,
+} from '../shared/dtosInterfaces/messageDtos';
+import {
+  MessageCreateParameters,
+  MessageGetByParameter,
+} from '../shared/dtosInterfaces/messageDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';
@@ -31,23 +37,26 @@ export class MessageService {
 
       const receiver = await this._userRepository.getById(parameters.receiverId);
       if (!receiver) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
-      
-      const flag = await this.shouldCreateConversation(parameters.senderId , parameters.receiverId);
-      let conversation_Id : string;
-      if(flag){
+
+      const flag = await this.shouldCreateConversation(parameters.senderId, parameters.receiverId);
+      let conversation_Id: string;
+      if (flag) {
         const conversation = await this._conversationRepository.add();
         conversation_Id = conversation.id;
-        await this.addUsersToConversation(parameters.senderId,parameters.receiverId,conversation_Id);
+        await this.addUsersToConversation(
+          parameters.senderId,
+          parameters.receiverId,
+          conversation_Id
+        );
+      } else {
+        conversation_Id = await this.getConversation_Id(parameters.senderId, parameters.receiverId);
       }
-      else{
-        conversation_Id = await this.getConversation_Id(parameters.senderId,parameters.receiverId);
-      }
-      const createMessage : MessageCreateFullParameters = {
-        senderId : parameters.senderId,
-        receiverId : parameters.receiverId,
-        conversationId : conversation_Id,
-        content : parameters.content
-      }
+      const createMessage: MessageCreateFullParameters = {
+        senderId: parameters.senderId,
+        receiverId: parameters.receiverId,
+        conversationId: conversation_Id,
+        content: parameters.content,
+      };
       const message = await this._messageRepository.add(createMessage);
       return message;
     } catch (error) {
@@ -91,30 +100,37 @@ export class MessageService {
     }
   };
 
-  //Validation methods of send message 
+  //Validation methods of send message
   public shouldCreateConversation = async (
     senderId: string,
     receiverId: string
   ): Promise<boolean> => {
-    const message = await this._messageRepository.getBySender_IdAndReceiver_Id(senderId,receiverId);
-    if(message) return false;
+    const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
+      senderId,
+      receiverId
+    );
+    if (message) return false;
     return true;
-};
- 
- public getConversation_Id = async (senderId:string,receiverId:string) : Promise<string> => {
-  const message = await this._messageRepository.getBySender_IdAndReceiver_Id(senderId,receiverId);
-  if(message)
-  return message.conversationId;
-  return "";
- }
+  };
 
- public addUsersToConversation = async (user1_Id : string , user2_Id : string , conversationId : string) => {
-  const users = [user1_Id, user2_Id];
+  public getConversation_Id = async (senderId: string, receiverId: string): Promise<string> => {
+    const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
+      senderId,
+      receiverId
+    );
+    if (message) return message.conversationId;
+    return '';
+  };
 
-  await Promise.all(
-    users.map(userId =>
-      this._userConversationRepository.add({ userId, conversationId })
-    )
-  );
- }
+  public addUsersToConversation = async (
+    user1_Id: string,
+    user2_Id: string,
+    conversationId: string
+  ) => {
+    const users = [user1_Id, user2_Id];
+
+    await Promise.all(
+      users.map((userId) => this._userConversationRepository.add({ userId, conversationId }))
+    );
+  };
 }

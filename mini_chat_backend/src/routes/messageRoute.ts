@@ -30,7 +30,7 @@ export class MessageRoute extends BaseRoute {
     this.router.post(
       '/sendMessage',
       AuthMiddleware.authenticate,
-      this.messageController.addMessage
+      this.messageController.sendMessage
     );
   };
   private initDeleteHttpMethod = async () => {

@@ -66,7 +66,8 @@ export class Server {
     });
   };
 }
-function configureSocket(io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) {
+function configureSocket(
+  io: SocketIOServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
+) {
   throw new Error('Function not implemented.');
 }
-

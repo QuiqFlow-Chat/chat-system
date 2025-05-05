@@ -1,6 +1,5 @@
-import UserConversation from '../models/UserConversation';import { IUserConversationRepository } from './userConversationRepositoryInterface';
-;
-
+import UserConversation from '../models/UserConversation';
+import { IUserConversationRepository } from './userConversationRepositoryInterface';
 export class UserConversationRepository implements IUserConversationRepository<UserConversation> {
   public add = async (data: any): Promise<void> => {
     try {
@@ -18,7 +17,7 @@ export class UserConversationRepository implements IUserConversationRepository<U
       throw new Error(`Failed to get all userConversation`);
     }
   };
-  public getById= async (id: string): Promise<UserConversation | null> => {
+  public getById = async (id: string): Promise<UserConversation | null> => {
     try {
       return await UserConversation.findByPk(id);
     } catch (error) {
@@ -38,9 +37,8 @@ export class UserConversationRepository implements IUserConversationRepository<U
       console.error('Error in get userConversation by user and conversation id :', error);
       throw new Error(`Failed to get user conversation`);
     }
-    
   };
-  public delete= async (entity: UserConversation): Promise<void> => {
+  public delete = async (entity: UserConversation): Promise<void> => {
     try {
       await UserConversation.destroy({
         where: { id: (entity as any).id },
@@ -50,4 +48,4 @@ export class UserConversationRepository implements IUserConversationRepository<U
       throw new Error(`Failed to delete userConversation`);
     }
   };
-  };
+}

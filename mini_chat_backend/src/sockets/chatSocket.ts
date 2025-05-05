@@ -30,11 +30,9 @@ export const registerChatHandlers = (
 
   socket.on('sendMessage', async (message) => {
     try {
-      console.log(
-        `✉️ New message from ${message.senderId} to ${message.receiverId}`
-      );
+      console.log(`✉️ New message from ${message.senderId} to ${message.receiverId}`);
 
-      const newMessage =  await messageService.sendMessage(message);
+      const newMessage = await messageService.sendMessage(message);
       const createdAt = new Date().toISOString();
 
       io.to(newMessage.conversationId).emit('receiveMessage', {

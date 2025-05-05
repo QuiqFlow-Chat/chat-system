@@ -4,6 +4,8 @@ import { Application } from 'express';
 import { BaseRoute } from './baseRoute';
 import { ConversationController } from '../controller/conversationController';
 import { AuthMiddleware } from '../middlewares/authMiddlewares';
+import { validateRequest } from '../middlewares/validationMiddleware';
+import { conversationIdSchema } from '../shared/validations/conversationValidation';
 
 export class ConversationRoute extends BaseRoute {
   conversationRepository: ConversationsRepository;
@@ -14,17 +16,10 @@ export class ConversationRoute extends BaseRoute {
     this.conversationRepository = new ConversationsRepository();
     this.conversationService = new ConversationService(this.conversationRepository);
     this.conversationController = new ConversationController(this.conversationService);
-    this.initPostHttpMethod();
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
   }
-  private initPostHttpMethod = async () => {
-    this.router.post(
-      '/addNewConversation',
-      AuthMiddleware.authenticate,
-      this.conversationController.addNewConversation
-    );
-  };
+
   private initGetHttpMethod = async () => {
     this.router.get(
       '/getAllConversations',
@@ -33,21 +28,25 @@ export class ConversationRoute extends BaseRoute {
     );
     this.router.get(
       '/:id/getConversationById',
+      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
       this.conversationController.getConversationById
     );
     this.router.get(
       '/:id/getConversationMessages',
+      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
       this.conversationController.getConversationMessages
     );
     this.router.get(
       '/:id/getConversationUsers',
+      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
       this.conversationController.getConversationUsers
     );
     this.router.get(
       '/:id/getUserConversations',
+      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
       this.conversationController.getUserConversations
     );
@@ -55,6 +54,7 @@ export class ConversationRoute extends BaseRoute {
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteConversationAsync',
+      validateRequest(conversationIdSchema, 'body'),
       AuthMiddleware.authenticate,
       this.conversationController.deleteConversation
     );

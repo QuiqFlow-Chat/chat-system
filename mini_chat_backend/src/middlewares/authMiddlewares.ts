@@ -22,31 +22,31 @@ export class AuthMiddleware {
    */
 
   @catchAsync()
-  static async authenticate (req: Request, _res: Response, next: NextFunction) {
-      const authHeader = req.headers.authorization;
+  static async authenticate(req: Request, _res: Response, next: NextFunction) {
+    const authHeader = req.headers.authorization;
 
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw AppError.unauthorized('Authorization token is missing or invalid');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw AppError.unauthorized('Authorization token is missing or invalid');
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+      const decoded = AuthUtils.verifyToken(token);
+
+      // Attach user data to the request
+      req.user = {
+        id: decoded.id,
+        email: decoded.email,
+      };
+
+      next();
+    } catch (err) {
+      if (err instanceof jwt.JsonWebTokenError) {
+        throw AppError.unauthorized('Invalid token');
+      } else {
+        throw err;
       }
-
-      const token = authHeader.split(' ')[1];
-
-      try {
-        const decoded = AuthUtils.verifyToken(token);
-
-        // Attach user data to the request
-        req.user = {
-          id: decoded.id,
-          email: decoded.email,
-        };
-
-        next();
-      } catch (err) {
-        if (err instanceof jwt.JsonWebTokenError) {
-          throw AppError.unauthorized('Invalid token');
-        } else {
-          throw err;
-        }
-      }
-  };
+    }
+  }
 }

@@ -4,7 +4,7 @@ import { IMessageRepository } from './messageRepositoryInterface';
 export class MessageRepository implements IMessageRepository<Message> {
   public add = async (data: any): Promise<Message> => {
     try {
-     return await Message.create(data);
+      return await Message.create(data);
     } catch (error) {
       console.error('Error in add message:', error);
       throw new Error(`Failed to add message`);
@@ -26,17 +26,19 @@ export class MessageRepository implements IMessageRepository<Message> {
       throw new Error(`Failed to get the message`);
     }
   };
-  public getBySender_IdAndReceiver_Id = async(senderId:string,receiverId:string):Promise<Message|null> => {
+  public getBySender_IdAndReceiver_Id = async (
+    senderId: string,
+    receiverId: string
+  ): Promise<Message | null> => {
     try {
       return await Message.findOne({
-        where:{senderId,receiverId}
-     });
+        where: { senderId, receiverId },
+      });
     } catch (error) {
       console.error('error in get message by sender and receiver id : ', error);
       throw new Error(`Failed to get message`);
     }
-   
-  }
+  };
   public delete = async (entity: Message): Promise<void> => {
     try {
       await Message.destroy({
