@@ -1,9 +1,11 @@
+import { userConversationIdSchema } from './../shared/validations/userConversationValidation';
 import { Application } from 'express';
 import { BaseRoute } from './baseRoute';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
 import { UserConversationController } from '../controller/userConversationController';
 import { UserConversationService } from '../services/userConversationService';
 import { AuthMiddleware } from '../middlewares/authMiddlewares';
+import { validateRequest } from '../middlewares/validationMiddleware';
 
 export class UserConversationRoute extends BaseRoute {
   userConversationRepository: UserConversationRepository;
@@ -27,6 +29,7 @@ export class UserConversationRoute extends BaseRoute {
     this.router.get(
       '/:id/getUserConversationsById',
       AuthMiddleware.authenticate,
+      validateRequest(userConversationIdSchema,'params'),
       this.userConversationController.getUserConversationsById
     );
   };
@@ -34,6 +37,7 @@ export class UserConversationRoute extends BaseRoute {
     this.router.delete(
       '/deleteUserConversations',
       AuthMiddleware.authenticate,
+      validateRequest(userConversationIdSchema,'body'),
       this.userConversationController.deleteUserConversations
     );
   };

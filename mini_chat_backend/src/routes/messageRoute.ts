@@ -1,9 +1,12 @@
+import { messageUpdateContentSchema } from './../shared/validations/messageValidation';
 import { Application } from 'express';
 import { BaseRoute } from './baseRoute';
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { MessageService } from '../services/messageService';
 import { MessageController } from '../controller/messageController';
 import { AuthMiddleware } from '../middlewares/authMiddlewares';
+import { validateRequest } from '../middlewares/validationMiddleware';
+import { messageIdSchema, sendMessageSchema } from '../shared/validations/messageValidation';
 
 export class MessageRoute extends BaseRoute {
   messageRepository: MessageRepository;
@@ -23,6 +26,7 @@ export class MessageRoute extends BaseRoute {
     this.router.get(
       '/:id/updateMessageStatus',
       AuthMiddleware.authenticate,
+      validateRequest(messageIdSchema,'params'),
       this.messageController.updateMessageStatus
     );
   }
@@ -30,6 +34,7 @@ export class MessageRoute extends BaseRoute {
     this.router.post(
       '/sendMessage',
       AuthMiddleware.authenticate,
+      validateRequest(sendMessageSchema,'body'),
       this.messageController.sendMessage
     );
   };
@@ -37,6 +42,7 @@ export class MessageRoute extends BaseRoute {
     this.router.delete(
       '/deleteMessage',
       AuthMiddleware.authenticate,
+      validateRequest(messageIdSchema,'body'),
       this.messageController.deleteMessage
     );
   };
@@ -44,6 +50,7 @@ export class MessageRoute extends BaseRoute {
     this.router.patch(
       '/updateMessageContent',
       AuthMiddleware.authenticate,
+      validateRequest(messageUpdateContentSchema,'body'),
       this.messageController.updateMessageContent
     );
   };
