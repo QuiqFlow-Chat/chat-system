@@ -28,34 +28,34 @@ export class ConversationRoute extends BaseRoute {
     );
     this.router.get(
       '/:id/getConversationById',
-      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
+      validateRequest(conversationIdSchema, 'params'),
       this.conversationController.getConversationById
     );
     this.router.get(
       '/:id/getConversationMessages',
-      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
+      validateRequest(conversationIdSchema, 'params'),
       this.conversationController.getConversationMessages
     );
     this.router.get(
       '/:id/getConversationUsers',
-      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
+      validateRequest(conversationIdSchema, 'params'),
       this.conversationController.getConversationUsers
     );
     this.router.get(
       '/:id/getUserConversations',
-      validateRequest(conversationIdSchema, 'params'),
       AuthMiddleware.authenticate,
+      validateRequest(conversationIdSchema, 'params'),
       this.conversationController.getUserConversations
     );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteConversationAsync',
-      validateRequest(conversationIdSchema, 'body'),
       AuthMiddleware.authenticate,
+      validateRequest(conversationIdSchema, 'body'),
       this.conversationController.deleteConversation
     );
   };

@@ -25,12 +25,13 @@ export class UserRoute extends BaseRoute {
     this.router.get('/getAllUsers', AuthMiddleware.authenticate, this.userController.getAllUsers);
     this.router.get(
       '/:id/getUserById',
-      validateRequest(userIdSchema, 'params'),
       AuthMiddleware.authenticate,
+      validateRequest(userIdSchema, 'params'),
       this.userController.getUserById
     );
     this.router.get(
       '/:id/getUserLastActivity',
+      AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'params'),
       this.userController.getUserLastActivity
     );
@@ -38,16 +39,16 @@ export class UserRoute extends BaseRoute {
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteUser',
-      validateRequest(userIdSchema, 'body'),
       AuthMiddleware.authenticate,
+      validateRequest(userIdSchema, 'body'),
       this.userController.deleteUser
     );
   };
   private initUpdateHttpMethod = async () => {
     this.router.patch(
       '/updateUser',
-      validateRequest(userUpdateSchema, 'body'),
       AuthMiddleware.authenticate,
+      validateRequest(userUpdateSchema, 'body'),
       this.userController.updateUser
     );
   };
