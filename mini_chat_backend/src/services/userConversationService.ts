@@ -1,5 +1,5 @@
 import { MESSAGES } from '../constants/message';
-import { UserConversationGetByParameter } from '../dtosInterfaces/userConversationDtos';
+import { UserConversationGetByParameter } from '../shared/dtosInterfaces/userConversationDtos';
 import { AppError } from '../middlewares/errorMiddlewares';
 import UserConversation from '../models/UserConversation';
 import { UserConversationRepository } from '../repositories/userConversationRepository';

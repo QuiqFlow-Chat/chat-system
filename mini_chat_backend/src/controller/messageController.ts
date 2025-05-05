@@ -4,7 +4,7 @@ import {
   MessageCreateParameters,
   MessageGetByParameter,
   MessageUpdateParameters,
-} from '../dtosInterfaces/messageDtos';
+} from '../shared/dtosInterfaces/messageDtos';
 import { MESSAGES } from '../constants/message';
 import { catchAsync } from '../decorators/try_catchDecorators';
 

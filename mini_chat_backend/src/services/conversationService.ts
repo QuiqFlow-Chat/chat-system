@@ -1,10 +1,10 @@
-import { ConversaionGetByParameter } from './../dtosInterfaces/conversationDtos';
+import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import Conversation from '../models/Conversation';
 import Message from '../models/Message';
 import { MESSAGES } from '../constants/message';
 import { AppError } from '../middlewares/errorMiddlewares';
-import { PaginatedResult, PaginationParams } from '../dtosInterfaces/paginationDtos';
+import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
 import { paginate } from '../utils/paginationUtils';
 import { UserRepository } from '../repositories/userRepository';
 import User from '../models/User';

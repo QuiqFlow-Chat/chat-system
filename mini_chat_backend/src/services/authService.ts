@@ -3,7 +3,7 @@ import {
   UserCreateParameters,
   UserLoginParameters,
   AuthResponse,
-} from '../dtosInterfaces/userDtos';
+} from '../shared/dtosInterfaces/userDtos';
 import { AppError } from '../middlewares/errorMiddlewares';
 import { UserRepository } from '../repositories/userRepository';
 import { AuthUtils } from '../utils/authUtils';

@@ -1,5 +1,5 @@
-import { MessageCreateFullParameters, MessageUpdateParameters } from './../dtosInterfaces/messageDtos';
-import { MessageCreateParameters, MessageGetByParameter } from '../dtosInterfaces/messageDtos';
+import { MessageCreateFullParameters, MessageUpdateParameters } from '../shared/dtosInterfaces/messageDtos';
+import { MessageCreateParameters, MessageGetByParameter } from '../shared/dtosInterfaces/messageDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';

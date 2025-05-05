@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ConversationService } from '../services/conversationService';
-import { ConversaionGetByParameter } from '../dtosInterfaces/conversationDtos';
+import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
 import { MESSAGES } from '../constants/message';
 import { catchAsync } from '../decorators/try_catchDecorators';
 

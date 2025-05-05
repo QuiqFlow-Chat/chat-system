@@ -1,6 +1,6 @@
-import { ConversaionGetByParameter } from './../dtosInterfaces/conversationDtos';
-import { MessageCreateParameters } from '../dtosInterfaces/messageDtos';
-import { UserGetByParameter } from '../dtosInterfaces/userDtos';
+import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
+import { MessageCreateParameters } from '../shared/dtosInterfaces/messageDtos';
+import { UserGetByParameter } from '../shared/dtosInterfaces/userDtos';
 import { Socket } from 'socket.io';
 
 export interface ClientToServerEvents {
