@@ -1,17 +1,16 @@
 import Message from '../models/Message';
-import UserConversation from '../models/UserConversation';
-import { IGenericRepository } from './genericRepositoryInterface';
+import { IMessageRepository } from './messageRepositoryInterface';
 
-export class MessageRepository implements IGenericRepository<Message> {
-  public addAsync = async (data: any): Promise<Message> => {
+export class MessageRepository implements IMessageRepository<Message> {
+  public add = async (data: any): Promise<void> => {
     try {
-      return await Message.create(data);
+      await Message.create(data);
     } catch (error) {
       console.error('Error in addAsync:', error);
       throw new Error(`Failed to add message`);
     }
   };
-  public getAllAsync = async (): Promise<Message[]> => {
+  public getAll = async (): Promise<Message[]> => {
     try {
       return await Message.findAll();
     } catch (error) {
@@ -19,7 +18,7 @@ export class MessageRepository implements IGenericRepository<Message> {
       throw new Error(`Failed to get all messages`);
     }
   };
-  public getByIdAsync = async (id: string): Promise<Message | null> => {
+  public getById = async (id: string): Promise<Message | null> => {
     try {
       return await Message.findByPk(id);
     } catch (error) {
@@ -27,7 +26,12 @@ export class MessageRepository implements IGenericRepository<Message> {
       throw new Error(`Failed to get the message`);
     }
   };
-  public deleteAsync = async (entity: Message): Promise<void> => {
+  public getBySender_IdAndReceiver_Id = async(senderId:string,receiverId:string):Promise<Message|null> => {
+     return await Message.findOne({
+       where:{senderId,receiverId}
+    });
+  }
+  public delete = async (entity: Message): Promise<void> => {
     try {
       await Message.destroy({
         where: { id: (entity as any).id },
@@ -37,7 +41,7 @@ export class MessageRepository implements IGenericRepository<Message> {
       throw new Error(`Failed to delete message`);
     }
   };
-  public updateAsync = async (entity: Message): Promise<void> => {
+  public update = async (entity: Message): Promise<void> => {
     try {
       await entity.save();
     } catch (error) {

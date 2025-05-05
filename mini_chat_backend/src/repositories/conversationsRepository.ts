@@ -1,18 +1,17 @@
 import Conversation from '../models/Conversation';
 import Message from '../models/Message';
 import User from '../models/User';
-import { IGenericRepository } from './genericRepositoryInterface';
-
-export class ConversationsRepository implements IGenericRepository<Conversation> {
-  public addAsync = async (): Promise<void> => {
+import { IConversationRepository } from './conversationRepositoryInterface';
+export class ConversationsRepository implements IConversationRepository<Conversation> {
+  public add = async (): Promise<Conversation> => {
     try {
-      await Conversation.create();
+     return await Conversation.create();
     } catch (error) {
       console.error('Error in addAsync:', error);
       throw new Error(`Failed to add conversation`);
     }
   };
-  public getAllAsync = async (): Promise<Conversation[]> => {
+  public getAll = async (): Promise<Conversation[]> => {
     try {
       return await Conversation.findAll({
         include: [
@@ -32,7 +31,7 @@ export class ConversationsRepository implements IGenericRepository<Conversation>
       throw new Error(`Failed to get all conversations`);
     }
   };
-  public getByIdAsync = async (id: string): Promise<Conversation | null> => {
+  public getById = async (id: string): Promise<Conversation | null> => {
     try {
       return await Conversation.findByPk(id, {
         include: [
@@ -52,7 +51,7 @@ export class ConversationsRepository implements IGenericRepository<Conversation>
       throw new Error(`Failed to get conversation`);
     }
   };
-  public deleteAsync = async (entity: Conversation): Promise<void> => {
+  public delete = async (entity: Conversation): Promise<void> => {
     try {
       await Conversation.destroy({
         where: { id: (entity as any).id },
@@ -62,12 +61,5 @@ export class ConversationsRepository implements IGenericRepository<Conversation>
       throw new Error(`Failed to destroy conversation`);
     }
   };
-  public updateAsync = async (entity: Conversation): Promise<void> => {
-    try {
-      await entity.save();
-    } catch (error) {
-      console.error('Error in updateAsync :', error);
-      throw new Error(`Failed to update conversation`);
-    }
-  };
+ 
 }

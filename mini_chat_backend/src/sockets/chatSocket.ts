@@ -20,7 +20,7 @@ export const registerChatHandlers = (
 
   socket.on('userOffline', async (user) => {
     try {
-      await userService.LogoutAsync(user);
+      await userService.getUserLastActivity(user.id);
       console.log(`🔴 User offline: ${user.id}`);
       socket.broadcast.emit('userOffline', user);
     } catch (error) {

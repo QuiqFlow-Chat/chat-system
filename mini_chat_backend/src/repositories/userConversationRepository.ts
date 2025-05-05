@@ -1,8 +1,8 @@
-import UserConversation from '../models/UserConversation';
-import { IGenericRepository } from './genericRepositoryInterface';
+import UserConversation from '../models/UserConversation';import { IUserConversationRepository } from './userConversationRepositoryInterface';
+;
 
-export class UserConversationRepository implements IGenericRepository<UserConversation> {
-  public addAsync = async (data: any): Promise<void> => {
+export class UserConversationRepository implements IUserConversationRepository<UserConversation> {
+  public add = async (data: any): Promise<void> => {
     try {
       await UserConversation.create(data);
     } catch (error) {
@@ -10,7 +10,7 @@ export class UserConversationRepository implements IGenericRepository<UserConver
       throw new Error(`Failed to add userConversation`);
     }
   };
-  public getAllAsync = async (): Promise<UserConversation[]> => {
+  public getAll = async (): Promise<UserConversation[]> => {
     try {
       return await UserConversation.findAll();
     } catch (error) {
@@ -18,7 +18,7 @@ export class UserConversationRepository implements IGenericRepository<UserConver
       throw new Error(`Failed to get all userConversation`);
     }
   };
-  public getByIdAsync = async (id: string): Promise<UserConversation | null> => {
+  public getById= async (id: string): Promise<UserConversation | null> => {
     try {
       return await UserConversation.findByPk(id);
     } catch (error) {
@@ -34,7 +34,7 @@ export class UserConversationRepository implements IGenericRepository<UserConver
       },
     });
   };
-  public deleteAsync = async (entity: UserConversation): Promise<void> => {
+  public delete= async (entity: UserConversation): Promise<void> => {
     try {
       await UserConversation.destroy({
         where: { id: (entity as any).id },
@@ -44,12 +44,4 @@ export class UserConversationRepository implements IGenericRepository<UserConver
       throw new Error(`Failed to delete userConversation`);
     }
   };
-  public updateAsync = async (entity: UserConversation): Promise<void> => {
-    try {
-      await entity.save();
-    } catch (error) {
-      console.error('Error in updateAsync:', error);
-      throw new Error(`Failed to update userConversation`);
-    }
   };
-}

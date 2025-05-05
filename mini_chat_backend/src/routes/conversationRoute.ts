@@ -20,38 +20,43 @@ export class ConversationRoute extends BaseRoute {
   }
   private initPostHttpMethod = async () => {
     this.router.post(
-      '/addConversationAsync',
+      '/addNewConversation',
       AuthMiddleware.authenticate,
-      this.conversationController.addConversationAsync
+      this.conversationController.addNewConversation
     );
   };
   private initGetHttpMethod = async () => {
     this.router.get(
-      '/getAllConversationsAsync',
+      '/getAllConversations',
       AuthMiddleware.authenticate,
-      this.conversationController.getAllConversationsAsync
+      this.conversationController.getAllConversations
     );
     this.router.get(
-      '/:id/getConversationByIdAsync',
+      '/:id/getConversationById',
       AuthMiddleware.authenticate,
-      this.conversationController.getConversationByIdAsync
+      this.conversationController.getConversationById
     );
     this.router.get(
-      '/:id/getConversationMessagesAsync',
+      '/:id/getConversationMessages',
       AuthMiddleware.authenticate,
-      this.conversationController.getConversationMessagesAsync
+      this.conversationController.getConversationMessages
     );
     this.router.get(
-      '/:id/getUserConversationsAsync',
+      '/:id/getConversationUsers',
       AuthMiddleware.authenticate,
-      this.conversationController.getUserConversationsAsync
+      this.conversationController.getConversationUsers
+    );
+    this.router.get(
+      '/:id/getUserConversations',
+      AuthMiddleware.authenticate,
+      this.conversationController.getUserConversations
     );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteConversationAsync',
       AuthMiddleware.authenticate,
-      this.conversationController.deleteConversationAsync
+      this.conversationController.deleteConversation
     );
   };
 }

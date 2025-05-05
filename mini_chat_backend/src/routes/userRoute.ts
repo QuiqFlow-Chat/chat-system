@@ -21,28 +21,29 @@ export class UserRoute extends BaseRoute {
 
   private initGetHttpMethod = async () => {
     this.router.get(
-      '/getAllUsersAsync',
+      '/getAllUsers',
       AuthMiddleware.authenticate,
-      this.userController.getAllUsersAsync
+      this.userController.getAllUsers
     );
     this.router.get(
-      '/:id/getUserByIdAsync',
+      '/:id/getUserById',
       AuthMiddleware.authenticate,
-      this.userController.getUserByIdAsync
+      this.userController.getUserById
     );
+    this.router.get('/:id/getUserLastActivity', this.userController.getUserLastActivity);
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
-      '/deleteUserAsync',
+      '/deleteUser',
       AuthMiddleware.authenticate,
-      this.userController.deleteUserAsync
+      this.userController.deleteUser
     );
   };
   private initUpdateHttpMethod = async () => {
     this.router.patch(
-      '/updateUserAsync',
+      '/updateUser',
       AuthMiddleware.authenticate,
-      this.userController.updateUserAsync
+      this.userController.updateUser
     );
   };
 }
