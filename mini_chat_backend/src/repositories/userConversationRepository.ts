@@ -6,7 +6,7 @@ export class UserConversationRepository implements IUserConversationRepository<U
     try {
       await UserConversation.create(data);
     } catch (error) {
-      console.error('Error in addAsync:', error);
+      console.error('Error in add user conversation:', error);
       throw new Error(`Failed to add userConversation`);
     }
   };
@@ -14,7 +14,7 @@ export class UserConversationRepository implements IUserConversationRepository<U
     try {
       return await UserConversation.findAll();
     } catch (error) {
-      console.error('Error in getAllAsync:', error);
+      console.error('Error in get all conversations:', error);
       throw new Error(`Failed to get all userConversation`);
     }
   };
@@ -22,17 +22,23 @@ export class UserConversationRepository implements IUserConversationRepository<U
     try {
       return await UserConversation.findByPk(id);
     } catch (error) {
-      console.error('Error in getByIdAsync:', error);
+      console.error('Error in get userConversation by id:', error);
       throw new Error(`Failed to get the userConversation`);
     }
   };
   public getByUser_IdAndConversation_Id = async (userId: string, conversationId: string) => {
-    return await UserConversation.findOne({
-      where: {
-        userId,
-        conversationId,
-      },
-    });
+    try {
+      return await UserConversation.findOne({
+        where: {
+          userId,
+          conversationId,
+        },
+      });
+    } catch (error) {
+      console.error('Error in get userConversation by user and conversation id :', error);
+      throw new Error(`Failed to get user conversation`);
+    }
+    
   };
   public delete= async (entity: UserConversation): Promise<void> => {
     try {
@@ -40,7 +46,7 @@ export class UserConversationRepository implements IUserConversationRepository<U
         where: { id: (entity as any).id },
       });
     } catch (error) {
-      console.error('Error in deleteAsync:', error);
+      console.error('Error in delete userConversation:', error);
       throw new Error(`Failed to delete userConversation`);
     }
   };

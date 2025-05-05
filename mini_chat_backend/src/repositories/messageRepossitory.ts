@@ -2,11 +2,11 @@ import Message from '../models/Message';
 import { IMessageRepository } from './messageRepositoryInterface';
 
 export class MessageRepository implements IMessageRepository<Message> {
-  public add = async (data: any): Promise<void> => {
+  public add = async (data: any): Promise<Message> => {
     try {
-      await Message.create(data);
+     return await Message.create(data);
     } catch (error) {
-      console.error('Error in addAsync:', error);
+      console.error('Error in add message:', error);
       throw new Error(`Failed to add message`);
     }
   };
@@ -14,7 +14,7 @@ export class MessageRepository implements IMessageRepository<Message> {
     try {
       return await Message.findAll();
     } catch (error) {
-      console.error('Error in getAllAsync:', error);
+      console.error('Error in get all messages:', error);
       throw new Error(`Failed to get all messages`);
     }
   };
@@ -22,14 +22,20 @@ export class MessageRepository implements IMessageRepository<Message> {
     try {
       return await Message.findByPk(id);
     } catch (error) {
-      console.error('Error in getByIdAsync:', error);
+      console.error('Error in get message by id:', error);
       throw new Error(`Failed to get the message`);
     }
   };
   public getBySender_IdAndReceiver_Id = async(senderId:string,receiverId:string):Promise<Message|null> => {
-     return await Message.findOne({
-       where:{senderId,receiverId}
-    });
+    try {
+      return await Message.findOne({
+        where:{senderId,receiverId}
+     });
+    } catch (error) {
+      console.error('error in get message by sender and receiver id : ', error);
+      throw new Error(`Failed to get message`);
+    }
+   
   }
   public delete = async (entity: Message): Promise<void> => {
     try {
@@ -37,7 +43,7 @@ export class MessageRepository implements IMessageRepository<Message> {
         where: { id: (entity as any).id },
       });
     } catch (error) {
-      console.error('Error in deleteAsync:', error);
+      console.error('Error in delete message:', error);
       throw new Error(`Failed to delete message`);
     }
   };
@@ -45,7 +51,7 @@ export class MessageRepository implements IMessageRepository<Message> {
     try {
       await entity.save();
     } catch (error) {
-      console.error('Error in updateAsync:', error);
+      console.error('Error in update message:', error);
       throw new Error(`Failed to update message`);
     }
   };

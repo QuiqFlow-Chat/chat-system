@@ -17,7 +17,7 @@ export class UserService {
       if (users.length === 0) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return users;
     } catch (error) {
-      console.log('Error in getAllAsync', error);
+      console.log('Error in getAll', error);
       throw new Error('Faild to get all users');
     }
   };
@@ -28,7 +28,7 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return user;
     } catch (error) {
-      console.log('Error in getUserByIdAsync', error);
+      console.log('Error in getUserById', error);
       throw new Error('Faild to get user');
     }
   };
@@ -39,7 +39,7 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       await this._userRepository.delete(user);
     } catch (error) {
-      console.error('Error in deleteUserAsync:', error);
+      console.error('Error in deleteUser:', error);
       throw new Error('Failed to delete user');
     }
   };
@@ -59,7 +59,7 @@ export class UserService {
       user.password = await AuthUtils.hashPassword(parameter.password);
       await this._userRepository.update(user);
     } catch (error) {
-      console.log('Error in updateUserAsync', error);
+      console.log('Error in updateUser', error);
       throw new Error('Faild to update user');
     }
   }
@@ -72,7 +72,7 @@ export class UserService {
       await this._userRepository.update(user);
       return user.lastActivity;
     } catch (error) {
-      console.log('Error in logouAsync', error);
+      console.log('Error in logou', error);
       throw new Error('Faild to logout user');
     }
   };

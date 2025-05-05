@@ -14,7 +14,7 @@ export class UserConversationService {
         throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversations;
     } catch (error) {
-      console.log('error in getAllUserConversationsAsync', error);
+      console.log('error in getAllUserConversations', error);
       throw new Error('faild to get all user conversations');
     }
   };
@@ -25,7 +25,7 @@ export class UserConversationService {
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversation;
     } catch (error) {
-      console.log('error in getUserConversationsByIdAsync', error);
+      console.log('error in getUserConversationsById', error);
       throw new Error('faild to get user conversations');
     }
   };
@@ -38,7 +38,7 @@ export class UserConversationService {
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       await this._userConversationRepository.delete(userConversation);
     } catch (error) {
-      console.log('error in deleteUserConversationsAsync', error);
+      console.log('error in deleteUserConversations', error);
       throw new Error('faild to delete user conversations');
     }
   };

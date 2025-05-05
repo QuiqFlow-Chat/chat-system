@@ -35,7 +35,7 @@ export class AuthService {
         lastActivity: new Date(),
       });
     } catch (error) {
-      console.log('Error in registerAsync', error);
+      console.log('Error in register user', error);
       throw new Error('Faild to register user');
     }
   };
@@ -70,7 +70,7 @@ export class AuthService {
         token,
       };
     } catch (error) {
-      console.log('Error in loginAsync', error);
+      console.log('Error in login user', error);
       throw new Error('Faild to login user');
     }
   };

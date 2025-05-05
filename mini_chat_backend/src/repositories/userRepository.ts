@@ -9,7 +9,7 @@ export class UserRepository implements IUserRepository<User> {
     try {
       await User.create(data);
     } catch (error) {
-      console.error('Error in addAsync:', error);
+      console.error('Error in add user:', error);
       throw new Error(`Failed to add user:`);
     }
   };
@@ -25,21 +25,27 @@ export class UserRepository implements IUserRepository<User> {
         ],
       });
     } catch (error) {
-      console.error('Error in getAllAsync:', error);
+      console.error('Error in get all users:', error);
       throw new Error(`Failed to get all users:`);
     }
   };
   public getByEmail = async (email: string) : Promise<User | null> => {
-    return await User.findOne({
-      where: { email },
-      include: [
-        {
-          model: Conversation,
-          as: 'conversations',
-          through: { attributes: [] },
-        },
-      ],
-    });
+    try {
+      return await User.findOne({
+        where: { email },
+        include: [
+          {
+            model: Conversation,
+            as: 'conversations',
+            through: { attributes: [] },
+          },
+        ],
+      });
+    } catch (error) {
+      console.error('Error in get user by email:', error);
+      throw new Error(`Failed to get user`);
+    }
+    
   };
   public getById = async (id: string): Promise<User | null> => {
     try {
@@ -52,7 +58,7 @@ export class UserRepository implements IUserRepository<User> {
         ],
       });
     } catch (error) {
-      console.error('Error in getByIdAsync:', error);
+      console.error('Error in get user by id:', error);
       throw new Error(`Failed to get the user `);
     }
   };
@@ -85,7 +91,7 @@ export class UserRepository implements IUserRepository<User> {
         ],
       });
     } catch (error) {
-      console.error('Error in getByIdAsync:', error);
+      console.error('Error in get user by id:', error);
       throw new Error(`Failed to get the user `);
     }
   };
@@ -95,7 +101,7 @@ export class UserRepository implements IUserRepository<User> {
         where: { id: (entity as any).id },
       });
     } catch (error) {
-      console.error('Error in deleteAsync:', error);
+      console.error('Error in delete user:', error);
       throw new Error(`Failed to destroy user`);
     }
   };
@@ -103,7 +109,7 @@ export class UserRepository implements IUserRepository<User> {
     try {
       await entity.save();
     } catch (error) {
-      console.error('Error in updateAsync:', error);
+      console.error('Error in update user:', error);
       throw new Error(`Failed to update user`);
     }
   };
