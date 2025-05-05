@@ -19,7 +19,7 @@ export class ConversationService {
     try {
       return await this._conversationRepository.add();
     } catch (error) {
-      console.log('error in addConversationAsync', error);
+      console.log('error in addConversation', error);
       throw new Error('faild to add new conversation');
     }
   };
@@ -30,7 +30,7 @@ export class ConversationService {
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       await this._conversationRepository.delete(conversation);
     } catch (error) {
-      console.log('error in deleteConversationAsync', error);
+      console.log('error in deleteConversation', error);
       throw new Error('faild to delete conversation');
     }
   };
@@ -44,7 +44,7 @@ export class ConversationService {
       }
       return conversations;
     } catch (error) {
-      console.log('error in getAllConversationsAsync', error);
+      console.log('error in getAllConversations', error);
       throw new Error('Failed to get all conversations');
     }
   };
@@ -55,7 +55,7 @@ export class ConversationService {
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       return conversation;
     } catch (error) {
-      console.log('error in getConversationByIdAsync', error);
+      console.log('error in getConversationById', error);
       throw new Error('faild to get conversation');
     }
   };
@@ -82,7 +82,7 @@ export class ConversationService {
 
       return paginate(sortedMessages, page, limit);
     } catch (error) {
-      console.log('error in getConversationMessagesAsync', error);
+      console.log('error in getConversationMessages', error);
       throw new Error('faild to get conversation messages');
     }
   };
@@ -99,8 +99,8 @@ export class ConversationService {
       return users;
 
     } catch (error) {
-      console.log('error in getConversationMessagesAsync', error);
-      throw new Error('faild to get conversation messages');
+      console.log('error in getConversationUsers', error);
+      throw new Error('faild to get conversation users');
     }
   };
 
@@ -131,7 +131,7 @@ export class ConversationService {
 
       return paginate(sortedUserConversations, page, limit);
     } catch (error) {
-      console.log('Error in getUserConversationsAsync', error);
+      console.log('Error in getUserConversations', error);
       throw new Error('Faild to get user conversations');
     }
   };

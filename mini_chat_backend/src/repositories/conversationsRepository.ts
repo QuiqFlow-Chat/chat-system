@@ -7,7 +7,7 @@ export class ConversationsRepository implements IConversationRepository<Conversa
     try {
      return await Conversation.create();
     } catch (error) {
-      console.error('Error in addAsync:', error);
+      console.error('Error in add conversation:', error);
       throw new Error(`Failed to add conversation`);
     }
   };
@@ -27,7 +27,7 @@ export class ConversationsRepository implements IConversationRepository<Conversa
         ],
       });
     } catch (error) {
-      console.error('Error in getAllAsync:', error);
+      console.error('Error in get all conversations:', error);
       throw new Error(`Failed to get all conversations`);
     }
   };
@@ -47,7 +47,7 @@ export class ConversationsRepository implements IConversationRepository<Conversa
         ],
       });
     } catch (error) {
-      console.error('Error in getByIdAsync :', error);
+      console.error('Error in get conversation by id :', error);
       throw new Error(`Failed to get conversation`);
     }
   };
@@ -57,7 +57,7 @@ export class ConversationsRepository implements IConversationRepository<Conversa
         where: { id: (entity as any).id },
       });
     } catch (error) {
-      console.error('Error in deleteAsync :', error);
+      console.error('Error in delete conversation :', error);
       throw new Error(`Failed to destroy conversation`);
     }
   };

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppError } from './errorMiddlewares';
 import { AuthUtils } from '../utils/authUtils';
+import { catchAsync } from '../decorators/try_catchDecorators';
 
 // Extend Express Request to include user property
 declare global {
@@ -19,8 +20,9 @@ export class AuthMiddleware {
   /**
    * Middleware to verify JWT token and attach user data to the request object.
    */
-  static authenticate = (req: Request, res: Response, next: NextFunction): void => {
-    try {
+
+  @catchAsync()
+  static async authenticate (req: Request, _res: Response, next: NextFunction) {
       const authHeader = req.headers.authorization;
 
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -46,8 +48,5 @@ export class AuthMiddleware {
           throw err;
         }
       }
-    } catch (err) {
-      next(err);
-    }
   };
 }

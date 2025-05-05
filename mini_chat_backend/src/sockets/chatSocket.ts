@@ -31,16 +31,16 @@ export const registerChatHandlers = (
   socket.on('sendMessage', async (message) => {
     try {
       console.log(
-        `✉️ New message from ${message.senderId} in conversation ${message.conversationId}`
+        `✉️ New message from ${message.senderId} to ${message.receiverId}`
       );
 
-      await messageService.addMessageAsync(message);
+      const newMessage =  await messageService.sendMessage(message);
       const createdAt = new Date().toISOString();
 
-      io.to(message.conversationId).emit('receiveMessage', {
-        conversationId: message.conversationId,
-        senderId: message.senderId,
-        content: message.content,
+      io.to(newMessage.conversationId).emit('receiveMessage', {
+        conversationId: newMessage.conversationId,
+        senderId: newMessage.senderId,
+        content: newMessage.content,
         createdAt,
       });
     } catch (error) {

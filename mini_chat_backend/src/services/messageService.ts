@@ -6,6 +6,7 @@ import { UserRepository } from '../repositories/userRepository';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
 import { MESSAGES } from '../constants/message';
 import { AppError } from '../middlewares/errorMiddlewares';
+import Message from '../models/Message';
 
 export class MessageService {
   _userRepository: UserRepository;
@@ -17,7 +18,7 @@ export class MessageService {
     this._userConversationRepository = new UserConversationRepository();
   }
 
-  public sendMessage = async (parameters: MessageCreateParameters): Promise<void> => {
+  public sendMessage = async (parameters: MessageCreateParameters): Promise<Message> => {
     try {
       if (!parameters.content || !parameters.receiverId || !parameters.senderId)
         throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_MESSAGE[0]);
@@ -47,10 +48,11 @@ export class MessageService {
         conversationId : conversation_Id,
         content : parameters.content
       }
-      await this._messageRepository.add(createMessage);
+      const message = await this._messageRepository.add(createMessage);
+      return message;
     } catch (error) {
-      console.log('error in addMessageAsync', error);
-      throw new Error('faild to add new message');
+      console.log('error in sendMessage', error);
+      throw new Error('faild to send new message');
     }
   };
 
@@ -60,7 +62,7 @@ export class MessageService {
       if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       await this._messageRepository.delete(message);
     } catch (error) {
-      console.log('error in deleteMessageAsync', error);
+      console.log('error in deleteMessage', error);
       throw new Error('faild to delete message');
     }
   };
@@ -72,7 +74,7 @@ export class MessageService {
       message.content = parameters.content || message.content;
       await this._messageRepository.update(message);
     } catch (error) {
-      console.log('error in updateMessageContentAsync', error);
+      console.log('error in updateMessageContent', error);
       throw new Error('faild to update message content');
     }
   };
@@ -84,7 +86,7 @@ export class MessageService {
       message.isRead = true;
       await this._messageRepository.update(message);
     } catch (error) {
-      console.log('error in updateMessageStatusAsync', error);
+      console.log('error in updateMessageStatus', error);
       throw new Error('faild to update message status');
     }
   };
