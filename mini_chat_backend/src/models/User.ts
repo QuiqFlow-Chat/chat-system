@@ -4,7 +4,6 @@ import {
   CreatedAt,
   DataType,
   HasMany,
-  Index,
   Model,
   PrimaryKey,
   Table,

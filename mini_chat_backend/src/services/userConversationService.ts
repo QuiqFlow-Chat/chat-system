@@ -7,9 +7,9 @@ import { UserConversationRepository } from '../repositories/userConversationRepo
 export class UserConversationService {
   constructor(private _userConversationRepository: UserConversationRepository) {}
 
-  public getAllUserConversationsAsync = async (): Promise<UserConversation[]> => {
+  public getAllUserConversations = async (): Promise<UserConversation[]> => {
     try {
-      const userConversations = await this._userConversationRepository.getAllAsync();
+      const userConversations = await this._userConversationRepository.getAll();
       if (userConversations.length === 0)
         throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversations;
@@ -19,9 +19,9 @@ export class UserConversationService {
     }
   };
 
-  public getUserConversationsByIdAsync = async (id: string): Promise<UserConversation> => {
+  public getUserConversationsById = async (id: string): Promise<UserConversation> => {
     try {
-      const userConversation = await this._userConversationRepository.getByIdAsync(id);
+      const userConversation = await this._userConversationRepository.getById(id);
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversation;
     } catch (error) {
@@ -30,13 +30,13 @@ export class UserConversationService {
     }
   };
 
-  public deleteUserConversationsAsync = async (
+  public deleteUserConversations = async (
     parameter: UserConversationGetByParameter
   ): Promise<void> => {
     try {
-      const userConversation = await this._userConversationRepository.getByIdAsync(parameter.id);
+      const userConversation = await this._userConversationRepository.getById(parameter.id);
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
-      await this._userConversationRepository.deleteAsync(userConversation);
+      await this._userConversationRepository.delete(userConversation);
     } catch (error) {
       console.log('error in deleteUserConversationsAsync', error);
       throw new Error('faild to delete user conversations');

@@ -1,6 +1,13 @@
 export interface MessageCreateParameters {
   senderId: string;
-  conversationId: string;
+  receiverId:string,
+  content: string;
+}
+
+export interface MessageCreateFullParameters {
+  senderId: string;
+  receiverId:string,
+  conversationId:string
   content: string;
 }
 

@@ -30,7 +30,7 @@ export const up = async ({ context }: { context: Sequelize }) => {
       },
     },
     conversation_id: {
-      allowNull: false,
+      allowNull: true,
       type: DataType.UUID,
       references: {
         model: 'Conversations',

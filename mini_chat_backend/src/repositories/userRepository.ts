@@ -1,11 +1,11 @@
-import Message from '../models/Message';
 import User from '../models/User';
-import { IGenericRepository } from './genericRepositoryInterface';
 import Conversation from '../models/Conversation';
 import { Op } from 'sequelize';
+import { IUserRepository } from './userRepositoryInterface';
+import Message from '../models/Message';
 
-export class UserRepository implements IGenericRepository<User> {
-  public addAsync = async (data: any): Promise<void> => {
+export class UserRepository implements IUserRepository<User> {
+  public add = async (data: any): Promise<void> => {
     try {
       await User.create(data);
     } catch (error) {
@@ -13,14 +13,10 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to add user:`);
     }
   };
-  public getAllAsync = async (): Promise<User[]> => {
+  public getAll = async (): Promise<User[]> => {
     try {
       return await User.findAll({
         include: [
-          {
-            model: Message,
-            as: 'messages',
-          },
           {
             model: Conversation,
             as: 'conversations',
@@ -33,14 +29,10 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to get all users:`);
     }
   };
-  public getByEmailAsync = async (email: string) => {
+  public getByEmail = async (email: string) : Promise<User | null> => {
     return await User.findOne({
       where: { email },
       include: [
-        {
-          model: Message,
-          as: 'messages',
-        },
         {
           model: Conversation,
           as: 'conversations',
@@ -49,15 +41,10 @@ export class UserRepository implements IGenericRepository<User> {
       ],
     });
   };
-  public getByIdAsync = async (id: string): Promise<User | null> => {
+  public getById = async (id: string): Promise<User | null> => {
     try {
       return await User.findByPk(id, {
-        include: [
-          {
-            model: Message,
-            as: 'messages',
-          },
-          {
+        include:[{
             model: Conversation,
             as: 'conversations',
             through: { attributes: [] },
@@ -69,14 +56,10 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to get the user `);
     }
   };
-  public getUserConversationsAsync = async (id: string): Promise<User | null> => {
+  public getUserConversations = async (id: string): Promise<User | null> => {
     try {
       return await User.findByPk(id, {
         include: [
-          {
-            model: Message,
-            as: 'messages',
-          },
           {
             model: Conversation,
             as: 'conversations',
@@ -93,6 +76,10 @@ export class UserRepository implements IGenericRepository<User> {
                   },
                 },
               },
+              {
+                model: Message,
+                order: [['createdAt', 'DESC']],
+              }
             ],
           },
         ],
@@ -102,7 +89,7 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to get the user `);
     }
   };
-  public deleteAsync = async (entity: User): Promise<void> => {
+  public delete = async (entity: User): Promise<void> => {
     try {
       await User.destroy({
         where: { id: (entity as any).id },
@@ -112,7 +99,7 @@ export class UserRepository implements IGenericRepository<User> {
       throw new Error(`Failed to destroy user`);
     }
   };
-  public updateAsync = async (entity: User): Promise<void> => {
+  public update = async (entity: User): Promise<void> => {
     try {
       await entity.save();
     } catch (error) {

@@ -21,30 +21,30 @@ export class MessageRoute extends BaseRoute {
   }
   initGetHttpMethod() {
     this.router.get(
-      '/:id/updateMessageStatusAsync',
+      '/:id/updateMessageStatus',
       AuthMiddleware.authenticate,
-      this.messageController.updateMessageStatusAsync
+      this.messageController.updateMessageStatus
     );
   }
   private initPostHttpMethod = async () => {
     this.router.post(
-      '/addMessageAsync',
+      '/sendMessage',
       AuthMiddleware.authenticate,
-      this.messageController.addMessageAsync
+      this.messageController.addMessage
     );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
-      '/deleteMessageAsync',
+      '/deleteMessage',
       AuthMiddleware.authenticate,
-      this.messageController.deleteMessageAsync
+      this.messageController.deleteMessage
     );
   };
   private initUpdateHttpMethod = async () => {
     this.router.patch(
-      '/updateMessageContentAsync',
+      '/updateMessageContent',
       AuthMiddleware.authenticate,
-      this.messageController.updateMessageContentAsync
+      this.messageController.updateMessageContent
     );
   };
 }
