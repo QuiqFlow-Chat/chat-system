@@ -15,15 +15,6 @@ export class ConversationService {
     this._userRepository = new UserRepository();
   }
 
-  public addNewConversation = async (): Promise<Conversation> => {
-    try {
-      return await this._conversationRepository.add();
-    } catch (error) {
-      console.log('error in addConversation', error);
-      throw new Error('faild to add new conversation');
-    }
-  };
-
   public deleteConversation = async (parameter: ConversaionGetByParameter): Promise<void> => {
     try {
       const conversation = await this._conversationRepository.getById(parameter.id);
@@ -35,8 +26,7 @@ export class ConversationService {
     }
   };
 
-  public getAllConversations = async (
-  ): Promise<Conversation[]> => {
+  public getAllConversations = async (): Promise<Conversation[]> => {
     try {
       const conversations = await this._conversationRepository.getAll();
       if (!conversations || conversations.length === 0) {
@@ -87,9 +77,7 @@ export class ConversationService {
     }
   };
 
-  public getConversationUsers = async (
-    id: string,
-  ): Promise<User[]> => {
+  public getConversationUsers = async (id: string): Promise<User[]> => {
     try {
       const conversation = await this._conversationRepository.getById(id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
@@ -97,31 +85,35 @@ export class ConversationService {
       // Get all users from the conversation
       const users = conversation.users;
       return users;
-
     } catch (error) {
       console.log('error in getConversationUsers', error);
       throw new Error('faild to get conversation users');
     }
   };
 
-  public getUserConversations = async (id: string, paginationParams?: PaginationParams): Promise<PaginatedResult<Conversation>> => {
+  public getUserConversations = async (
+    id: string,
+    paginationParams?: PaginationParams
+  ): Promise<PaginatedResult<Conversation>> => {
     try {
       const user = await this._userRepository.getUserConversations(id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-      const userConversations =  user.conversations;
+      const userConversations = user.conversations;
       // Sort conversations messages by createdAt (newest first)
-     
+
       userConversations.forEach((conversation) => {
-        conversation.messages?.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        conversation.messages?.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       });
-      
+
       const sortedUserConversations = [...userConversations].sort((a, b) => {
         const aLastMessage = a.messages?.[a.messages.length - 1];
         const bLastMessage = b.messages?.[b.messages.length - 1];
-      
+
         const aTime = aLastMessage ? new Date(aLastMessage.createdAt).getTime() : 0;
         const bTime = bLastMessage ? new Date(bLastMessage.createdAt).getTime() : 0;
-      
+
         return bTime - aTime;
       });
 

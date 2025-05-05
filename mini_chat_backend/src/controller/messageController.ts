@@ -12,35 +12,30 @@ export class MessageController {
   constructor(private _messageService: MessageService) {}
 
   @catchAsync()
-  public async addMessage(req: Request, res: Response, _next: NextFunction) {
-    
-      const parameters: MessageCreateParameters = req.body;
-      await this._messageService.sendMessage(parameters);
-      res.status(201).json({ message: MESSAGES.MESSAGE.CREATED });
-   
-  };
+  public async sendMessage(req: Request, res: Response, _next: NextFunction) {
+    const parameters: MessageCreateParameters = req.body;
+    await this._messageService.sendMessage(parameters);
+    res.status(201).json({ message: MESSAGES.MESSAGE.CREATED });
+  }
 
   @catchAsync()
-  public async deleteMessage (req: Request, res: Response, _next: NextFunction)  {
-   
-      const parameter: MessageGetByParameter = req.body;
-      await this._messageService.deleteMessage(parameter);
-      res.status(200).json({ message: MESSAGES.MESSAGE.CREATED });
-  };
+  public async deleteMessage(req: Request, res: Response, _next: NextFunction) {
+    const parameter: MessageGetByParameter = req.body;
+    await this._messageService.deleteMessage(parameter);
+    res.status(200).json({ message: MESSAGES.MESSAGE.CREATED });
+  }
 
   @catchAsync()
-  public async updateMessageContent (req: Request, res: Response, _next: NextFunction){
-    
-      const parameters: MessageUpdateParameters = req.body;
-      await this._messageService.updateMessageContent(parameters);
-      res.status(200).json({ message: MESSAGES.MESSAGE.UPDATED[0] });
-  };
-  
+  public async updateMessageContent(req: Request, res: Response, _next: NextFunction) {
+    const parameters: MessageUpdateParameters = req.body;
+    await this._messageService.updateMessageContent(parameters);
+    res.status(200).json({ message: MESSAGES.MESSAGE.UPDATED[0] });
+  }
+
   @catchAsync()
-  public async updateMessageStatus (req: Request, res: Response, _next: NextFunction)  {
-   
-      const { id } = req.params;
-      await this._messageService.updateMessageStatus(id);
-      res.status(200).json({ message: MESSAGES.MESSAGE.UPDATED[1] });
-  };
+  public async updateMessageStatus(req: Request, res: Response, _next: NextFunction) {
+    const { id } = req.params;
+    await this._messageService.updateMessageStatus(id);
+    res.status(200).json({ message: MESSAGES.MESSAGE.UPDATED[1] });
+  }
 }

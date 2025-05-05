@@ -26,17 +26,20 @@ interface MessageCreateAttributes {
 @Table({
   tableName: 'Messages',
   timestamps: true,
-  indexes:[{
-    name:'idx_message_senderId',
-    fields:['senderId']
-  },{
-    name:'idx_message_receiverId',
-    fields:['receiverId']
-  },
-{
-  name:'idx_message_sender_IdAndReceiver_Id',
-  fields:['senderId','receiverId']
-}]
+  indexes: [
+    {
+      name: 'idx_message_senderId',
+      fields: ['senderId'],
+    },
+    {
+      name: 'idx_message_receiverId',
+      fields: ['receiverId'],
+    },
+    {
+      name: 'idx_message_sender_IdAndReceiver_Id',
+      fields: ['senderId', 'receiverId'],
+    },
+  ],
 })
 class Message extends Model<MessageCreateAttributes> implements MessageCreateAttributes {
   @PrimaryKey
@@ -71,7 +74,7 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
   @Column({
     type: DataType.UUID,
     field: 'conversation_id',
-    allowNull:true
+    allowNull: true,
   })
   @ForeignKey(() => Conversation)
   conversationId!: string;
@@ -88,12 +91,12 @@ class Message extends Model<MessageCreateAttributes> implements MessageCreateAtt
   updatedAt!: Date;
 
   @BelongsTo(() => User, 'senderId')
-sender!: User;
+  sender!: User;
 
-@BelongsTo(() => User, 'receiverId')
-receiver!: User;
+  @BelongsTo(() => User, 'receiverId')
+  receiver!: User;
 
-@BelongsTo(() => Conversation)
-conversation!: Conversation;
+  @BelongsTo(() => Conversation)
+  conversation!: Conversation;
 }
 export default Message;

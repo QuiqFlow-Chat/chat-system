@@ -5,7 +5,7 @@ import { IConversationRepository } from './conversationRepositoryInterface';
 export class ConversationsRepository implements IConversationRepository<Conversation> {
   public add = async (): Promise<Conversation> => {
     try {
-     return await Conversation.create();
+      return await Conversation.create();
     } catch (error) {
       console.error('Error in add conversation:', error);
       throw new Error(`Failed to add conversation`);
@@ -61,5 +61,4 @@ export class ConversationsRepository implements IConversationRepository<Conversa
       throw new Error(`Failed to destroy conversation`);
     }
   };
- 
 }

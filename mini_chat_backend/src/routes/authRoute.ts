@@ -3,6 +3,8 @@ import { AuthController } from '../controller/authController';
 import { UserRepository } from '../repositories/userRepository';
 import { AuthService } from '../services/authService';
 import { BaseRoute } from './baseRoute';
+import { authLoginSchema, authRegisterSchema } from '../shared/validations/authValidation';
+import { validateRequest } from '../middlewares/validationMiddleware';
 
 export class AuthRoute extends BaseRoute {
   userRepository: UserRepository;
@@ -17,7 +19,11 @@ export class AuthRoute extends BaseRoute {
   }
   private initPostHttpMethod = async () => {
     // Public routes - no authentication needed
-    this.router.post('/register', this.authController.register);
-    this.router.post('/login', this.authController.login);
+    this.router.post(
+      '/register',
+      validateRequest(authRegisterSchema, 'body'),
+      this.authController.register
+    );
+    this.router.post('/login', validateRequest(authLoginSchema, 'body'), this.authController.login);
   };
 }

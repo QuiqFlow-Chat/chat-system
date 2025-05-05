@@ -29,7 +29,7 @@ export class UserRepository implements IUserRepository<User> {
       throw new Error(`Failed to get all users:`);
     }
   };
-  public getByEmail = async (email: string) : Promise<User | null> => {
+  public getByEmail = async (email: string): Promise<User | null> => {
     try {
       return await User.findOne({
         where: { email },
@@ -45,12 +45,12 @@ export class UserRepository implements IUserRepository<User> {
       console.error('Error in get user by email:', error);
       throw new Error(`Failed to get user`);
     }
-    
   };
   public getById = async (id: string): Promise<User | null> => {
     try {
       return await User.findByPk(id, {
-        include:[{
+        include: [
+          {
             model: Conversation,
             as: 'conversations',
             through: { attributes: [] },
@@ -85,7 +85,7 @@ export class UserRepository implements IUserRepository<User> {
               {
                 model: Message,
                 order: [['createdAt', 'DESC']],
-              }
+              },
             ],
           },
         ],
