@@ -3,6 +3,8 @@ import { MESSAGES } from '../constants/message';
 import { AuthService } from '../services/authService';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { UserCreateParameters, UserLoginParameters } from '../shared/dtosInterfaces/userDtos';
+import { SuccessCode, sendSuccess } from '../utils/successCode';
+
 export class AuthController {
   constructor(private _authService: AuthService) {}
 
@@ -10,13 +12,13 @@ export class AuthController {
   public async register(req: Request, res: Response, next: NextFunction) {
     const parameters: UserCreateParameters = req.body;
     await this._authService.register(parameters);
-    res.status(201).json({ message: MESSAGES.USER.CREATED });
+    sendSuccess(res, SuccessCode.created(MESSAGES.AUTH.SUCCESS.REGISTER));
   }
 
   @catchAsync()
   public async login(req: Request, res: Response, next: NextFunction) {
     const parameters: UserLoginParameters = req.body;
     const user = await this._authService.login(parameters);
-    res.status(200).json(user);
+    sendSuccess(res, SuccessCode.ok(MESSAGES.AUTH.SUCCESS.LOGIN, user));
   }
 }
