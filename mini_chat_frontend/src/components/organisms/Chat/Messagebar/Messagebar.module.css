@@ -1,0 +1,15 @@
+.messengerCard {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.chatMain {
+  background-color: var(--quiqflow-color-white);
+  border-radius: 0.5rem;
+  box-shadow: var(--quiqflow-box-shadow-1);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

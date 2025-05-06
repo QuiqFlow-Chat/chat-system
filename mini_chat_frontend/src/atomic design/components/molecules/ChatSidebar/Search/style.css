@@ -1,0 +1,33 @@
+.contacts-header {
+    padding: 1rem;
+    /* border-bottom: 1px solid #eee; */
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--quiqflow-color-grey);
+}
+
+.search-input {
+    background-color: var(--quiqflow-color-white);
+    border-radius: 0.3rem;
+    border: solid var(--quiqflow-color-grey-border);
+    color: var(--quiqflow-color-modal-overlay);
+    font-size: var(--quiqflow-font-size-sm);
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    width: 100%;
+    font-weight: var(--quiqflow-font-weight-normal);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--quiqflow-color-selected-border);
+    color: var(--quiqflow-color-bg-dark);
+}

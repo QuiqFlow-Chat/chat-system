@@ -1,0 +1,37 @@
+.input {
+  border-radius: 0.375rem;
+  border: 1px solid var(--quiqflow-color-border-muted);
+  color: var(--quiqflow-color-grey);
+  font-size: var(--quiqflow-font-size-md);
+  font-weight: var(--quiqflow-font-weight-normal);
+  padding: .75rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.input:focus{
+  border-color: var(--quiqflow-color-primary);
+  outline: none;
+}
+
+/* form */
+.auth-input{
+  background-color: var(--quiqflow-color-light-grey);
+  border: none;
+  font-size: var(--quiqflow-font-size-sm);
+}
+
+.auth-input:focus {
+  background-color: var(--quiqflow-color-bg-secondary);
+  outline: none;
+}
+
+.input.is-invalid {
+  border-color: var(--quiqflow-color-error);
+  box-shadow: var(--quiqflow-box-shadow-error);
+}
+
+.input.is-valid {
+  border-color: var(--quiqflow-color-success);
+  box-shadow: var(--quiqflow-box-shadow-success);
+}

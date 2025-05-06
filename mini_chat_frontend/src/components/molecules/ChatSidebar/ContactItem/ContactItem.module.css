@@ -1,0 +1,49 @@
+/* src/components/molecules/ChatSidebar/ContactItem/ContactItem.module.css */
+
+.contactItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem ;
+  gap: 2rem;
+  border-bottom: 1px dashed var(--quiqflow-color-light-grey);
+}
+
+.contactDetails {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatar.small{
+  width: 35px;
+  height: 35px;
+}
+
+.contactName {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--quiqflow-color-bg-dark);
+  margin-bottom: 0.25rem;
+}
+
+.contactName:hover {
+  color: var(--quiqflow-color-primary);
+}
+
+.contactEmail {
+  font-size: var(--quiqflow-font-size-sm);
+  color: var(--quiqflow-color-modal-overlay);
+}
+
+.contactTime {
+  font-size: var(--quiqflow-font-size-sm);
+  /* font-weight: var(--quiqflow-font-weight-bold); */
+  color: var(--quiqflow-color-modal-overlay);
+  width: 50px;
+}
