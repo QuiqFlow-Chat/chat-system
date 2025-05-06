@@ -36,13 +36,31 @@ export class MessageRepository implements IMessageRepository<Message> {
         where: {
           [Op.or]: [
             { senderId, receiverId },
-            { senderId: receiverId, receiverId: senderId }
-          ]
-        }
+            { senderId: receiverId, receiverId: senderId },
+          ],
+        },
       });
     } catch (error) {
       console.error('error in get message by sender and receiver id : ', error);
       throw new Error(`Failed to get message`);
+    }
+  };
+  public getAllBySender_IdAndReceiver_Id = async (
+    senderId: string,
+    receiverId: string
+  ): Promise<Message[]> => {
+    try {
+      return await Message.findAll({
+        where: {
+          [Op.or]: [
+            { senderId, receiverId },
+            { senderId: receiverId, receiverId: senderId },
+          ],
+        },
+      });
+    } catch (error) {
+      console.error('error in get all messages by sender and receiver id : ', error);
+      throw new Error(`Failed to get all messages`);
     }
   };
   public delete = async (entity: Message): Promise<void> => {

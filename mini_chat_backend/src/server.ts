@@ -27,7 +27,7 @@ export class Server {
         origin: '*', // Allow all origins
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
-        credentials: true
+        credentials: true,
       },
     });
 
@@ -46,13 +46,15 @@ export class Server {
 
   private initMiddleware = async () => {
     // Enable CORS for all origins
-    this.app.use(cors({
-      origin: '*',  // Allow all origins
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true
-    }));
-    
+    this.app.use(
+      cors({
+        origin: '*', // Allow all origins
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
+      })
+    );
+
     this.app.use(express.json());
   };
 

@@ -1,3 +1,4 @@
+import { ConversaionMessagesGetByParameters } from './../shared/dtosInterfaces/conversationDtos';
 import { NextFunction, Request, Response } from 'express';
 import { ConversationService } from '../services/conversationService';
 import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
@@ -30,12 +31,12 @@ export class ConversationController {
 
   @catchAsync()
   public async getConversationMessages(req: Request, res: Response, _next: NextFunction) {
-    const { senderId , receiverId } = req.body;
+    const parameters: ConversaionMessagesGetByParameters = req.body;
     // Extract pagination parameters from query string
     const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
 
-    const messages = await this._conversationService.getConversationMessages(senderId,receiverId, {
+    const messages = await this._conversationService.getConversationMessages(parameters, {
       page: page || 1,
       limit: limit || 10,
     });
