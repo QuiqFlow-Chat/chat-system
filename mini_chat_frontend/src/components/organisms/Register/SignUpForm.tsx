@@ -10,22 +10,19 @@ import PasswordField, { passwordValidation } from "../../molecules/FormField/Pas
 import ConfirmPasswordField, { confirmPasswordValidation } from "../../molecules/FormField/ConfirmPasswordField/ConfirmPasswordField";
 import FullNameField, { fullNameValidation } from "../../molecules/FormField/FullNameField/FullNameField";
 
-// Define the shape of form values
-interface SignUpValues {
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { UserCreateParameters } from "../../../shared/dtosInterfaces/userDtos";
+
+
 
 interface SignUpFormProps {
   onSubmit: (
-    values: SignUpValues,
-    formikHelpers: FormikHelpers<SignUpValues>
-  ) => void | Promise<void>;
+    values: UserCreateParameters,
+    formikHelpers: FormikHelpers<UserCreateParameters>
+  ) => void ;
+  loading?: boolean;
 }
 
-const initialValues: SignUpValues = {
+const initialValues: UserCreateParameters = {
   fullName: "",
   email: "",
   password: "",
@@ -39,8 +36,7 @@ const validationSchema = Yup.object({
   confirmPassword: confirmPasswordValidation("password"),
 });
 
-const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
-  return (
+const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, loading }) => {  return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
@@ -56,13 +52,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
           <ConfirmPasswordField name="confirmPassword" passwordFieldName="password" />
 
           <div className={styles.buttonContainer}>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Signing up..." : "Sign Up"}
-            </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting || loading}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
+          </Button>
           </div>
         </Form>
       )}

@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import { Socket } from "socket.io-client";
 import { UserConversationCreateParameters } from "../shared/dtosInterfaces/userConversationDtos";
 import { MessageCreateParameters } from "../shared/dtosInterfaces/messageDtos";
+import tokenStorage from "../utils/storage";
 
 export interface MessageReceivePayload {
   senderId: string;
@@ -43,6 +44,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const socket: TypedSocket = io(import.meta.env.VITE_SOCKET_URL, {
       transports: ["websocket"],
       withCredentials: true,
+      Authorization : `Bearer ${tokenStorage.load()}`
     });
 
     socketRef.current = socket;

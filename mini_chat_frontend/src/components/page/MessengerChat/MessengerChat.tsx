@@ -6,6 +6,7 @@ import Messagebar from "../../organisms/Chat/Messagebar/Messagebar";
 
 import SidebarImage from "../../../assets/images/sidebar.jpg";
 import { UserGetByParameter } from "../../../shared/dtosInterfaces/userDtos";
+import { SocketProvider } from "../../../contexts/SocketContext";
 
 // بيانات dummy يمكن استبدالها بالبيانات الحقيقية من API
 const dummyContacts: UserGetByParameter[] = [
@@ -35,13 +36,14 @@ const MessengerChat: React.FC = () => {
   }, []);
 
   return (
+  <SocketProvider>
     <div className={styles.chatPage}>
       <img src={SidebarImage} className={styles.sidebarImage} />
       <div className={styles.chatContainer}>
         <ChatSidebar
           contacts={contacts} 
           onSelectConversation={(conversationId) => setActiveConversationId(conversationId)}
-        />
+          />
         {activeConversationId && (
           <Messagebar
             currentUser={currentUser}
@@ -50,6 +52,7 @@ const MessengerChat: React.FC = () => {
         )}
       </div>
     </div>
+  </SocketProvider>
   );
 };
 

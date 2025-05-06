@@ -26,10 +26,10 @@ export const fullNameValidation = Yup.string()
       return parts.length >= 2;
     }
   )
-  .test("word-lengths", "Each name must be 3–10 characters", (value) => {
+  .test("word-lengths", "Each name must be 3-15 characters", (value) => {
     if (!value) return false;
     const parts = value.trim().split(/\s+/);
-    return parts.every((word) => word.length >= 3 && word.length <= 10);
+    return parts.every((word) => word.length >= 3 && word.length <= 15);
   });
 
 const FullNameField: React.FC<FullNameFieldProps> = ({ name }) => {
