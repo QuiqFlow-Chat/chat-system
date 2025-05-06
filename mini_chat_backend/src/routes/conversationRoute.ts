@@ -5,7 +5,10 @@ import { BaseRoute } from './baseRoute';
 import { ConversationController } from '../controller/conversationController';
 import { AuthMiddleware } from '../middlewares/authMiddlewares';
 import { validateRequest } from '../middlewares/validationMiddleware';
-import { conversationIdSchema, conversationIdSchemaforMessages } from '../shared/validations/conversationValidation';
+import {
+  conversationIdSchema,
+  conversationIdSchemaforMessages,
+} from '../shared/validations/conversationValidation';
 
 export class ConversationRoute extends BaseRoute {
   conversationRepository: ConversationsRepository;

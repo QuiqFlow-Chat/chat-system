@@ -1,4 +1,7 @@
-import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
+import {
+  ConversaionGetByParameter,
+  ConversaionMessagesGetByParameters,
+} from '../shared/dtosInterfaces/conversationDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import Conversation from '../models/Conversation';
 import Message from '../models/Message';
@@ -12,7 +15,7 @@ import { MessageRepository } from '../repositories/messageRepossitory';
 
 export class ConversationService {
   _userRepository: UserRepository;
-  _messageRepository : MessageRepository;
+  _messageRepository: MessageRepository;
   constructor(private _conversationRepository: ConversationsRepository) {
     this._userRepository = new UserRepository();
     this._messageRepository = new MessageRepository();
@@ -55,32 +58,25 @@ export class ConversationService {
   };
 
   public getConversationMessages = async (
-    senderId:string,
-    receiverId:string,
+    parameters: ConversaionMessagesGetByParameters,
     paginationParams?: PaginationParams
   ): Promise<PaginatedResult<Message> | []> => {
     try {
-      const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
-        senderId,
-        receiverId
+      const messages = await this._messageRepository.getAllBySender_IdAndReceiver_Id(
+        parameters.senderId,
+        parameters.receiverId
       );
-      
-      if(!message) return[];
-      const conversationId = message.conversation.id
-      const conversation = await this._conversationRepository.getById(conversationId);
-
-      if(conversation){
-        const messages = conversation.messages;
+      if (messages?.length === 0) return [];
+      else {
         const sortedMessages = [...messages].sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-  
+
         const page = paginationParams?.page || 1;
         const limit = paginationParams?.limit || 10;
-  
+
         return paginate(sortedMessages, page, limit);
       }
-     return [];
     } catch (error) {
       throw new AppError('Failed to get conversation messages', 500);
     }

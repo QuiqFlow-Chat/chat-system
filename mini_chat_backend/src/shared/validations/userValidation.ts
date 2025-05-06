@@ -20,10 +20,10 @@ export const userUpdateSchema = Joi.object({
     'string.max': 'Full name must be at most 15 characters',
   }),
   password: Joi.string()
-  .optional()
-  .allow('')
-  .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&]).{8,}$/)
-  .messages({
-    'string.pattern.base': 'Invalid password format',
-  }),
+    .optional()
+    .allow('')
+    .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&]).{8,}$/)
+    .messages({
+      'string.pattern.base': 'Invalid password format',
+    }),
 });
