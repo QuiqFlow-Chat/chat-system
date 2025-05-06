@@ -9,8 +9,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/LoginPage" element={<LoginPage />} />
-        <Route path="/MessengerChat" element={<MessengerChat />} />
+        <Route path="/loginPage" element={<LoginPage />} />
+        <Route path="/messengerChat" element={<MessengerChat />} />
       </Routes>
     </Router>
   );

@@ -2,8 +2,9 @@ import React from "react";
 import { FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
 
-import styles from "./LoginPage.module.css";
+import tokenStorage from "../utils/storage";
 
+import styles from "./LoginPage.module.css";
 import LoginForm from "../../organisms/Register/LoginForm";
 
 const LoginPage: React.FC = () => {
@@ -16,7 +17,7 @@ const LoginPage: React.FC = () => {
     const { setSubmitting } = formikHelpers;
     console.log("Logging in with:", values);
     setSubmitting(true);
-    navigate("/MessengerChat");
+    navigate("/messengerChat");
   };
 
   const goToSignup = () => {

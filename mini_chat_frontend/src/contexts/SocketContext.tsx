@@ -36,7 +36,9 @@ export const useSocket = () => {
   return context;
 };
 
-export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const socketRef = useRef<TypedSocket | null>(null);
 
   useEffect(() => {

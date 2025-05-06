@@ -16,11 +16,11 @@ const SignUpPage: React.FC = () => {
       console.error("Registration failed:", error);
     } finally {
       setSubmitting(false);
-      navigate("/MessengerChat");
+      navigate("/messengerChat");
     }
   };
   const goToLogin = () => {
-    navigate("/LoginPage");
+    navigate("/login");
   };
   return (
     <div className={styles.registerPage}>
