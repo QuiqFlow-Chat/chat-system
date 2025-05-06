@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import { AuthService } from '../services/authService';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { UserCreateParameters, UserLoginParameters } from '../shared/dtosInterfaces/userDtos';

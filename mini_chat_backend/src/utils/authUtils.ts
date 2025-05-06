@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { AppError } from '../middlewares/errorMiddlewares';
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 
 export interface TokenPayload {
   id: string;

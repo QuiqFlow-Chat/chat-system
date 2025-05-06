@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserConversationService } from '../services/userConversationService';
 import { UserConversationGetByParameter } from '../shared/dtosInterfaces/userConversationDtos';
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 

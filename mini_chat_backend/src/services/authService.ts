@@ -1,4 +1,4 @@
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import {
   UserCreateParameters,
   UserLoginParameters,
@@ -10,24 +10,20 @@ import { AuthUtils } from '../utils/authUtils';
 
 export class AuthService {
   constructor(private _userRepository: UserRepository) {}
+
   public register = async (parameters: UserCreateParameters): Promise<void> => {
     try {
-      if (
-        !parameters.fullName ||
-        !parameters.email ||
-        !parameters.password ||
-        !parameters.confirmPassword
-      )
-        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_REGISTER[0]);
-      const checkUser = await this._userRepository.getByEmail(parameters.email);
-      if (!checkUser) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_REGISTER[1]);
-      if (parameters.password !== parameters.confirmPassword)
-        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_REGISTER[2]);
+      const existingUser = await this._userRepository.getByEmail(parameters.email);
+      if (existingUser) {
+        throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_REGISTER[1]);
+      }
 
-      // Hash the password
+      if (parameters.password !== parameters.confirmPassword) {
+        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_REGISTER[2]);
+      }
+
       const hashedPassword = await AuthUtils.hashPassword(parameters.password);
 
-      // Create the user with hashed password
       await this._userRepository.add({
         fullName: parameters.fullName,
         email: parameters.email,
@@ -35,43 +31,47 @@ export class AuthService {
         lastActivity: new Date(),
       });
     } catch (error) {
-      console.log('Error in register user', error);
-      throw new Error('Faild to register user');
+      console.error('[AuthService][register] Error:', error);
+      throw error instanceof AppError
+        ? error
+        : new AppError('An error occurred while registering the user', 500);
     }
   };
 
   public login = async (parameters: UserLoginParameters): Promise<AuthResponse> => {
     try {
-      const checkUser = await this._userRepository.getByEmail(parameters.email);
-      if (!checkUser) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_LOGIN[1]);
+      const existingUser = await this._userRepository.getByEmail(parameters.email);
+      if (!existingUser) {
+        throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_LOGIN[1]);
+      }
 
-      // Verify password using bcrypt
-      const passwordMatch = await AuthUtils.comparePassword(
+      const isPasswordValid = await AuthUtils.comparePassword(
         parameters.password,
-        checkUser.password
+        existingUser.password
       );
 
-      if (!passwordMatch) {
+      if (!isPasswordValid) {
         throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_LOGIN[0]);
       }
 
-      // Generate token
       const token = AuthUtils.generateToken({
-        id: checkUser.id,
-        email: checkUser.email,
+        id: existingUser.id,
+        email: existingUser.email,
       });
 
       return {
         user: {
-          id: checkUser.id,
-          email: checkUser.email,
-          fullName: checkUser.fullName,
+          id: existingUser.id,
+          email: existingUser.email,
+          fullName: existingUser.fullName,
         },
         token,
       };
     } catch (error) {
-      console.log('Error in login user', error);
-      throw new Error('Faild to login user');
+      console.error('[AuthService][login] Error:', error);
+      throw error instanceof AppError
+        ? error
+        : new AppError('An error occurred while logging in the user', 500);
     }
   };
 }

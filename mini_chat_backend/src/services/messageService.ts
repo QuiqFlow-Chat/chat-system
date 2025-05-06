@@ -10,7 +10,7 @@ import { ConversationsRepository } from '../repositories/conversationsRepository
 import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import { AppError } from '../middlewares/errorMiddlewares';
 import Message from '../models/Message';
 

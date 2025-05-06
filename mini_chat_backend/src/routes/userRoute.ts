@@ -22,18 +22,18 @@ export class UserRoute extends BaseRoute {
   }
 
   private initGetHttpMethod = async () => {
-    this.router.get('/getAllUsers', AuthMiddleware.authenticate, this.userController.getAllUsers);
+    this.router.get('/getAllUsers', AuthMiddleware.authenticate, this.userController.getAllUsers.bind(this.userController));
     this.router.get(
       '/:id/getUserById',
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'params'),
-      this.userController.getUserById
+      this.userController.getUserById.bind(this.userController)
     );
     this.router.get(
       '/:id/getUserLastActivity',
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'params'),
-      this.userController.getUserLastActivity
+      this.userController.getUserLastActivity.bind(this.userController)
     );
   };
   private initDeleteHttpMethod = async () => {
@@ -41,7 +41,7 @@ export class UserRoute extends BaseRoute {
       '/deleteUser',
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'body'),
-      this.userController.deleteUser
+      this.userController.deleteUser.bind(this.userController)
     );
   };
   private initUpdateHttpMethod = async () => {
@@ -49,7 +49,7 @@ export class UserRoute extends BaseRoute {
       '/updateUser',
       AuthMiddleware.authenticate,
       validateRequest(userUpdateSchema, 'body'),
-      this.userController.updateUser
+      this.userController.updateUser.bind(this.userController)
     );
   };
 }
