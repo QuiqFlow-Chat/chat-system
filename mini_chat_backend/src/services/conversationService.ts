@@ -8,11 +8,14 @@ import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/pagi
 import { paginate } from '../utils/paginationUtils';
 import { UserRepository } from '../repositories/userRepository';
 import User from '../models/User';
+import { MessageRepository } from '../repositories/messageRepossitory';
 
 export class ConversationService {
   _userRepository: UserRepository;
+  _messageRepository : MessageRepository;
   constructor(private _conversationRepository: ConversationsRepository) {
     this._userRepository = new UserRepository();
+    this._messageRepository = new MessageRepository();
   }
 
   public deleteConversation = async (parameter: ConversaionGetByParameter): Promise<void> => {
@@ -52,22 +55,32 @@ export class ConversationService {
   };
 
   public getConversationMessages = async (
-    id: string,
+    senderId:string,
+    receiverId:string,
     paginationParams?: PaginationParams
   ): Promise<PaginatedResult<Message> | []> => {
     try {
-      const conversation = await this._conversationRepository.getById(id);
-      if (!conversation) return [];
-
-      const messages = conversation.messages;
-      const sortedMessages = [...messages].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
+        senderId,
+        receiverId
       );
+      
+      if(!message) return[];
+      const conversationId = message.conversation.id
+      const conversation = await this._conversationRepository.getById(conversationId);
 
-      const page = paginationParams?.page || 1;
-      const limit = paginationParams?.limit || 10;
-
-      return paginate(sortedMessages, page, limit);
+      if(conversation){
+        const messages = conversation.messages;
+        const sortedMessages = [...messages].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+  
+        const page = paginationParams?.page || 1;
+        const limit = paginationParams?.limit || 10;
+  
+        return paginate(sortedMessages, page, limit);
+      }
+     return [];
     } catch (error) {
       throw new AppError('Failed to get conversation messages', 500);
     }

@@ -25,7 +25,7 @@ export class UserConversationRepository implements IUserConversationRepository<U
       throw new Error(`Failed to get the userConversation`);
     }
   };
-  public getByUser_IdAndConversation_Id = async (userId: string, conversationId: string) => {
+  public getByUser_IdAndConversation_Id = async (userId: string, conversationId: string):Promise<UserConversation|null> => {
     try {
       return await UserConversation.findOne({
         where: {

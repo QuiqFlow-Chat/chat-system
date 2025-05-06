@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Message from '../models/Message';
 import { IMessageRepository } from './messageRepositoryInterface';
 
@@ -32,7 +33,12 @@ export class MessageRepository implements IMessageRepository<Message> {
   ): Promise<Message | null> => {
     try {
       return await Message.findOne({
-        where: { senderId, receiverId },
+        where: {
+          [Op.or]: [
+            { senderId, receiverId },
+            { senderId: receiverId, receiverId: senderId }
+          ]
+        }
       });
     } catch (error) {
       console.error('error in get message by sender and receiver id : ', error);
