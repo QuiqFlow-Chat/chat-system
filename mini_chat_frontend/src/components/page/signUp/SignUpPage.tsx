@@ -19,20 +19,18 @@ const SignUpPage: React.FC = () => {
     setError(null);
 
     try {
-      const user = await signUp(values);
-      console.log("Registered user:", user);
-      navigate("/LoginPage"); 
-    } catch (err) {
-      console.error("Registration failed:", err);
-      setError("Registration failed. Please try again.");
+      await axios.post("/api/register", values);
+      navigate("/login");
+    } catch (error) {
+      console.error("Registration failed:", error);
     } finally {
       setSubmitting(false);
-      setLoading(false);
+      navigate("/messengerChat");
     }
   };
 
   const goToLogin = () => {
-    navigate("/LoginPage");
+    navigate("/login");
   };
 
   return (
