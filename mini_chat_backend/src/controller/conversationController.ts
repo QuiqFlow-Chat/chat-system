@@ -30,13 +30,12 @@ export class ConversationController {
 
   @catchAsync()
   public async getConversationMessages(req: Request, res: Response, _next: NextFunction) {
-    const { id } = req.params;
-
+    const { senderId , receiverId } = req.body;
     // Extract pagination parameters from query string
     const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
 
-    const messages = await this._conversationService.getConversationMessages(id, {
+    const messages = await this._conversationService.getConversationMessages(senderId,receiverId, {
       page: page || 1,
       limit: limit || 10,
     });
@@ -48,7 +47,7 @@ export class ConversationController {
   public async getConversationUsers(req: Request, res: Response, _next: NextFunction) {
     const { id } = req.params;
 
-    const users = await this._conversationService.getConversationMessages(id);
+    const users = await this._conversationService.getConversationUsers(id);
 
     sendSuccess(res, SuccessCode.ok(MESSAGES.SUCCESS.GENERAL.OK, users));
   }

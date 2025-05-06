@@ -107,7 +107,7 @@ export class MessageService {
     return true;
   };
 
-  public getConversation_Id = async (senderId: string, receiverId: string): Promise<string> => {
+   public getConversation_Id = async (senderId: string, receiverId: string): Promise<string> => {
     const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
       senderId,
       receiverId
