@@ -20,13 +20,13 @@ export const MESSAGES = {
       EXPIRED: 'Token has expired. Please log in again.',
       INVALID: 'Invalid token. Please log in again.',
       MISSING: 'Authorization token is missing or invalid',
-      VERIFICATION_FAILED: 'Authentication failed'
+      VERIFICATION_FAILED: 'Authentication failed',
     },
     SUCCESS: {
       LOGIN: 'Login successful',
       LOGOUT: 'Logout successful',
-      REGISTER: 'Registration successful'
-    }
+      REGISTER: 'Registration successful',
+    },
   },
 
   USER: {
@@ -36,8 +36,8 @@ export const MESSAGES = {
     DELETED: 'Delete User Completed Successfully ',
     SUCCESS: {
       PROFILE_FETCHED: 'User profile retrieved successfully',
-      SETTINGS_UPDATED: 'User settings updated successfully'
-    }
+      SETTINGS_UPDATED: 'User settings updated successfully',
+    },
   },
   CONVERSATION: {
     NOT_FOUND: 'conversation not found',
@@ -45,8 +45,8 @@ export const MESSAGES = {
     DELETED: 'Delete Conversation Completed Successfully',
     SUCCESS: {
       FETCHED: 'Conversations retrieved successfully',
-      UPDATED: 'Conversation updated successfully'
-    }
+      UPDATED: 'Conversation updated successfully',
+    },
   },
   MESSAGE: {
     NOT_FOUND: 'user not found',
@@ -56,22 +56,22 @@ export const MESSAGES = {
     SUCCESS: {
       SENT: 'Message sent successfully',
       DELIVERED: 'Message delivered successfully',
-      READ: 'Message marked as read successfully'
-    }
+      READ: 'Message marked as read successfully',
+    },
   },
   USER_CONVERSATION: {
     DELETED: 'Delete User Conversation Completed Successfully',
     NOT_FOUND: 'user conversations not found',
     SUCCESS: {
-      FETCHED: 'User conversations retrieved successfully'
-    }
+      FETCHED: 'User conversations retrieved successfully',
+    },
   },
   SUCCESS: {
     GENERAL: {
       OK: 'Operation completed successfully',
       CREATED: 'Resource created successfully',
       UPDATED: 'Resource updated successfully',
-      DELETED: 'Resource deleted successfully'
-    }
-  }
+      DELETED: 'Resource deleted successfully',
+    },
+  },
 };

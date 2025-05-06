@@ -14,8 +14,8 @@ export class UserConversationService {
         throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversations;
     } catch (error) {
-      console.log('error in getAllUserConversations', error);
-      throw new Error('faild to get all user conversations');
+      console.error('error in getAllUserConversations', error);
+      throw error instanceof Error ? error : new Error('Failed to get all user conversations');
     }
   };
 
@@ -25,8 +25,8 @@ export class UserConversationService {
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       return userConversation;
     } catch (error) {
-      console.log('error in getUserConversationsById', error);
-      throw new Error('faild to get user conversations');
+      console.error('error in getUserConversationsById', error);
+      throw error instanceof Error ? error : new Error('Failed to get user conversation');
     }
   };
 
@@ -38,8 +38,8 @@ export class UserConversationService {
       if (!userConversation) throw AppError.notFound(MESSAGES.USER_CONVERSATION.NOT_FOUND);
       await this._userConversationRepository.delete(userConversation);
     } catch (error) {
-      console.log('error in deleteUserConversations', error);
-      throw new Error('faild to delete user conversations');
+      console.error('error in deleteUserConversations', error);
+      throw error instanceof Error ? error : new Error('Failed to delete user conversation');
     }
   };
 }

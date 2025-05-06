@@ -27,7 +27,7 @@ export class Server {
         methods: ['GET', 'POST'],
       },
     });
-    
+
     this.authSequelize();
     this.initMiddleware();
     this.initSocket();

@@ -26,32 +26,32 @@ export class MessageRoute extends BaseRoute {
     this.router.get(
       '/:id/updateMessageStatus',
       AuthMiddleware.authenticate,
-      validateRequest(messageIdSchema,'params'),
-      this.messageController.updateMessageStatus
+      validateRequest(messageIdSchema, 'params'),
+      this.messageController.updateMessageStatus.bind(this.messageController).bind(this.messageController)
     );
   }
   private initPostHttpMethod = async () => {
     this.router.post(
       '/sendMessage',
       AuthMiddleware.authenticate,
-      validateRequest(sendMessageSchema,'body'),
-      this.messageController.sendMessage
+      validateRequest(sendMessageSchema, 'body'),
+      this.messageController.sendMessage.bind(this.messageController)
     );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteMessage',
       AuthMiddleware.authenticate,
-      validateRequest(messageIdSchema,'body'),
-      this.messageController.deleteMessage
+      validateRequest(messageIdSchema, 'body'),
+      this.messageController.deleteMessage.bind(this.messageController)
     );
   };
   private initUpdateHttpMethod = async () => {
     this.router.patch(
       '/updateMessageContent',
       AuthMiddleware.authenticate,
-      validateRequest(messageUpdateContentSchema,'body'),
-      this.messageController.updateMessageContent
+      validateRequest(messageUpdateContentSchema, 'body'),
+      this.messageController.updateMessageContent.bind(this.messageController)
     );
   };
 }

@@ -35,15 +35,18 @@ export class AuthUtils {
    * @param payload The data to include in the token
    * @param expiresIn Override default expiration time (e.g. '1h', '7d')
    */
-  public static generateToken(payload: TokenPayload, expiresIn: string | number = this.TOKEN_EXPIRATION): string {
+  public static generateToken(
+    payload: TokenPayload,
+    expiresIn: string | number = this.TOKEN_EXPIRATION
+  ): string {
     const now = Math.floor(Date.now() / 1000);
     const enhancedPayload = {
       ...payload,
-      iat: now,               // Issued at
-      nbf: now,               // Not valid before
-      jti: crypto.randomUUID() // Unique token ID for revocation capability
+      iat: now, // Issued at
+      nbf: now, // Not valid before
+      jti: crypto.randomUUID(), // Unique token ID for revocation capability
     };
-    
+
     const options: SignOptions = { expiresIn: expiresIn as any };
     return jwt.sign(enhancedPayload, this.JWT_SECRET, options);
   }

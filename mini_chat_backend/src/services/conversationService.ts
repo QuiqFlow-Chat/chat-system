@@ -21,8 +21,7 @@ export class ConversationService {
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       await this._conversationRepository.delete(conversation);
     } catch (error) {
-      console.log('error in deleteConversation', error);
-      throw new Error('faild to delete conversation');
+      throw error instanceof AppError ? error : new AppError('Failed to delete conversation', 500);
     }
   };
 
@@ -34,8 +33,9 @@ export class ConversationService {
       }
       return conversations;
     } catch (error) {
-      console.log('error in getAllConversations', error);
-      throw new Error('Failed to get all conversations');
+      throw error instanceof AppError
+        ? error
+        : new AppError('Failed to get all conversations', 500);
     }
   };
 
@@ -45,8 +45,9 @@ export class ConversationService {
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       return conversation;
     } catch (error) {
-      console.log('error in getConversationById', error);
-      throw new Error('faild to get conversation');
+      throw error instanceof AppError
+        ? error
+        : new AppError('Failed to get conversation by ID', 500);
     }
   };
 
@@ -58,22 +59,17 @@ export class ConversationService {
       const conversation = await this._conversationRepository.getById(id);
       if (!conversation) return [];
 
-      // Get all messages from the conversation
       const messages = conversation.messages;
-
-      // Sort messages by createdAt (newest first)
       const sortedMessages = [...messages].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
 
-      // Apply pagination
       const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
 
       return paginate(sortedMessages, page, limit);
     } catch (error) {
-      console.log('error in getConversationMessages', error);
-      throw new Error('faild to get conversation messages');
+      throw new AppError('Failed to get conversation messages', 500);
     }
   };
 
@@ -82,12 +78,11 @@ export class ConversationService {
       const conversation = await this._conversationRepository.getById(id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
 
-      // Get all users from the conversation
-      const users = conversation.users;
-      return users;
+      return conversation.users;
     } catch (error) {
-      console.log('error in getConversationUsers', error);
-      throw new Error('faild to get conversation users');
+      throw error instanceof AppError
+        ? error
+        : new AppError('Failed to get conversation users', 500);
     }
   };
 
@@ -98,8 +93,8 @@ export class ConversationService {
     try {
       const user = await this._userRepository.getUserConversations(id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
+
       const userConversations = user.conversations;
-      // Sort conversations messages by createdAt (newest first)
 
       userConversations.forEach((conversation) => {
         conversation.messages?.sort(
@@ -110,21 +105,19 @@ export class ConversationService {
       const sortedUserConversations = [...userConversations].sort((a, b) => {
         const aLastMessage = a.messages?.[a.messages.length - 1];
         const bLastMessage = b.messages?.[b.messages.length - 1];
-
         const aTime = aLastMessage ? new Date(aLastMessage.createdAt).getTime() : 0;
         const bTime = bLastMessage ? new Date(bLastMessage.createdAt).getTime() : 0;
-
         return bTime - aTime;
       });
 
-      // Apply pagination
       const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
 
       return paginate(sortedUserConversations, page, limit);
     } catch (error) {
-      console.log('Error in getUserConversations', error);
-      throw new Error('Faild to get user conversations');
+      throw error instanceof AppError
+        ? error
+        : new AppError('Failed to get user conversations', 500);
     }
   };
 }

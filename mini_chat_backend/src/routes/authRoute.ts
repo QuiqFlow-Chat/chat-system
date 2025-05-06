@@ -24,6 +24,10 @@ export class AuthRoute extends BaseRoute {
       validateRequest(authRegisterSchema, 'body'),
       this.authController.register.bind(this.authController)
     );
-    this.router.post('/login', validateRequest(authLoginSchema, 'body'), this.authController.login.bind(this.authController));
+    this.router.post(
+      '/login',
+      validateRequest(authLoginSchema, 'body'),
+      this.authController.login.bind(this.authController)
+    );
   };
 }

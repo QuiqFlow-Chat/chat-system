@@ -25,7 +25,7 @@ export class AppError extends Error {
 export class ErrorMiddleware {
   static handleError(err: unknown, req: Request, res: Response, _next: NextFunction): void {
     const statusCode = err instanceof AppError ? err.statusCode : 500;
-    const message = err instanceof AppError ? err.message : 'Internal server error'+err;
+    const message = err instanceof AppError ? err.message : 'Internal server error' + err;
 
     console.error(`[${req.method}] ${req.originalUrl} - ${message}`);
 

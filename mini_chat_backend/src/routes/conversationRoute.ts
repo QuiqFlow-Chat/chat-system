@@ -24,31 +24,31 @@ export class ConversationRoute extends BaseRoute {
     this.router.get(
       '/getAllConversations',
       AuthMiddleware.authenticate,
-      this.conversationController.getAllConversations
+      this.conversationController.getAllConversations.bind(this.conversationController)
     );
     this.router.get(
       '/:id/getConversationById',
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getConversationById
+      this.conversationController.getConversationById.bind(this.conversationController)
     );
     this.router.get(
       '/:id/getConversationMessages',
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getConversationMessages
+      this.conversationController.getConversationMessages.bind(this.conversationController)
     );
     this.router.get(
       '/:id/getConversationUsers',
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getConversationUsers
+      this.conversationController.getConversationUsers.bind(this.conversationController)
     );
     this.router.get(
       '/:id/getUserConversations',
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getUserConversations
+      this.conversationController.getUserConversations.bind(this.conversationController)
     );
   };
   private initDeleteHttpMethod = async () => {
@@ -56,7 +56,7 @@ export class ConversationRoute extends BaseRoute {
       '/deleteConversationAsync',
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'body'),
-      this.conversationController.deleteConversation
+      this.conversationController.deleteConversation.bind(this.conversationController)
     );
   };
 }

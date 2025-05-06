@@ -24,21 +24,21 @@ export class UserConversationRoute extends BaseRoute {
     this.router.get(
       '/getAllUserConversations',
       AuthMiddleware.authenticate,
-      this.userConversationController.getAllUserConversations
+      this.userConversationController.getAllUserConversations.bind(this.userConversationController)
     );
     this.router.get(
       '/:id/getUserConversationsById',
       AuthMiddleware.authenticate,
-      validateRequest(userConversationIdSchema,'params'),
-      this.userConversationController.getUserConversationsById
+      validateRequest(userConversationIdSchema, 'params'),
+      this.userConversationController.getUserConversationsById.bind(this.userConversationController)
     );
   };
   private initDeleteHttpMethod = async () => {
     this.router.delete(
       '/deleteUserConversations',
       AuthMiddleware.authenticate,
-      validateRequest(userConversationIdSchema,'body'),
-      this.userConversationController.deleteUserConversations
+      validateRequest(userConversationIdSchema, 'body'),
+      this.userConversationController.deleteUserConversations.bind(this.userConversationController)
     );
   };
 }

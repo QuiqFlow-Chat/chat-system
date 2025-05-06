@@ -26,12 +26,6 @@ export class MessageService {
 
   public sendMessage = async (parameters: MessageCreateParameters): Promise<Message> => {
     try {
-      if (!parameters.content || !parameters.receiverId || !parameters.senderId)
-        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_MESSAGE[0]);
-
-      if (parameters.content.length === 0)
-        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_MESSAGE[1]);
-
       const sender = await this._userRepository.getById(parameters.senderId);
       if (!sender) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
 
@@ -60,8 +54,8 @@ export class MessageService {
       const message = await this._messageRepository.add(createMessage);
       return message;
     } catch (error) {
-      console.log('error in sendMessage', error);
-      throw new Error('faild to send new message');
+      console.error('error in sendMessage', error);
+      throw error instanceof Error ? error : new Error('Failed to send new message');
     }
   };
 
@@ -71,8 +65,8 @@ export class MessageService {
       if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
       await this._messageRepository.delete(message);
     } catch (error) {
-      console.log('error in deleteMessage', error);
-      throw new Error('faild to delete message');
+      console.error('error in deleteMessage', error);
+      throw error instanceof Error ? error : new Error('Failed to delete message');
     }
   };
 
@@ -83,8 +77,8 @@ export class MessageService {
       message.content = parameters.content || message.content;
       await this._messageRepository.update(message);
     } catch (error) {
-      console.log('error in updateMessageContent', error);
-      throw new Error('faild to update message content');
+      console.error('error in updateMessageContent', error);
+      throw error instanceof Error ? error : new Error('Failed to update message content');
     }
   };
 
@@ -95,8 +89,8 @@ export class MessageService {
       message.isRead = true;
       await this._messageRepository.update(message);
     } catch (error) {
-      console.log('error in updateMessageStatus', error);
-      throw new Error('faild to update message status');
+      console.error('error in updateMessageStatus', error);
+      throw error instanceof Error ? error : new Error('Failed to update message status');
     }
   };
 

@@ -14,8 +14,8 @@ export class UserService {
       if (users.length === 0) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return users;
     } catch (error) {
-      console.log('Error in getAll', error);
-      throw new Error('Faild to get all users');
+      console.error('Error in getAllUsers:', error);
+      throw error instanceof Error ? error : new Error('Failed to get all users');
     }
   };
 
@@ -25,8 +25,8 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return user;
     } catch (error) {
-      console.log('Error in getUserById', error);
-      throw new Error('Faild to get user');
+      console.error('Error in getUserById:', error);
+      throw error instanceof Error ? error : new Error('Failed to get user');
     }
   };
 
@@ -37,7 +37,7 @@ export class UserService {
       await this._userRepository.delete(user);
     } catch (error) {
       console.error('Error in deleteUser:', error);
-      throw new Error('Failed to delete user');
+      throw error instanceof Error ? error : new Error('Failed to delete user');
     }
   };
 
@@ -45,32 +45,35 @@ export class UserService {
    * Updates a user's information
    * @param parameter User update parameters
    */
-  public async updateUser(parameter: UserUpdateParameters): Promise<void> {
+  public updateUser = async (parameter: UserUpdateParameters): Promise<void> => {
     try {
       const user = await this._userRepository.getById(parameter.id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-      if (!parameter.fullName && !parameter.password)
-        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_UPDATE[0]);
+
       user.fullName = parameter.fullName || user.fullName;
-      user.password = parameter.password || user.password;
-      user.password = await AuthUtils.hashPassword(parameter.password);
+
+      if (parameter.password) {
+        user.password = await AuthUtils.hashPassword(parameter.password);
+      }
+
       await this._userRepository.update(user);
     } catch (error) {
-      console.log('Error in updateUser', error);
-      throw new Error('Faild to update user');
+      console.error('Error in updateUser:', error);
+      throw error instanceof Error ? error : new Error('Failed to update user');
     }
-  }
+  };
 
   public getUserLastActivity = async (id: string): Promise<Date> => {
     try {
       const user = await this._userRepository.getById(id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-      user.lastActivity = new Date(Date.now());
+
+      user.lastActivity = new Date();
       await this._userRepository.update(user);
       return user.lastActivity;
     } catch (error) {
-      console.log('Error in logou', error);
-      throw new Error('Faild to logout user');
+      console.error('Error in getUserLastActivity:', error);
+      throw error instanceof Error ? error : new Error('Failed to update user last activity');
     }
   };
 }

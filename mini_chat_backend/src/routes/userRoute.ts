@@ -22,7 +22,11 @@ export class UserRoute extends BaseRoute {
   }
 
   private initGetHttpMethod = async () => {
-    this.router.get('/getAllUsers', AuthMiddleware.authenticate, this.userController.getAllUsers.bind(this.userController));
+    this.router.get(
+      '/getAllUsers',
+      AuthMiddleware.authenticate,
+      this.userController.getAllUsers.bind(this.userController)
+    );
     this.router.get(
       '/:id/getUserById',
       AuthMiddleware.authenticate,
