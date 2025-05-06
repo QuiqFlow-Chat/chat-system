@@ -27,7 +27,8 @@ export class MessageRoute extends BaseRoute {
       '/:id/updateMessageStatus',
       AuthMiddleware.authenticate,
       validateRequest(messageIdSchema, 'params'),
-      this.messageController.updateMessageStatus.bind(this.messageController).bind(this.messageController)
+      this.messageController.updateMessageStatus
+        .bind(this.messageController)
     );
   }
   private initPostHttpMethod = async () => {

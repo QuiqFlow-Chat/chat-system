@@ -6,3 +6,8 @@ export const conversationIdSchema = Joi.object({
     'string.guid': 'ID must be a valid UUID',
   }),
 });
+
+export const conversationIdSchemaforMessages = Joi.object({
+  senderId: Joi.string().uuid(),
+  receiverId: Joi.string().uuid(),
+});

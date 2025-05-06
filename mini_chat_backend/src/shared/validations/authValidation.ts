@@ -1,11 +1,11 @@
 import Joi from 'joi';
 
 export const authRegisterSchema = Joi.object({
-  fullName: Joi.string().min(3).max(10).required().messages({
+  fullName: Joi.string().min(3).max(15).required().messages({
     'string.base': 'Full name must be a string',
     'string.empty': 'Full name is required',
     'string.min': 'Full name must be at least 3 characters',
-    'string.max': 'Full name must be at most 10 characters',
+    'string.max': 'Full name must be at most 15 characters',
   }),
   email: Joi.string()
     .pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)

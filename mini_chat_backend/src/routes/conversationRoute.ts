@@ -5,7 +5,7 @@ import { BaseRoute } from './baseRoute';
 import { ConversationController } from '../controller/conversationController';
 import { AuthMiddleware } from '../middlewares/authMiddlewares';
 import { validateRequest } from '../middlewares/validationMiddleware';
-import { conversationIdSchema } from '../shared/validations/conversationValidation';
+import { conversationIdSchema, conversationIdSchemaforMessages } from '../shared/validations/conversationValidation';
 
 export class ConversationRoute extends BaseRoute {
   conversationRepository: ConversationsRepository;
@@ -18,6 +18,15 @@ export class ConversationRoute extends BaseRoute {
     this.conversationController = new ConversationController(this.conversationService);
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
+    this.initPostHttpMethod();
+  }
+  private initPostHttpMethod() {
+    this.router.post(
+      '/getConversationMessages',
+      AuthMiddleware.authenticate,
+      validateRequest(conversationIdSchemaforMessages, 'body'), // نتحقق من body مش params
+      this.conversationController.getConversationMessages.bind(this.conversationController)
+    );
   }
 
   private initGetHttpMethod = async () => {
@@ -31,12 +40,6 @@ export class ConversationRoute extends BaseRoute {
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
       this.conversationController.getConversationById.bind(this.conversationController)
-    );
-    this.router.get(
-      '/:id/getConversationMessages',
-      AuthMiddleware.authenticate,
-      validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getConversationMessages.bind(this.conversationController)
     );
     this.router.get(
       '/:id/getConversationUsers',
