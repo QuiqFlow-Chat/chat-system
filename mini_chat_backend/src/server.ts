@@ -1,6 +1,7 @@
 import { ErrorMiddleware } from './middlewares/errorMiddlewares';
 import { Application } from 'express';
 import express from 'express';
+import cors from 'cors';
 import { ConversationRoute } from './routes/conversationRoute';
 import { MessageRoute } from './routes/messageRoute';
 import { UserConversationRoute } from './routes/userConversationRoute';
@@ -23,8 +24,10 @@ export class Server {
     this.httpServer = http.createServer(this.app);
     this.io = new SocketIOServer(this.httpServer, {
       cors: {
-        origin: '*',
-        methods: ['GET', 'POST'],
+        origin: '*', // Allow all origins
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true
       },
     });
 
@@ -42,6 +45,14 @@ export class Server {
   };
 
   private initMiddleware = async () => {
+    // Enable CORS for all origins
+    this.app.use(cors({
+      origin: '*',  // Allow all origins
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true
+    }));
+    
     this.app.use(express.json());
   };
 
@@ -65,6 +76,7 @@ export class Server {
     this.httpServer.listen(this.port, () => {
       console.log(`❤ Server running on http://localhost:${this.port}`);
       console.log(`✨ Socket.IO server initialized`);
+      console.log(`🔓 CORS enabled for all origins`);
     });
   };
 }
