@@ -1,0 +1,57 @@
+.register-container{
+    background-color: var(--quiqflow-color-white);
+    border-radius: 0.5rem;
+    box-shadow: var(--quiqflow-box-shadow-2);
+    color: var(--quiqflow-color-primary-font);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--quiqflow-font-primary), sans-serif;
+    line-height: 1.5;
+    margin: auto;
+    max-width: 28rem;
+    padding:1.5rem 2.5rem;
+    width: 100%;
+}
+
+#registerForm{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.register-header {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.register-title {
+    color: var(--quiqflow-color-primary);
+    font-size: var(--quiqflow-font-size-3xl);
+    font-weight: var(--quiqflow-font-weight-bold);
+    margin: 0 ;
+}
+
+.register-subtext {
+    align-items: center;
+    color: var(--quiqflow-color-grey);
+    display: flex;
+    font-size: var(--quiqflow-font-size-xs);
+    justify-content: center;
+    margin: 0.5rem ;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+  }
+
+.register-link {
+    color: var(--quiqflow-color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.register-link:hover {
+    color: var(--quiqflow-color-primary-hover);
+    text-decoration: underline;
+}

@@ -1,0 +1,54 @@
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.outgoing {
+  align-self: flex-end;
+}
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageContact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  align-self: flex-end;
+}
+
+.avatar {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.small {
+  width: 35px;
+  height: 35px;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 0.75rem;
+  text-align: right;
+}
+
+.messageTime {
+  color: var(--quiqflow-color-modal-overlay);
+  font-size: 0.75rem;
+}
+
+.messageText {
+  background-color: var(--quiqflow-color-black-lightest);
+  color: var(--quiqflow-color-black);
+  text-align: right;
+  border-radius: var(--quiqflow-radius-chat-bubble);
+  font-weight: var(--quiqflow-font-weight-normal);
+  padding: 1rem;
+  word-wrap: break-word;
+  margin-top: 0.25rem;
+}

@@ -1,0 +1,19 @@
+.messageText {
+  border-radius: var(--quiqflow-radius-chat-bubble);
+  font-weight: var(--quiqflow-font-weight-normal);
+  padding: 1rem;
+  word-wrap: break-word;
+  animation: messagePopIn 0.3s ease-out;
+  max-width: 500px;
+}
+
+@keyframes messagePopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

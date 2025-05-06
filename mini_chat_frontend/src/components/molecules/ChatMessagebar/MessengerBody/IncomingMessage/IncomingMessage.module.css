@@ -1,0 +1,20 @@
+.message {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .incoming {
+    align-self: flex-start;
+  }
+  
+  .messageText {
+    background-color: var(--quiqflow-color-primary-light);
+    color: var(--quiqflow-color-black);
+  }
+  
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  

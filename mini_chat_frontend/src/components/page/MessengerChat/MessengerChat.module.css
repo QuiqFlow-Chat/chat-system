@@ -1,0 +1,20 @@
+.chatPage{
+display: flex;
+/* flex: 1 1 auto; */
+}
+
+.sidebarImage{
+max-width: 350px;
+height: 100vh;
+}
+
+.chatContainer {
+  background-color: var(--quiqflow-color-chat-bg);
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 0fr 2fr;
+  height: 100vh;
+  padding: 2rem;
+  flex: 1;
+}
+
