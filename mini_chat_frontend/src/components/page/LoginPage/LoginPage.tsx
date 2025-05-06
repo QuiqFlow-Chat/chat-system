@@ -1,22 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
-
+import { login } from "../../../services/api/authService";
+import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
 import styles from "./LoginPage.module.css";
 
 import LoginForm from "../../organisms/Register/LoginForm";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (
-    values: { email: string; password: string },
-    formikHelpers: FormikHelpers<{ email: string; password: string }>
+  const handleSubmit = async (
+    values: UserLoginParameters,
+    formikHelpers: FormikHelpers<UserLoginParameters>
   ) => {
     const { setSubmitting } = formikHelpers;
-    console.log("Logging in with:", values);
-    setSubmitting(true);
-    navigate("/MessengerChat");
+    setLoading(true);
+    setError(null);
+
+    try {
+      const user = await login(values);
+      console.log("Logged in user:", user);
+      navigate("/MessengerChat");
+    } catch (error) {
+      setError("Login failed. Please try again.");
+    } finally {
+      setSubmitting(false); // إعادة حالة الإرسال إلى False
+      setLoading(false);
+    }
   };
 
   const goToSignup = () => {
@@ -35,7 +48,9 @@ const LoginPage: React.FC = () => {
           <h1 className={styles.registerTitle}>Log In</h1>
         </header>
 
-        <LoginForm onSubmit={handleSubmit} />
+        {error && <div className={styles.error}>{error}</div>}
+
+        <LoginForm onSubmit={handleSubmit} loading={loading} />
 
         <p className={styles.registerSubtext}>
           Don&apos;t have an account?{" "}

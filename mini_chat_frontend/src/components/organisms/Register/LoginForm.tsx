@@ -1,29 +1,25 @@
 import React from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
 
 import Button from "../../atoms/Button/Button";
 import styles from "./Register.module.css";
 
-import PasswordField, { passwordValidation } from "../../molecules/FormField/PasswordField/PasswordField";
-import EmailField, { emailValidation } from "../../molecules/FormField/EmailField/EmailField";
-
-// Shape of the form's values
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
+import PasswordField, {passwordValidation,} from "../../molecules/FormField/PasswordField/PasswordField";
+import EmailField, {emailValidation,} from "../../molecules/FormField/EmailField/EmailField";
 
 // Component props
 interface LoginFormProps {
   onSubmit: (
-    values: LoginFormValues,
-    formikHelpers: FormikHelpers<LoginFormValues>
+    values: UserLoginParameters,
+    formikHelpers: FormikHelpers<UserLoginParameters>
   ) => void;
+  loading?: boolean;
 }
 
-// Initial values for the form
-const initialValues: LoginFormValues = {
+// Initial values
+const initialValues: UserLoginParameters = {
   email: "",
   password: "",
 };
@@ -34,7 +30,7 @@ const validationSchema = Yup.object({
   password: passwordValidation,
 });
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -48,9 +44,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           <EmailField name="email" />
           <PasswordField name="password" />
           <div className={styles.buttonContainer}>
-            <Button type="submit" variant="primary" disabled={isSubmitting}>
-              {isSubmitting ? "Logging in..." : "Log In"}
-            </Button>
+          <Button type="submit" variant="primary" disabled={isSubmitting || loading}>
+            {loading ? "Logging in..." : "Log In"}
+          </Button>
           </div>
         </Form>
       )}
