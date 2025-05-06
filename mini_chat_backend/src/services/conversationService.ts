@@ -2,7 +2,7 @@ import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversation
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import Conversation from '../models/Conversation';
 import Message from '../models/Message';
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import { AppError } from '../middlewares/errorMiddlewares';
 import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
 import { paginate } from '../utils/paginationUtils';

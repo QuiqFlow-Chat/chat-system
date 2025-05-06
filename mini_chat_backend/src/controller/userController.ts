@@ -1,7 +1,7 @@
 import { UserGetByParameter, UserUpdateParameters } from '../shared/dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/userService';
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 

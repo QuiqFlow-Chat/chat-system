@@ -1,4 +1,4 @@
-import { MESSAGES } from '../constants/message';
+import { MESSAGES } from '../constants/messages';
 import { UserGetByParameter, UserUpdateParameters } from '../shared/dtosInterfaces/userDtos';
 import User from '../models/User';
 import { UserRepository } from '../repositories/userRepository';
