@@ -6,7 +6,15 @@ import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 
 export class UserController {
-  constructor(private _userService: UserService) {}
+  private static _userControllerInstance: UserController;
+  private constructor(private _userService: UserService) {}
+
+  public static getInstance(userService: UserService): UserController {
+    if (!this._userControllerInstance) {
+      this._userControllerInstance = new UserController(userService);
+    }
+    return this._userControllerInstance;
+  }
 
   @catchAsync()
   public async getAllUsers(_req: Request, res: Response, _next: NextFunction) {

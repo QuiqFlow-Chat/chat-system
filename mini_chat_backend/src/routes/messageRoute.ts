@@ -15,8 +15,8 @@ export class MessageRoute extends BaseRoute {
   constructor(app: Application) {
     super(app);
     this.messageRepository = new MessageRepository();
-    this.messageService = new MessageService(this.messageRepository);
-    this.messageController = new MessageController(this.messageService);
+    this.messageService = MessageService.getInstance(this.messageRepository);
+    this.messageController = MessageController.getInstance(this.messageService);
     this.initPostHttpMethod();
     this.initUpdateHttpMethod();
     this.initDeleteHttpMethod();

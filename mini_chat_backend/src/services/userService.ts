@@ -1,12 +1,21 @@
+import { UserRepository } from './../repositories/userRepository';
 import { MESSAGES } from '../constants/messages';
 import { UserGetByParameter, UserUpdateParameters } from '../shared/dtosInterfaces/userDtos';
 import User from '../models/User';
-import { UserRepository } from '../repositories/userRepository';
+
 import { AppError } from '../middlewares/errorMiddlewares';
 import { AuthUtils } from '../utils/authUtils';
 
 export class UserService {
-  constructor(private _userRepository: UserRepository) {}
+  private static _userServiceInstance: UserService;
+  private constructor(private _userRepository: UserRepository) {}
+
+  public static getInstance(userRepository: UserRepository): UserService {
+    if (!this._userServiceInstance) {
+      this._userServiceInstance = new UserService(userRepository);
+    }
+    return this._userServiceInstance;
+  }
 
   public getAllUsers = async (): Promise<User[]> => {
     try {

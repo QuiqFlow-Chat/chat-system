@@ -14,8 +14,8 @@ export class UserRoute extends BaseRoute {
   constructor(app: Application) {
     super(app);
     this.userRepository = new UserRepository();
-    this.userService = new UserService(this.userRepository);
-    this.userController = new UserController(this.userService);
+    this.userService = UserService.getInstance(this.userRepository);
+    this.userController = UserController.getInstance(this.userService);
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
     this.initUpdateHttpMethod();

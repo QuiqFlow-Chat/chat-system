@@ -1,8 +1,8 @@
-export interface ConversaionGetByParameter {
+export interface ConversationGetByParameter {
   id: string;
 }
 
-export interface ConversaionMessagesGetByParameters {
+export interface ConversationMessagesGetByParameters {
   senderId: string;
   receiverId: string;
 }

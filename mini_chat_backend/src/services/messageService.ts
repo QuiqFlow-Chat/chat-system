@@ -1,3 +1,4 @@
+import { MessageRepository } from './../repositories/messageRepossitory';
 import {
   MessageCreateFullParameters,
   MessageUpdateParameters,
@@ -7,23 +8,27 @@ import {
   MessageGetByParameter,
 } from '../shared/dtosInterfaces/messageDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
-import { MessageRepository } from '../repositories/messageRepossitory';
 import { UserRepository } from '../repositories/userRepository';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
 import { MESSAGES } from '../constants/messages';
 import { AppError } from '../middlewares/errorMiddlewares';
 import Message from '../models/Message';
-
 export class MessageService {
   _userRepository: UserRepository;
   _conversationRepository: ConversationsRepository;
   _userConversationRepository: UserConversationRepository;
-  constructor(private _messageRepository: MessageRepository) {
+  private static _messageServiceInstance: MessageService;
+  private constructor(private _messageRepository: MessageRepository) {
     this._userRepository = new UserRepository();
     this._conversationRepository = new ConversationsRepository();
     this._userConversationRepository = new UserConversationRepository();
   }
-
+  public static getInstance(messageRepository: MessageRepository): MessageService {
+    if (!this._messageServiceInstance) {
+      this._messageServiceInstance = new MessageService(messageRepository);
+    }
+    return this._messageServiceInstance;
+  }
   public sendMessage = async (parameters: MessageCreateParameters): Promise<Message> => {
     try {
       const sender = await this._userRepository.getById(parameters.senderId);

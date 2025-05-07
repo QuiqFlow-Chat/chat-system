@@ -1,17 +1,25 @@
-import { ConversaionMessagesGetByParameters } from './../shared/dtosInterfaces/conversationDtos';
+import { ConversationService } from './../services/conversationService';
+import { ConversationMessagesGetByParameters } from './../shared/dtosInterfaces/conversationDtos';
 import { NextFunction, Request, Response } from 'express';
-import { ConversationService } from '../services/conversationService';
-import { ConversaionGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
+import { ConversationGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
 import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 
 export class ConversationController {
-  constructor(private _conversationService: ConversationService) {}
+  private static _conversationControllerInstance: ConversationController;
+  private constructor(private _conversationService: ConversationService) {}
+
+  public static getInstance(conversationService: ConversationService): ConversationController {
+    if (!this._conversationControllerInstance) {
+      this._conversationControllerInstance = new ConversationController(conversationService);
+    }
+    return this._conversationControllerInstance;
+  }
 
   @catchAsync()
   public async deleteConversation(req: Request, res: Response, _next: NextFunction) {
-    const parameter: ConversaionGetByParameter = req.body;
+    const parameter: ConversationGetByParameter = req.body;
     await this._conversationService.deleteConversation(parameter);
     sendSuccess(res, SuccessCode.ok(MESSAGES.CONVERSATION.DELETED));
   }
@@ -31,7 +39,7 @@ export class ConversationController {
 
   @catchAsync()
   public async getConversationMessages(req: Request, res: Response, _next: NextFunction) {
-    const parameters: ConversaionMessagesGetByParameters = req.body;
+    const parameters: ConversationMessagesGetByParameters = req.body;
     // Extract pagination parameters from query string
     const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;

@@ -14,8 +14,12 @@ export class UserConversationRoute extends BaseRoute {
   constructor(app: Application) {
     super(app);
     this.userConversationRepository = new UserConversationRepository();
-    this.userConversationService = new UserConversationService(this.userConversationRepository);
-    this.userConversationController = new UserConversationController(this.userConversationService);
+    this.userConversationService = UserConversationService.getInstance(
+      this.userConversationRepository
+    );
+    this.userConversationController = UserConversationController.getInstance(
+      this.userConversationService
+    );
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
   }

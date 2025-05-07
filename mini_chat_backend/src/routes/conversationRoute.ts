@@ -17,8 +17,8 @@ export class ConversationRoute extends BaseRoute {
   constructor(app: Application) {
     super(app);
     this.conversationRepository = new ConversationsRepository();
-    this.conversationService = new ConversationService(this.conversationRepository);
-    this.conversationController = new ConversationController(this.conversationService);
+    this.conversationService = ConversationService.getInstance(this.conversationRepository);
+    this.conversationController = ConversationController.getInstance(this.conversationService);
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
     this.initPostHttpMethod();

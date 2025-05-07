@@ -13,8 +13,8 @@ export class AuthRoute extends BaseRoute {
   constructor(app: Application) {
     super(app);
     this.userRepository = new UserRepository();
-    this.authService = new AuthService(this.userRepository);
-    this.authController = new AuthController(this.authService);
+    this.authService = AuthService.getInstance(this.userRepository);
+    this.authController = AuthController.getInstance(this.authService);
     this.initPostHttpMethod();
   }
   private initPostHttpMethod = async () => {

@@ -10,7 +10,15 @@ import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 
 export class MessageController {
-  constructor(private _messageService: MessageService) {}
+  private static _messageControllerInstance: MessageController;
+  private constructor(private _messageService: MessageService) {}
+
+  public static getInstance(messageService: MessageService): MessageController {
+    if (!this._messageControllerInstance) {
+      this._messageControllerInstance = new MessageController(messageService);
+    }
+    return this._messageControllerInstance;
+  }
 
   @catchAsync()
   public async sendMessage(req: Request, res: Response, _next: NextFunction) {

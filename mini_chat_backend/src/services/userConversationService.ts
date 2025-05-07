@@ -5,7 +5,17 @@ import UserConversation from '../models/UserConversation';
 import { UserConversationRepository } from '../repositories/userConversationRepository';
 
 export class UserConversationService {
-  constructor(private _userConversationRepository: UserConversationRepository) {}
+  private static _userConvServiceInstance: UserConversationService;
+  private constructor(private _userConversationRepository: UserConversationRepository) {}
+
+  public static getInstance(
+    userConversationRepository: UserConversationRepository
+  ): UserConversationService {
+    if (!this._userConvServiceInstance) {
+      this._userConvServiceInstance = new UserConversationService(userConversationRepository);
+    }
+    return this._userConvServiceInstance;
+  }
 
   public getAllUserConversations = async (): Promise<UserConversation[]> => {
     try {

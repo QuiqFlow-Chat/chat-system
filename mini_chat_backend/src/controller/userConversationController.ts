@@ -1,12 +1,22 @@
+import { UserConversationService } from './../services/userConversationService';
 import { NextFunction, Request, Response } from 'express';
-import { UserConversationService } from '../services/userConversationService';
 import { UserConversationGetByParameter } from '../shared/dtosInterfaces/userConversationDtos';
 import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 
 export class UserConversationController {
-  constructor(private _userConversationService: UserConversationService) {}
+  private static _userConvControllerInstance: UserConversationController;
+  private constructor(private _userConversationService: UserConversationService) {}
+
+  public static getInstance(
+    userConversationService: UserConversationService
+  ): UserConversationController {
+    if (!this._userConvControllerInstance) {
+      this._userConvControllerInstance = new UserConversationController(userConversationService);
+    }
+    return this._userConvControllerInstance;
+  }
 
   @catchAsync()
   public async getAllUserConversations(_req: Request, res: Response, _next: NextFunction) {

@@ -1,6 +1,6 @@
 import {
-  ConversaionGetByParameter,
-  ConversaionMessagesGetByParameters,
+  ConversationGetByParameter,
+  ConversationMessagesGetByParameters,
 } from '../shared/dtosInterfaces/conversationDtos';
 import { ConversationsRepository } from '../repositories/conversationsRepository';
 import Conversation from '../models/Conversation';
@@ -16,12 +16,19 @@ import { MessageRepository } from '../repositories/messageRepossitory';
 export class ConversationService {
   _userRepository: UserRepository;
   _messageRepository: MessageRepository;
-  constructor(private _conversationRepository: ConversationsRepository) {
+  private static _conversationServiceInstance: ConversationService;
+  private constructor(private _conversationRepository: ConversationsRepository) {
     this._userRepository = new UserRepository();
     this._messageRepository = new MessageRepository();
   }
+  public static getInstance(conversationRepository: ConversationsRepository): ConversationService {
+    if (!this._conversationServiceInstance) {
+      this._conversationServiceInstance = new ConversationService(conversationRepository);
+    }
+    return this._conversationServiceInstance;
+  }
 
-  public deleteConversation = async (parameter: ConversaionGetByParameter): Promise<void> => {
+  public deleteConversation = async (parameter: ConversationGetByParameter): Promise<void> => {
     try {
       const conversation = await this._conversationRepository.getById(parameter.id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
@@ -58,7 +65,7 @@ export class ConversationService {
   };
 
   public getConversationMessages = async (
-    parameters: ConversaionMessagesGetByParameters,
+    parameters: ConversationMessagesGetByParameters,
     paginationParams?: PaginationParams
   ): Promise<PaginatedResult<Message> | []> => {
     try {

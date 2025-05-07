@@ -6,10 +6,10 @@ import { MessageRepository } from '../repositories/messageRepossitory';
 import { registerChatHandlers } from '../sockets/chatSocket';
 
 const userRepository = new UserRepository();
-const userService = new UserService(userRepository);
+const userService = UserService.getInstance(userRepository);
 
 const messageRepository = new MessageRepository();
-const messageService = new MessageService(messageRepository);
+const messageService = MessageService.getInstance(messageRepository);
 
 export const initializeSocket = async (io: Server) => {
   io.on('connection', (socket) => {

@@ -9,7 +9,15 @@ import { UserRepository } from '../repositories/userRepository';
 import { AuthUtils } from '../utils/authUtils';
 
 export class AuthService {
-  constructor(private _userRepository: UserRepository) {}
+  private static _authServiceInstance: AuthService;
+  private constructor(private _userRepository: UserRepository) {}
+
+  public static getInstance(userRepository: UserRepository): AuthService {
+    if (!this._authServiceInstance) {
+      this._authServiceInstance = new AuthService(userRepository);
+    }
+    return this._authServiceInstance;
+  }
 
   public register = async (parameters: UserCreateParameters): Promise<void> => {
     try {

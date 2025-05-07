@@ -6,7 +6,16 @@ import { UserCreateParameters, UserLoginParameters } from '../shared/dtosInterfa
 import { SuccessCode, sendSuccess } from '../utils/successCode';
 
 export class AuthController {
-  constructor(private _authService: AuthService) {}
+  private static _authControllerInstance: AuthController;
+
+  private constructor(private _authService: AuthService) {}
+
+  public static getInstance(authService: AuthService): AuthController {
+    if (!this._authControllerInstance) {
+      this._authControllerInstance = new AuthController(authService);
+    }
+    return this._authControllerInstance;
+  }
 
   @catchAsync()
   public async register(req: Request, res: Response, next: NextFunction) {
