@@ -1,24 +1,33 @@
-class TokenStorage {
-    private key: string;
-  
-    constructor(key: string) {
-      this.key = key;
-    }
-  
-    save(token: string): void {
-      localStorage.setItem(this.key, token);
-    }
-  
-    load(): string | null {
-      return localStorage.getItem(this.key);
-    }
-  
-    clear(): void {
-      localStorage.removeItem(this.key);
-    }
+class StorageUtil<T> {
+  private key: string;
+
+  constructor(key: string) {
+    this.key = key;
   }
-  
-  const tokenStorage = new TokenStorage('token');
-  
-  export default tokenStorage;
-  
+
+  save(value: T): void {
+    localStorage.setItem(this.key, JSON.stringify(value));
+  }
+
+  load(): T | null {
+    const item = localStorage.getItem(this.key);
+    if (item) {
+      try {
+        return JSON.parse(item) as T;
+      } catch (e) {
+        console.error(`Error parsing ${this.key} from localStorage:`, e);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  clear(): void {
+    localStorage.removeItem(this.key);
+  }
+}
+
+const tokenStorage = new StorageUtil<string>('token');
+const userStorage = new StorageUtil<{ id: string; email: string; fullName: string }>('user');
+
+export { tokenStorage, userStorage };

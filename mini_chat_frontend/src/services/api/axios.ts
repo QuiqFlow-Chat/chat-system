@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants/api';
-import tokenStorage from '../../utils/storage';
+import { tokenStorage } from '../../utils/storage';
 
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
@@ -12,6 +12,7 @@ const axiosInstance = axios.create({
   axiosInstance.interceptors.request.use(
     (config) => {
       const token = tokenStorage.load(); 
+      // console.log(token)
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -21,3 +22,5 @@ const axiosInstance = axios.create({
   );
   
   export default axiosInstance;
+
+

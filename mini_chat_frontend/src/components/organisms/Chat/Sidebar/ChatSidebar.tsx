@@ -2,24 +2,34 @@ import { useState } from "react";
 import ContactItem from "../../../molecules/ChatSidebar/ContactItem/ContactItem";
 import Search from "../../../molecules/ChatSidebar/Search/Search";
 import styles from "./ChatSidebar.module.css";
-import { UserGetByParameter } from "../../../../shared/dtosInterfaces/userDtos";
+
+interface SidebarContact {
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+  };
+  conversationId: string;
+  lastMessageTime: string;
+}
 
 interface ChatSidebarProps {
-  contacts: UserGetByParameter[];  
+  contacts: SidebarContact[];
   onSelectConversation: (conversationId: string) => void;
 }
 
-function generateConversationId(email: string): string {
-  return `conv-${email.replace(/[@.]/g, "")}`;  
-}
-
-const ChatSidebar: React.FC<ChatSidebarProps> = ({ contacts, onSelectConversation }) => {
+const ChatSidebar: React.FC<ChatSidebarProps> = ({
+  
+  contacts,
+  onSelectConversation,
+}) => {
+  console.log("contacts:", contacts);
   const [query, setQuery] = useState("");
 
   const filteredContacts = contacts.filter(
     (contact) =>
-      contact.fullName.toLowerCase().includes(query.toLowerCase()) || // التصفية بناءً على fullName
-      contact.email.toLowerCase().includes(query.toLowerCase()) // أو email
+      contact.user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+      contact.user.email.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -34,12 +44,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ contacts, onSelectConversatio
             filteredContacts.map((contact, index) => (
               <ContactItem
                 key={index}
-                user={contact} 
-                time="10:00 AM"  
-                onClick={() => {
-                  const conversationId = generateConversationId(contact.email); // توليد conversationId بناءً على البريد
-                  onSelectConversation(conversationId);
-                }}
+                user={contact.user}
+                time={contact.lastMessageTime}
+                onClick={() => onSelectConversation(contact.conversationId)}
               />
             ))
           ) : (

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
-
-import tokenStorage from "../utils/storage";
-
+import { login } from "../../../services/api/authService";
+import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
 import styles from "./LoginPage.module.css";
+
 import LoginForm from "../../organisms/Register/LoginForm";
+
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,9 +18,19 @@ const LoginPage: React.FC = () => {
     formikHelpers: FormikHelpers<UserLoginParameters>
   ) => {
     const { setSubmitting } = formikHelpers;
-    console.log("Logging in with:", values);
-    setSubmitting(true);
-    navigate("/messengerChat");
+    setLoading(true);
+    setError(null);
+
+    try {
+      const user = await login(values);
+      console.log("Logged in user:", user);
+      navigate("/MessengerChat");
+    } catch (error) {
+      setError("Login failed. Please try again.");
+    } finally {
+      setSubmitting(false); 
+      setLoading(false);
+    }
   };
 
   const goToSignup = () => {
