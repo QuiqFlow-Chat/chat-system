@@ -28,6 +28,6 @@ export class AuthController {
   public async login(req: Request, res: Response, _next: NextFunction) {
     const parameters: UserLoginParameters = req.body;
     const user = await this._authService.login(parameters);
-    sendSuccess(res, SuccessCode.ok(MESSAGES.AUTH.LOGIN.SUCCESS));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.AUTH.LOGIN.SUCCESS ,user));
   }
 }
