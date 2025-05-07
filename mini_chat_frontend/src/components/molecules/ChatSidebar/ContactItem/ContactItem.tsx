@@ -3,10 +3,13 @@
 import React from "react";
 import Avatar from "../../../atoms/Avatar/Avatar";
 import styles from "./ContactItem.module.css";
-import { MessageGetByParameter } from "../../../../shared/dtosInterfaces/messageDtos";
 
 interface ContactItemProps {
-  user: MessageGetByParameter;  
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+  };
   time: string;
   color?: string;
   onClick?: () => void;
@@ -23,13 +26,12 @@ const ContactItem: React.FC<ContactItemProps> = ({
       <div className={styles.contactDetails}>
         <Avatar initial={user.fullName[0] || "U"} backgroundColor={color} />
         <div className={styles.contactInfo}>
-          <div className={styles.contactName}>{user.fullName}</div> 
-          <div className={styles.contactEmail}>{user.email}</div>  
+          <div className={styles.contactName}>{user.fullName}</div>
+          <div className={styles.contactEmail}>{user.email}</div>
         </div>
       </div>
       <div className={styles.contactTime}>{time}</div>
     </div>
   );
 };
-
 export default ContactItem;

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import styles from "./MessengerHeader.module.css";
 import UserName from "../../../atoms/UserName/UserName";
 import { useSocket } from "../../../../contexts/SocketContext";
-import { UserGetByParameter } from "../../../../shared/dtosInterfaces/userDtos";
+// import { UserGetByParameter } from "../../../../shared/dtosInterfaces/userDtos";
+import { User } from "../../../../services/api/userService";
 
 type MessengerHeaderProps = {
-  user: UserGetByParameter;  
+  user: User;  
 };
 
 const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
@@ -14,25 +15,25 @@ const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
 
   useEffect(() => {
     if (!socket || !user.id) return;
-
-    socket.on("userOnline", (user: { id: string }) => {
-      if (user.id === user.id) {
+  
+    socket.on("userOnline", (onlineUser: { id: string }) => {
+      if (onlineUser.id === user.id) {
         setStatus("online");
       }
     });
-
-    socket.on("userOffline", (user: { id: string }) => {
-      if (user.id === user.id) {
+  
+    socket.on("userOffline", (offlineUser: { id: string }) => {
+      if (offlineUser.id === user.id) {
         setStatus("offline");
       }
     });
-
+  
     return () => {
       socket.off("userOnline");
       socket.off("userOffline");
     };
-  }, [socket, user.id]);
-
+  }, [socket, user?.id]);
+  
   return (
     <div className={styles.messengerHeader}>
       <div className={styles.messengerTitle}>
