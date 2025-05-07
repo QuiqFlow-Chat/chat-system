@@ -13,7 +13,7 @@ export const userUpdateSchema = Joi.object({
     'string.empty': 'ID is required',
     'string.guid': 'ID must be a valid UUID',
   }),
-  fullName: Joi.string().min(3).max(15).required().messages({
+  fullName: Joi.string().min(3).max(15).optional().allow('').messages({
     'string.base': 'Full name must be a string',
     'string.empty': 'Full name is required',
     'string.min': 'Full name must be at least 3 characters',
