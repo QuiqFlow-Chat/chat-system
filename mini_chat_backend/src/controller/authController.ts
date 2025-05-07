@@ -18,16 +18,16 @@ export class AuthController {
   }
 
   @catchAsync()
-  public async register(req: Request, res: Response, next: NextFunction) {
+  public async register(req: Request, res: Response, _next: NextFunction) {
     const parameters: UserCreateParameters = req.body;
     await this._authService.register(parameters);
-    sendSuccess(res, SuccessCode.created(MESSAGES.AUTH.SUCCESS.REGISTER));
+    sendSuccess(res, SuccessCode.created(MESSAGES.AUTH.REGISTER.SUCCESS));
   }
 
   @catchAsync()
-  public async login(req: Request, res: Response, next: NextFunction) {
+  public async login(req: Request, res: Response, _next: NextFunction) {
     const parameters: UserLoginParameters = req.body;
     const user = await this._authService.login(parameters);
-    sendSuccess(res, SuccessCode.ok(MESSAGES.AUTH.SUCCESS.LOGIN, user));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.AUTH.LOGIN.SUCCESS));
   }
 }

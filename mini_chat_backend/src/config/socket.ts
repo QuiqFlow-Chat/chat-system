@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { UserRepository } from '../repositories/userRepository';
 import { UserService } from '../services/userService';
 import { MessageService } from '../services/messageService';
-import { MessageRepository } from '../repositories/messageRepossitory';
+import { MessageRepository } from '../repositories/messageRepository';
 import { registerChatHandlers } from '../sockets/chatSocket';
 
 const userRepository = new UserRepository();

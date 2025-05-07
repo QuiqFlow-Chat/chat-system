@@ -1,4 +1,4 @@
-import { MessageRepository } from './../repositories/messageRepossitory';
+import { MessageRepository } from '../repositories/messageRepository';
 import {
   MessageCreateFullParameters,
   MessageUpdateParameters,
@@ -32,10 +32,10 @@ export class MessageService {
   public sendMessage = async (parameters: MessageCreateParameters): Promise<Message> => {
     try {
       const sender = await this._userRepository.getById(parameters.senderId);
-      if (!sender) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
+      if (!sender) throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.SENDER_NOT_FOUND);
 
       const receiver = await this._userRepository.getById(parameters.receiverId);
-      if (!receiver) throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_MESSAGE[2]);
+      if (!receiver) throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.RECEIVER_NOT_FOUND);
 
       const flag = await this.shouldCreateConversation(parameters.senderId, parameters.receiverId);
       let conversation_Id: string;

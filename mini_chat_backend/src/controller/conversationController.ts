@@ -34,7 +34,7 @@ export class ConversationController {
   public async getConversationById(req: Request, res: Response, _next: NextFunction) {
     const { id } = req.params;
     const conversation = await this._conversationService.getConversationById(id);
-    sendSuccess(res, SuccessCode.ok(MESSAGES.SUCCESS.GENERAL.OK, conversation));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, conversation));
   }
 
   @catchAsync()
@@ -49,7 +49,7 @@ export class ConversationController {
       limit: limit || 10,
     });
 
-    sendSuccess(res, SuccessCode.ok(MESSAGES.SUCCESS.GENERAL.OK, messages));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, messages));
   }
 
   @catchAsync()
@@ -58,7 +58,7 @@ export class ConversationController {
 
     const users = await this._conversationService.getConversationUsers(id);
 
-    sendSuccess(res, SuccessCode.ok(MESSAGES.SUCCESS.GENERAL.OK, users));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, users));
   }
 
   @catchAsync()

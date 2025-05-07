@@ -23,11 +23,11 @@ export class AuthService {
     try {
       const existingUser = await this._userRepository.getByEmail(parameters.email);
       if (existingUser) {
-        throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_REGISTER[1]);
+        throw AppError.unauthorized(MESSAGES.AUTH.REGISTER.USER_EXISTS);
       }
 
       if (parameters.password !== parameters.confirmPassword) {
-        throw AppError.badRequest(MESSAGES.AUTH.UN_VALID_REGISTER[2]);
+        throw AppError.badRequest(MESSAGES.AUTH.REGISTER.PASSWORD_MISMATCH);
       }
 
       const hashedPassword = await AuthUtils.hashPassword(parameters.password);
@@ -50,7 +50,7 @@ export class AuthService {
     try {
       const existingUser = await this._userRepository.getByEmail(parameters.email);
       if (!existingUser) {
-        throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_LOGIN[1]);
+        throw AppError.unauthorized(MESSAGES.AUTH.LOGIN.INVALID_USER);
       }
 
       const isPasswordValid = await AuthUtils.comparePassword(
@@ -59,7 +59,7 @@ export class AuthService {
       );
 
       if (!isPasswordValid) {
-        throw AppError.unauthorized(MESSAGES.AUTH.UN_VALID_LOGIN[0]);
+        throw AppError.unauthorized(MESSAGES.AUTH.LOGIN.INVALID_PASSWORD);
       }
 
       const token = AuthUtils.generateToken({

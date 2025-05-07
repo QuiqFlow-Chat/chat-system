@@ -8,8 +8,17 @@ class DataBase {
 
   private constructor() {}
 
-  public static getDbInstance = () => {
+  public static getDbInstance = (): Sequelize => {
     if (!DataBase.db_instance) {
+      if (
+        !process.env.DB_USER ||
+        !process.env.DB_PASSWORD ||
+        !process.env.DB_NAME ||
+        !process.env.DB_HOST ||
+        !process.env.DB_PORT
+      ) {
+        throw new Error('Missing required environment variables for database configuration.');
+      }
       DataBase.db_instance = new Sequelize({
         username: process.env.DB_USER,
         database: process.env.DB_NAME,

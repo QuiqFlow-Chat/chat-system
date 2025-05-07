@@ -11,7 +11,7 @@ import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/pagi
 import { paginate } from '../utils/paginationUtils';
 import { UserRepository } from '../repositories/userRepository';
 import User from '../models/User';
-import { MessageRepository } from '../repositories/messageRepossitory';
+import { MessageRepository } from '../repositories/messageRepository';
 
 export class ConversationService {
   _userRepository: UserRepository;

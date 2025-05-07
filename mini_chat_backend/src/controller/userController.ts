@@ -19,7 +19,7 @@ export class UserController {
   @catchAsync()
   public async getAllUsers(_req: Request, res: Response, _next: NextFunction) {
     const users = await this._userService.getAllUsers();
-    sendSuccess(res, SuccessCode.ok(MESSAGES.SUCCESS.GENERAL.OK, users));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, users));
   }
 
   @catchAsync()
@@ -47,6 +47,6 @@ export class UserController {
   public async getUserLastActivity(req: Request, res: Response, _next: NextFunction) {
     const { id } = req.params;
     const lastActivity = await this._userService.getUserLastActivity(id);
-    sendSuccess(res, SuccessCode.ok(MESSAGES.SUCCESS.GENERAL.OK, lastActivity));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, lastActivity));
   }
 }

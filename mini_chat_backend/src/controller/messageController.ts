@@ -24,7 +24,7 @@ export class MessageController {
   public async sendMessage(req: Request, res: Response, _next: NextFunction) {
     const parameters: MessageCreateParameters = req.body;
     await this._messageService.sendMessage(parameters);
-    sendSuccess(res, SuccessCode.created(MESSAGES.MESSAGE.SUCCESS.SENT));
+    sendSuccess(res, SuccessCode.created(MESSAGES.MESSAGE.CREATE.SUCCESS));
   }
 
   @catchAsync()
@@ -38,13 +38,13 @@ export class MessageController {
   public async updateMessageContent(req: Request, res: Response, _next: NextFunction) {
     const parameters: MessageUpdateParameters = req.body;
     await this._messageService.updateMessageContent(parameters);
-    sendSuccess(res, SuccessCode.ok(MESSAGES.MESSAGE.UPDATED[0]));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.MESSAGE.UPDATED.CONTENT));
   }
 
   @catchAsync()
   public async updateMessageStatus(req: Request, res: Response, _next: NextFunction) {
     const { id } = req.params;
     await this._messageService.updateMessageStatus(id);
-    sendSuccess(res, SuccessCode.ok(MESSAGES.MESSAGE.SUCCESS.READ));
+    sendSuccess(res, SuccessCode.ok(MESSAGES.MESSAGE.UPDATED.STATUS));
   }
 }

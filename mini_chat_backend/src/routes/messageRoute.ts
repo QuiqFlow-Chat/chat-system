@@ -1,7 +1,7 @@
 import { messageUpdateContentSchema } from './../shared/validations/messageValidation';
 import { Application } from 'express';
 import { BaseRoute } from './baseRoute';
-import { MessageRepository } from '../repositories/messageRepossitory';
+import { MessageRepository } from '../repositories/messageRepository';
 import { MessageService } from '../services/messageService';
 import { MessageController } from '../controller/messageController';
 import { AuthMiddleware } from '../middlewares/authMiddlewares';
