@@ -1,10 +1,7 @@
 // src/contexts/SocketContext.tsx
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import { Socket } from "socket.io-client";
-import { UserConversationCreateParameters } from "../shared/dtosInterfaces/userConversationDtos";
-import { MessageCreateParameters } from "../shared/dtosInterfaces/messageDtos";
-import tokenStorage from "../utils/storage";
+import { tokenStorage } from "../utils/storage";
 
 export interface MessageReceivePayload {
   senderId: string;
@@ -13,23 +10,9 @@ export interface MessageReceivePayload {
   createdAt: string;
 }
 
-interface ServerToClientEvents {
-  receiveMessage: (data: MessageReceivePayload) => void;
-  userOnline: (user: UserConversationCreateParameters) => void;
-  userOffline: (user: UserConversationCreateParameters) => void;
-  isTyping: (userId: string) => void;
-}
+// type TypedSocket =typeof Socket<ServerToClientEvents, ClientToServerEvents>;
 
-interface ClientToServerEvents {
-  sendMessage: (data: MessageCreateParameters) => void;
-  userOnline: (user: UserConversationCreateParameters) => void;
-  userOffline: (user: UserConversationCreateParameters) => void;
-  isTyping: (data: UserConversationCreateParameters) => void;
-}
-
-type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
-
-const SocketContext = createContext<TypedSocket | null>(null);
+const SocketContext = createContext<any | null>(null);
 
 export const useSocket = () => {
   const context = useContext(SocketContext);
@@ -40,14 +23,14 @@ export const useSocket = () => {
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const socketRef = useRef<TypedSocket | null>(null);
+  const socketRef = useRef<any | null>(null);
 
   useEffect(() => {
-    const socket: TypedSocket = io(import.meta.env.VITE_SOCKET_URL, {
+    const socket: any = io(import.meta.env.VITE_SOCKET_URL, {
       transports: ["websocket"],
       withCredentials: true,
       Authorization : `Bearer ${tokenStorage.load()}`
-    });
+    }as any);
 
     socketRef.current = socket;
 

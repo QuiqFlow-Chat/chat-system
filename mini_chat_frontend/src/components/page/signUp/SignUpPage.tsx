@@ -5,34 +5,31 @@ import styles from "./signUp.module.css";
 import SignUpForm from "../../organisms/Register/SignUpForm";
 import { signUp } from "../../../services/api/authService";
 import { UserCreateParameters } from "../../../shared/dtosInterfaces/userDtos";
-
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const handleSubmit = async (
     values: UserCreateParameters,
     { setSubmitting }: FormikHelpers<UserCreateParameters>
   ) => {
     setLoading(true);
     setError(null);
-
     try {
-      await axios.post("/api/register", values);
-      navigate("/login");
-    } catch (error) {
-      console.error("Registration failed:", error);
+      const user = await signUp(values);
+      console.log("Registered user:", user);
+      navigate("/LoginPage");
+    } catch (err) {
+      console.error("Registration failed:", err);
+      setError("Registration failed. Please try again.");
     } finally {
       setSubmitting(false);
-      navigate("/messengerChat");
+      setLoading(false);
     }
   };
-
   const goToLogin = () => {
-    navigate("/login");
+    navigate("/LoginPage");
   };
-
   return (
     <div className={styles.registerPage}>
       <img
@@ -46,11 +43,8 @@ const SignUpPage: React.FC = () => {
         <header className={styles.registerHeader}>
           <h1 className={styles.registerTitle}>Sign Up</h1>
         </header>
-
         {error && <div className={styles.error}>{error}</div>}
-
         <SignUpForm onSubmit={handleSubmit} loading={loading} />
-
         <p className={styles.registerSubtext}>
           Already have an account?{" "}
           <span onClick={goToLogin} className={styles.registerLink}>
@@ -61,5 +55,4 @@ const SignUpPage: React.FC = () => {
     </div>
   );
 };
-
 export default SignUpPage;
