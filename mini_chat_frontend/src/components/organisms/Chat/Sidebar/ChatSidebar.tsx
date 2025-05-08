@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import ContactItem from "../../../molecules/ChatSidebar/ContactItem/ContactItem";
 import Search from "../../../molecules/ChatSidebar/Search/Search";
 import styles from "./ChatSidebar.module.css";
-import { apiGet } from "../../../../utils/apiUtils";
 import { User } from "../Messagebar/Messagebar";
 import { useSidebarPagination } from "../../../../hooks/useSidebarPagination";
+import { getAllUsers } from "../../../../services/userService";
 
 interface SidebarContact {
   user: {
@@ -31,15 +31,11 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   const [loading, setLoading] = useState(false);
 
   const fetchAllUsers = async () => {
-    // if (allUsers) return;
-
     setLoading(true);
     try {
-      const response = await apiGet<{ data: { data: any[] } }>(
-        "/getAllUsers?page=1&limit=50"
-      );
-
-      const transformed = response.data.data.map((user) => ({
+      const users = await getAllUsers();
+  
+      const transformed = users.map((user) => ({
         user: {
           id: user.id,
           email: user.email,
@@ -48,9 +44,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         conversationId: "",
         lastMessageTime: "",
       }));
-
+  
       setAllUsers(transformed);
-      // console.log("transformed", transformed);
     } catch (error) {
       console.error("Error fetching users:", error);
       setAllUsers([]);

@@ -16,6 +16,14 @@ const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
   const [status, setStatus] = useState<string>("offline");
 
   useEffect(() => {
+    // console.log("user",user.fullName)
+    if (!user || !user.id) {
+      console.log("MessengerHeader: user is undefined", user);
+      return;
+    }
+  
+    console.log("MessengerHeader: user fullName =", user.fullName);
+    
     if (!socket || !user.id) return;
   
     socket.on("userOnline", (onlineUser: { id: string }) => {
