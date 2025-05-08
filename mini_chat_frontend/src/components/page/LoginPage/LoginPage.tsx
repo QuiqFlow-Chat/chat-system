@@ -7,7 +7,6 @@ import styles from "./LoginPage.module.css";
 
 import LoginForm from "../../organisms/Register/LoginForm";
 
-
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,11 +23,11 @@ const LoginPage: React.FC = () => {
     try {
       const user = await login(values);
       console.log("Logged in user:", user);
-      navigate("/MessengerChat");
+      navigate("/messengerChat");
     } catch (error) {
       setError("Login failed. Please try again.");
     } finally {
-      setSubmitting(false); 
+      setSubmitting(false);
       setLoading(false);
     }
   };
