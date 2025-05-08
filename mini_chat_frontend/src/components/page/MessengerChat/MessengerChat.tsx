@@ -33,32 +33,38 @@ const MessengerChat: React.FC = (): JSX.Element => {
   const [contacts, setContacts] = useState<SidebarContact[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [otherUser, setOtherUser] = useState<any | null>(null);
 
   useEffect(() => {
     const loadUserAndContacts = async () => {
       const loadedUser = userStorage.load();
       if (!loadedUser) return;
-
       setCurrentUser(loadedUser);
+
       try {
+        // console.log("loadedUser", loadedUser.id);
+
         const response = await apiGet<{ data: { data: Conversation[] } }>(
           `/${loadedUser.id}/getUserConversations`
         );
 
         const conversations = response.data.data;
-        console.log({ conversations });
+        // console.log("conversations",conversations)
+        const formattedContacts: SidebarContact[] = conversations.map(
+          (conv ) => {
+            const otherUser = conv.users.find(u => u.id !== currentUser?.id)!;
+            const lastMessage = conv.messages?.[conv.messages.length - 1];
+            const conversationId = conv.id;
+            console.log("USERS",otherUser)
 
-        const formattedContacts: SidebarContact[] = conversations.map((conv) => {
-          const otherUser = conv.users.find((u) => u.id !== loadedUser.id);
-          const lastMessage = conv.messages?.[conv.messages.length - 1];
-
-          return {
-            user: otherUser ?? { id: "", email: "", fullName: "Unknown" },
-            conversationId: conv.id,
-            lastMessageTime: lastMessage?.createdAt || "No messages",
-          };
-        });
-
+            return {
+              user: otherUser ,
+              conversationId: conversationId,
+              lastMessageTime: lastMessage?.createdAt || "No messages",
+            };
+          }
+        );
+        
         setContacts(formattedContacts);
       } catch (error) {
         console.error("Failed to fetch users or conversations:", error);
@@ -67,6 +73,17 @@ const MessengerChat: React.FC = (): JSX.Element => {
 
     loadUserAndContacts();
   }, []);
+
+  const handleSelectConversation = (conversationId: string, user: User) => {
+    setActiveConversationId(conversationId);
+    setOtherUser(user);
+    
+    // Find the selected contact from the contacts list
+    const selectedContact = contacts.find(contact => contact.conversationId === conversationId);
+    if (selectedContact) {
+      setOtherUser(selectedContact.user);
+    }
+  };
 
   if (!currentUser) return <div>Loading...</div>;
 
@@ -77,14 +94,13 @@ const MessengerChat: React.FC = (): JSX.Element => {
         <div className={styles.chatContainer}>
           <ChatSidebar
             contacts={contacts}
-            onSelectConversation={(conversationId) =>
-              setActiveConversationId(conversationId)
-            }
+            onSelectConversation={handleSelectConversation}
           />
           {activeConversationId ? (
             <Messagebar
               currentUser={currentUser}
-              conversationId={activeConversationId}
+              otherUser={otherUser}
+              // conversationId={activeConversationId}
             />
           ) : (
             <div className={styles.emptyMessagebar}>

@@ -76,7 +76,7 @@ export class ConversationService {
       if (messages?.length === 0) return [];
       else {
         const sortedMessages = [...messages].sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         );
 
         const page = paginationParams?.page || 1;

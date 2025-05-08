@@ -1,220 +1,113 @@
-// import React, { useState, useEffect } from "react";
-// import styles from "./Messagebar.module.css";
-// import MessengerHeader from "../../../molecules/ChatMessagebar/MessengerHeader/MessengerHeader";
-// import MessengerFooter from "../../../molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
-// import MessagesContainer from "../../../molecules/ChatMessagebar/MessengerBody/MessagesContainer";
-
-// import { useSocket } from "../../../../contexts/SocketContext";
-// import { UserConversationCreateParameters } from "../../../../shared/dtosInterfaces/userConversationDtos";
-// import { MessageCreateParameters } from "../../../../shared/dtosInterfaces/messageDtos";
-
-// type MessagebarProps = {
-//   currentUser: {
-//     id: string;
-//     fullName: string;
-//   };
-//   conversationId: string;
-// };
-
-// export interface Message {
-//   type: "incoming" | "outgoing";
-//   name: string;
-//   time: string;
-//   color: string;
-//   message: string;
-// }
-
-// const Messagebar: React.FC<MessagebarProps> = ({
-//   currentUser,
-//   conversationId,
-// }) => {
-//   const socket = useSocket();
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [isTyping, setIsTyping] = useState(false);
-
-//   useEffect(() => {
-//     const userOnlineData: UserConversationCreateParameters = {
-//       userId: currentUser.id,
-//       conversationId,
-//     };
-//     socket.emit("userOnline", userOnlineData);
-
-//     socket.on("receiveMessage", (data) => {
-//       const formattedTime = new Date(data.createdAt).toLocaleTimeString([], {
-//         hour: "2-digit",
-//         minute: "2-digit",
-//       });
-
-//       setMessages((prev) => [
-//         ...prev,
-//         {
-//           type: "incoming",
-//           name: data.fullName,
-//           time: formattedTime,
-//           color: "#6c5ce7",
-//           message: data.content,
-//         },
-//       ]);
-//     });
-
-//     socket.on("isTyping", (userId = "user123") => {
-//       if (userId !== currentUser.id) {
-//         setIsTyping(true);
-//       }
-//     });
-
-//     return () => {
-//       const userOfflineData: UserConversationCreateParameters = {
-//         userId: currentUser.id,
-//         conversationId,
-//       };
-//       socket.emit("userOffline", userOfflineData);
-//       socket.off("receiveMessage");
-//       socket.off("isTyping");
-//     };
-//   }, [socket, currentUser.id, conversationId]);
-
-//   const handleSend = (newMessage: string) => {
-//     const formattedTime = new Date().toLocaleTimeString([], {
-//       hour: "2-digit",
-//       minute: "2-digit",
-//     });
-
-//     setMessages((prev) => [
-//       ...prev,
-//       {
-//         type: "outgoing",
-//         name: currentUser.fullName,
-//         time: formattedTime,
-//         color: "#0984e3",
-//         message: newMessage,
-//       },
-//     ]);
-
-//     const messageData: MessageCreateParameters = {
-//       senderId: currentUser.id,
-//       conversationId,
-//       content: newMessage,
-//     };
-
-//     socket.emit("sendMessage", messageData);
-//   };
-
-//   const handleTyping = () => {
-//     const typingData: UserConversationCreateParameters = {
-//       userId: currentUser.id,
-//       conversationId,
-//     };
-//     socket.emit("isTyping", typingData);
-//   };
-
-//   return (
-//     <div className={styles.chatMain}>
-//       <div className={styles.messengerCard}>
-//         <MessengerHeader name={currentUser.fullName} userId={currentUser.id} />{" "}
-//         {/* تمرير name و userId */}
-//         <MessagesContainer
-//           conversationId={conversationId}
-//           currentUserId={currentUser.id}
-//           isTyping={isTyping}
-//           messages={messages}
-//         />
-//         <MessengerFooter onSend={handleSend} onTyping={handleTyping} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Messagebar;
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Messagebar.module.css";
 import MessengerHeader from "../../../molecules/ChatMessagebar/MessengerHeader/MessengerHeader";
 import MessengerFooter from "../../../molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
 import MessagesContainer from "../../../molecules/ChatMessagebar/MessengerBody/MessagesContainer";
-
 import { useSocket } from "../../../../contexts/SocketContext";
-import { UserConversationCreateParameters } from "../../../../shared/dtosInterfaces/userConversationDtos";
 import { MessageCreateParameters } from "../../../../shared/dtosInterfaces/messageDtos";
-
-type MessagebarProps = {
-  currentUser: {
-    id: string;
-    fullName: string;
-  };
-  conversationId: string;
-};
+import { debounce } from "lodash";
+// Shared interfaces for consistency
+export interface User {
+  id: string;
+  email: string;
+  fullName: string;
+}
 
 export interface Message {
   type: "incoming" | "outgoing";
   name: string;
   time: string;
-  color: string;
   message: string;
+}
+
+interface MessagebarProps {
+  currentUser: User;
+  otherUser: User;
+  conversationId?: string;
 }
 
 const Messagebar: React.FC<MessagebarProps> = ({
   currentUser,
-  conversationId,
+  otherUser,
+  conversationId = "",
 }) => {
   const socket = useSocket();
   const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Reset typing indicator after delay
+  const resetTypingIndicator = () => {
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 3000);
+  };
 
   useEffect(() => {
-    const userOnlineData: UserConversationCreateParameters = {
-      userId: currentUser.id,
+    if (!socket || !currentUser.id || !otherUser.id) return;
+    
+    const userOnlineData = {
+      id: currentUser.id,
       conversationId,
     };
+    
     socket.emit("userOnline", userOnlineData);
-
-    socket.on("isTyping", (userId = "user123") => {
-      if (userId !== currentUser.id) {
+    
+    socket.on("isTyping", (userId: string) => {
+      if (userId === otherUser.id) {
         setIsTyping(true);
+        resetTypingIndicator();
       }
     });
 
     return () => {
-      const userOfflineData: UserConversationCreateParameters = {
-        userId: currentUser.id,
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      
+      const userOfflineData = {
+        id: currentUser.id,
         conversationId,
       };
+      
       socket.emit("userOffline", userOfflineData);
       socket.off("receiveMessage");
       socket.off("isTyping");
     };
-  }, [socket, currentUser.id, conversationId]);
+  }, [socket, currentUser.id, otherUser.id, conversationId]);
 
   const handleSend = (newMessage: string) => {
-    const formattedTime = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
+    if (!newMessage.trim() || !otherUser.id) return;
+    
     const messageData: MessageCreateParameters = {
       senderId: currentUser.id,
-      conversationId,
       content: newMessage,
+      receiverId: otherUser.id,
     };
 
     socket.emit("sendMessage", messageData);
   };
 
-  const handleTyping = () => {
-    const typingData: UserConversationCreateParameters = {
+  const handleTyping = debounce(() => {
+    const typingData = {
       userId: currentUser.id,
+      receiverId: otherUser.id,
       conversationId,
     };
+    
     socket.emit("isTyping", typingData);
-  };
+  }, 300); // Debounce to avoid excessive socket emissions
 
   return (
     <div className={styles.chatMain}>
       <div className={styles.messengerCard}>
-        <MessengerHeader name={currentUser.fullName} userId={currentUser.id} />{" "}
-        {/*  name و userId */}
+        <MessengerHeader user={otherUser} />
         <MessagesContainer
           conversationId={conversationId}
-          currentUserId={currentUser.id}
+          currentUser={currentUser}
+          otherUser={otherUser}
           isTyping={isTyping}
         />
         <MessengerFooter onSend={handleSend} onTyping={handleTyping} />

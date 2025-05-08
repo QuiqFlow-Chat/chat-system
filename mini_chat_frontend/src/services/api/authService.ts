@@ -8,6 +8,7 @@ export const login = async (credentials: UserLoginParameters) => {
   const response = await apiPost<AuthResponse, UserLoginParameters>('/login', credentials);
   // localStorage
   userStorage.save(response.data.user);
+  console.log("for storage",response.data.user)
   tokenStorage.save(response.data.token);
 
   return response.data.user;

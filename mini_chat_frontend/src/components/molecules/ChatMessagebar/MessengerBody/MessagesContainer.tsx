@@ -1,124 +1,64 @@
-// import React, { useEffect, useRef } from "react";
-// import styles from "./MessagesContainer.module.css";
-// import IncomingMessage from "./IncomingMessage/IncomingMessage";
-// import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
-
-// interface Message {
-//   type: "incoming" | "outgoing";
-//   name: string;
-//   time: string;
-//   color?: string;
-//   message: string;
-//   imgSrc?: string | null;
-// }
-
-// interface MessagesContainerProps {
-//   messages: Message[];
-//   isTyping: boolean;
-// }
-
-// const MessagesContainer: React.FC<MessagesContainerProps> = ({
-//   messages,
-//   isTyping,
-// }) => {
-//   const bottomRef = useRef<HTMLDivElement | null>(null);
-
-//   useEffect(() => {
-//     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-//   }, [messages]);
-
-//   return (
-//     <div className={styles.messengerBody}>
-//       <div className={styles.messagesContainer}>
-//         {messages.map((msg, index) => {
-//           if (msg.type === "incoming") {
-//             return (
-//               <IncomingMessage
-//                 key={index}
-//                 name={msg.name}
-//                 time={msg.time}
-//                 color={msg.color}
-//                 message={msg.message}
-//                 imgSrc={msg.imgSrc}
-//               />
-//             );
-//           } else if (msg.type === "outgoing") {
-//             return (
-//               <OutgoingMessage
-//                 key={index}
-//                 name={msg.name}
-//                 time={msg.time}
-//                 color={msg.color}
-//                 message={msg.message}
-//                 imgSrc={msg.imgSrc}
-//               />
-//             );
-//           }
-//           return null;
-//         })}
-
-//         {/* Typing Indicator */}
-//         {isTyping && (
-//           <div className={styles.typingIndicator}>
-//             <span className={styles.dot}></span>
-//             <span className={styles.dot}></span>
-//             <span className={styles.dot}></span>
-//           </div>
-//         )}
-
-//         {/*  Scroll Anchor */}
-//         <div ref={bottomRef} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MessagesContainer;
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./MessagesContainer.module.css";
 import IncomingMessage from "./IncomingMessage/IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
 import { usePaginatedMessages } from "../../../../hooks/usePaginatedMessages";
 import { useSocket } from "../../../../contexts/SocketContext";
 import { MessageReceivePayload } from "../../../../contexts/SocketContext";
-
-interface Message {
-  type: "incoming" | "outgoing";
-  name: string;
-  time: string;
-  message: string;
-}
+import { User, Message } from "../../../organisms/Chat/Messagebar/Messagebar";
 
 interface MessagesContainerProps {
   conversationId: string;
-  currentUserId: string;
+  currentUser: User;
+  otherUser: User;
   isTyping: boolean;
 }
 
 const MessagesContainer: React.FC<MessagesContainerProps> = ({
   conversationId,
-  currentUserId,
+  currentUser,
+  otherUser,
   isTyping,
 }) => {
   const socket = useSocket();
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  
   const {
     messages: paginatedMessages,
     containerRef,
     loading,
-  } = usePaginatedMessages({ conversationId, currentUserId });
+    error,
+  } = usePaginatedMessages({
+    conversationId,
+    currentUserId: currentUser.id,
+    receiverId: otherUser.id,
+  });
 
   const [messages, setMessages] = useState<Message[]>(paginatedMessages);
 
+  // Update messages when pagination loads new ones
   useEffect(() => {
     setMessages(paginatedMessages);
   }, [paginatedMessages]);
 
+  // Scroll to bottom when new messages arrive
   useEffect(() => {
+    if (messages.length > 0) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages.length]);
+
+  // Handle real-time message reception
+  useEffect(() => {
+    if (!socket || !currentUser.id || !otherUser.id) return;
+
     const handleReceiveMessage = (data: MessageReceivePayload) => {
-      const newMsg: Message = {
-        type: data.senderId === currentUserId ? "outgoing" : "incoming",
-        name: data.fullName,
+      const isCurrentUserSender = data.senderId === currentUser.id;
+      const senderName = isCurrentUserSender ? currentUser.fullName : otherUser.fullName;
+      
+      const newMessage: Message = {
+        type: isCurrentUserSender ? "outgoing" : "incoming",
+        name: senderName,
         time: new Date(data.createdAt).toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -126,11 +66,18 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
         message: data.content,
       };
 
-      setMessages((prev) => [...prev, newMsg]);
+      setMessages((prev) => [...prev, newMessage]);
+      
+      // Auto-scroll to new message
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     };
 
+    // Join conversation and notify server
     socket.emit("userOnline", {
-      userId: currentUserId,
+      id: currentUser.id,
+      receiverId: otherUser.id,
       conversationId,
     });
 
@@ -138,28 +85,31 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
 
     return () => {
       socket.emit("userOffline", {
-        userId: currentUserId,
+        id: currentUser.id,
+        receiverId: otherUser.id,
         conversationId,
       });
       socket.off("receiveMessage", handleReceiveMessage);
     };
-  }, [socket, currentUserId, conversationId]);
+  }, [socket, currentUser, otherUser, conversationId]);
 
   return (
     <div className={styles.messengerBody} ref={containerRef}>
       <div className={styles.messagesContainer}>
-        {loading && <div className={styles.loading}>Loading...</div>}
+        {loading && <div className={styles.loading}>Loading messages...</div>}
+        {error && <div className={styles.error}>{error}</div>}
+        
         {messages.map((msg, index) =>
           msg.type === "incoming" ? (
             <IncomingMessage
-              key={index}
+              key={`msg-${index}`}
               name={msg.name}
               time={msg.time}
               message={msg.message}
             />
           ) : (
             <OutgoingMessage
-              key={index}
+              key={`msg-${index}`}
               name={msg.name}
               time={msg.time}
               message={msg.message}
@@ -174,6 +124,8 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
             <span className={styles.dot}></span>
           </div>
         )}
+        
+        <div ref={bottomRef} />
       </div>
     </div>
   );
