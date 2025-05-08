@@ -12,6 +12,8 @@ import { paginate } from '../utils/paginationUtils';
 import { UserRepository } from '../repositories/userRepository';
 import User from '../models/User';
 import { MessageRepository } from '../repositories/messageRepository';
+import { Sequelize } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 
 export class ConversationService {
   _userRepository: UserRepository;
@@ -75,12 +77,11 @@ export class ConversationService {
       );
       if (messages?.length === 0) return [];
 
-        const page = paginationParams?.page || 1;
-        const limit = paginationParams?.limit || 10;
+      const page = paginationParams?.page || 1;
+      const limit = paginationParams?.limit || 10;
 
-        return paginate(messages, page, limit);
-      }
-      catch (error) {
+      return paginate(messages, page, limit);
+    } catch (error) {
       throw new AppError('Failed to get conversation messages', 500);
     }
   };
@@ -99,37 +100,19 @@ export class ConversationService {
   };
 
   public getUserConversations = async (
-    id: string,
+    userId: string,
     paginationParams?: PaginationParams
   ): Promise<PaginatedResult<Conversation>> => {
     try {
-      const user = await this._userRepository.getUserConversations(id);
-      if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-
-      const userConversations = user.conversations;
-
-      userConversations.forEach((conversation) => {
-        conversation.messages?.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-      });
-
-      const sortedUserConversations = [...userConversations].sort((a, b) => {
-        const aLastMessage = a.messages?.[a.messages.length - 1];
-        const bLastMessage = b.messages?.[b.messages.length - 1];
-        const aTime = aLastMessage ? new Date(aLastMessage.createdAt).getTime() : 0;
-        const bTime = bLastMessage ? new Date(bLastMessage.createdAt).getTime() : 0;
-        return bTime - aTime;
-      });
+      const conversations = await this._userRepository.getUserConversations(userId);
 
       const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
 
-      return paginate(sortedUserConversations, page, limit);
+      return paginate(conversations, page, limit);
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError('Failed to get user conversations', 500);
+      console.error('getUserConversations error:', error);
+      throw error instanceof AppError ? error : new AppError('فشل في جلب المحادثات', 500);
     }
   };
 }

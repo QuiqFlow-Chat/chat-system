@@ -21,10 +21,10 @@ export class UserController {
   public async getAllUsers(req: Request, res: Response, _next: NextFunction) {
     const page = req.query.page ? parseInt(req.query.page as string) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
-    
-    const paginationParams: PaginationParams | undefined = page !== undefined && limit !== undefined ? 
-      { page, limit } : undefined;
-    
+
+    const paginationParams: PaginationParams | undefined =
+      page !== undefined && limit !== undefined ? { page, limit } : undefined;
+
     const paginatedUsers = await this._userService.getAllUsers(paginationParams);
     sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, paginatedUsers));
   }

@@ -3,6 +3,7 @@ import Conversation from '../models/Conversation';
 import { Op } from 'sequelize';
 import { IUserRepository } from './userRepositoryInterface';
 import Message from '../models/Message';
+import { Sequelize } from 'sequelize-typescript';
 
 export class UserRepository implements IUserRepository<User> {
   public add = async (data: any): Promise<void> => {
@@ -62,34 +63,45 @@ export class UserRepository implements IUserRepository<User> {
       throw new Error(`Failed to get the user `);
     }
   };
-  public getUserConversations = async (id: string): Promise<User | null> => {
+  public getUserConversations = async (id: string): Promise<Conversation[]> => {
     try {
-      return await User.findByPk(id, {
+      const conversations = await Conversation.findAll({
         include: [
           {
-            model: Conversation,
-            as: 'conversations',
+            model: User,
+            as: 'users',
+            where: {
+              id: {
+                [Op.ne]: id,
+              },
+            },
+            attributes: ['id', 'fullName', 'email'],
             through: { attributes: [] },
-            include: [
-              {
-                model: User,
-                as: 'users',
-                through: { attributes: [] },
-                attributes: ['id', 'fullName', 'email', 'lastActivity'],
-                where: {
-                  id: {
-                    [Op.ne]: id,
-                  },
-                },
-              },
-              {
-                model: Message,
-                order: [['createdAt', 'DESC']],
-              },
-            ],
+          },
+          {
+            model: Message,
+            separate: true,
+            order: [['createdAt', 'ASC']],
           },
         ],
+        where: Sequelize.literal(`
+          EXISTS (
+            SELECT 1 FROM "UserConversations"
+            WHERE "UserConversations"."conversation_id" = "Conversation"."id"
+            AND "UserConversations"."user_id" = '${id}'
+          )
+        `),
+        order: [
+          [
+            Sequelize.literal(`(
+              SELECT MAX("created_at") FROM "Messages"
+              WHERE "Messages"."conversation_id" = "Conversation"."id"
+            )`),
+            'DESC',
+          ],
+        ],
       });
+      return conversations ?? [];
     } catch (error) {
       console.error('Error in get user by id:', error);
       throw new Error(`Failed to get the user `);

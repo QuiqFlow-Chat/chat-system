@@ -18,14 +18,16 @@ export class UserService {
     return this._userServiceInstance;
   }
 
-  public getAllUsers = async (paginationParams?: PaginationParams): Promise<PaginatedResult<User>> => {
+  public getAllUsers = async (
+    paginationParams?: PaginationParams
+  ): Promise<PaginatedResult<User>> => {
     try {
       const users = await this._userRepository.getAll();
       if (users.length === 0) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-      
+
       const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
-      
+
       return paginate(users, page, limit);
     } catch (error) {
       console.error('Error in getAllUsers:', error);
