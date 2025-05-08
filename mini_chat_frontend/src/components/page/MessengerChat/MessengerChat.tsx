@@ -4,23 +4,13 @@ import ChatSidebar from "../../organisms/Chat/Sidebar/ChatSidebar";
 import Messagebar from "../../organisms/Chat/Messagebar/Messagebar";
 import SidebarImage from "../../../assets/images/sidebar.jpg";
 import { SocketProvider } from "../../../contexts/SocketContext";
-import { apiGet } from "../../../utils/apiUtils";
 import { userStorage } from "../../../utils/storage";
+import { getUserConversations } from "../../../services/userService";
 
 interface User {
   id: string;
   email: string;
   fullName: string;
-}
-
-interface Message {
-  createdAt: string;
-}
-
-interface Conversation {
-  id: string;
-  users: User[];
-  messages: Message[];
 }
 
 interface SidebarContact {
@@ -42,32 +32,21 @@ const MessengerChat: React.FC = (): JSX.Element => {
       setCurrentUser(loadedUser);
 
       try {
-        // console.log("loadedUser", loadedUser.id);
-
-        const response = await apiGet<{ data: { data: Conversation[] } }>(
-          `/${loadedUser.id}/getUserConversations`
-        );
-
-        const conversations = response.data.data;
-        // console.log("conversations",conversations)
-        const formattedContacts: SidebarContact[] = conversations.map(
-          (conv ) => {
-            const otherUser = conv.users.find(u => u.id !== currentUser?.id)!;
-            const lastMessage = conv.messages?.[conv.messages.length - 1];
-            const conversationId = conv.id;
-            console.log("USERS",otherUser)
-
-            return {
-              user: otherUser ,
-              conversationId: conversationId,
-              lastMessageTime: lastMessage?.createdAt || "No messages",
-            };
-          }
-        );
-        
+        const conversations = await getUserConversations(loadedUser.id);
+      
+        const formattedContacts: SidebarContact[] = conversations.map((conv) => {
+          const otherUser = conv.users.find(u => u.id !== loadedUser.id)!;
+          const lastMessage = conv.messages?.[conv.messages.length - 1];
+          return {
+            user: otherUser,
+            conversationId: conv.id,
+            lastMessageTime: lastMessage?.createdAt || "No messages",
+          };
+        });
+      
         setContacts(formattedContacts);
       } catch (error) {
-        console.error("Failed to fetch users or conversations:", error);
+        console.error("Failed to fetch conversations:", error);
       }
     };
 
@@ -96,11 +75,11 @@ const MessengerChat: React.FC = (): JSX.Element => {
             contacts={contacts}
             onSelectConversation={handleSelectConversation}
           />
-          {activeConversationId ? (
+          {activeConversationId && otherUser ? (
             <Messagebar
               currentUser={currentUser}
               otherUser={otherUser}
-              // conversationId={activeConversationId}
+              conversationId={activeConversationId}
             />
           ) : (
             <div className={styles.emptyMessagebar}>
