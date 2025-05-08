@@ -1,7 +1,6 @@
 // src/contexts/SocketContext.tsx
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import { tokenStorage } from "../utils/storage";
 
 export interface MessageReceivePayload {
   senderId: string;
@@ -26,10 +25,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const socketRef = useRef<any | null>(null);
 
   useEffect(() => {
-    const socket: any = io(import.meta.env.VITE_SOCKET_URL, {
+    const socket: any = io('http://localhost:3777', {
       transports: ["websocket"],
-      withCredentials: true,
-      Authorization : `Bearer ${tokenStorage.load()}`
+      // withCredentials: false,
     }as any);
 
     socketRef.current = socket;

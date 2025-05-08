@@ -9,12 +9,13 @@ interface SearchProps {
   query: string;
   setQuery: (value: string) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: () => void;
 }
 
-const Search: React.FC<SearchProps> = ({ query, setQuery, onChange }) => {
+const Search: React.FC<SearchProps> = ({ query, setQuery, onChange, onFocus }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    onChange?.(e); // call optional external handler if provided
+    onChange?.(e); 
   };
 
   return (
@@ -29,6 +30,7 @@ const Search: React.FC<SearchProps> = ({ query, setQuery, onChange }) => {
           placeholder="Search by username or email..."
           value={query}
           onChange={handleChange}
+          onFocus={onFocus}
         />
       </div>
     </div>

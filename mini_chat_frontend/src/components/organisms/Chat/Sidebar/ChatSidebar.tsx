@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactItem from "../../../molecules/ChatSidebar/ContactItem/ContactItem";
 import Search from "../../../molecules/ChatSidebar/Search/Search";
 import styles from "./ChatSidebar.module.css";
+import { apiGet } from "../../../../utils/apiUtils";
+import { User } from "../Messagebar/Messagebar";
 
 interface SidebarContact {
   user: {
@@ -15,18 +17,58 @@ interface SidebarContact {
 
 interface ChatSidebarProps {
   contacts: SidebarContact[];
-  onSelectConversation: (conversationId: string) => void;
+  onSelectConversation: (conversationId: string, user: User) => void;
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
-  
   contacts,
   onSelectConversation,
 }) => {
-  console.log("contacts:", contacts);
   const [query, setQuery] = useState("");
+  const [allUsers, setAllUsers] = useState<SidebarContact[] | null>(null);
+  const [searchActive, setSearchActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const filteredContacts = contacts.filter(
+  const fetchAllUsers = async () => {
+    // if (allUsers) return;
+
+    setLoading(true);
+    try {
+      const response = await apiGet<{ data: any[] }>("/getAllUsers");
+
+      const transformed = response.data.map((user) => ({
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+        },
+        conversationId: "",
+        lastMessageTime: "",
+      }));
+
+      setAllUsers(transformed);
+      // console.log("transformed", transformed);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setAllUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (searchActive && !allUsers) {
+        fetchAllUsers();
+      }
+    }, 500);
+    console.log("allUsers", allUsers);
+    return () => clearTimeout(delay);
+  }, [searchActive, allUsers]);
+
+  const baseContacts = searchActive ? allUsers ?? [] : contacts;
+
+  const filteredContacts = baseContacts.filter(
     (contact) =>
       contact.user.fullName.toLowerCase().includes(query.toLowerCase()) ||
       contact.user.email.toLowerCase().includes(query.toLowerCase())
@@ -35,18 +77,29 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   return (
     <div className={styles.chatSidebar}>
       <div className={styles.contactsCard}>
-        {/* Header */}
-        <Search query={query} setQuery={setQuery} />
-
-        {/* Body */}
+        <Search
+          query={query}
+          setQuery={(value) => {
+            setQuery(value);
+            setSearchActive(value.trim() !== "");
+          }}
+          onFocus={() => {
+            fetchAllUsers();
+          }}
+        />
         <div className={styles.contactsList}>
-          {filteredContacts.length > 0 ? (
+          {loading ? (
+            <div>Loading...</div>
+          ) : filteredContacts.length > 0 ? (
             filteredContacts.map((contact, index) => (
               <ContactItem
                 key={index}
-                user={contact.user}
+                user={{
+                  ...contact.user,
+                  lastActivity: contact.lastMessageTime,
+                }}
                 time={contact.lastMessageTime}
-                onClick={() => onSelectConversation(contact.conversationId)}
+                onClick={() => onSelectConversation(contact.conversationId, contact.user)}
               />
             ))
           ) : (
