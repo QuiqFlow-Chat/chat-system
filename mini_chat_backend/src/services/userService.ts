@@ -2,7 +2,8 @@ import { UserRepository } from './../repositories/userRepository';
 import { MESSAGES } from '../constants/messages';
 import { UserGetByParameter, UserUpdateParameters } from '../shared/dtosInterfaces/userDtos';
 import User from '../models/User';
-
+import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
+import { paginate } from '../utils/paginationUtils';
 import { AppError } from '../middlewares/errorMiddlewares';
 import { AuthUtils } from '../utils/authUtils';
 
@@ -17,11 +18,15 @@ export class UserService {
     return this._userServiceInstance;
   }
 
-  public getAllUsers = async (): Promise<User[]> => {
+  public getAllUsers = async (paginationParams?: PaginationParams): Promise<PaginatedResult<User>> => {
     try {
       const users = await this._userRepository.getAll();
       if (users.length === 0) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-      return users;
+      
+      const page = paginationParams?.page || 1;
+      const limit = paginationParams?.limit || 10;
+      
+      return paginate(users, page, limit);
     } catch (error) {
       console.error('Error in getAllUsers:', error);
       throw error instanceof Error ? error : new Error('Failed to get all users');

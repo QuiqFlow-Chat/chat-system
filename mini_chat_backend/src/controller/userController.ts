@@ -4,6 +4,7 @@ import { UserService } from '../services/userService';
 import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
+import { PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
 
 export class UserController {
   private static _userControllerInstance: UserController;
@@ -17,9 +18,15 @@ export class UserController {
   }
 
   @catchAsync()
-  public async getAllUsers(_req: Request, res: Response, _next: NextFunction) {
-    const users = await this._userService.getAllUsers();
-    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, users));
+  public async getAllUsers(req: Request, res: Response, _next: NextFunction) {
+    const page = req.query.page ? parseInt(req.query.page as string) : undefined;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+    
+    const paginationParams: PaginationParams | undefined = page !== undefined && limit !== undefined ? 
+      { page, limit } : undefined;
+    
+    const paginatedUsers = await this._userService.getAllUsers(paginationParams);
+    sendSuccess(res, SuccessCode.ok(MESSAGES.COMMON.SUCCESS.OK, paginatedUsers));
   }
 
   @catchAsync()
