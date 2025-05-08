@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { apiPost } from "../utils/apiUtils";
 import { debounce } from "lodash";
 import { Message } from "../components/organisms/Chat/Messagebar/Messagebar";
+import { useSocket, MessageReceivePayload } from "../contexts/SocketContext";
 
 interface RawMessage {
   id: string;
@@ -40,27 +41,27 @@ export const usePaginatedMessages = ({
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const socket = useSocket();
 
   const fetchMessages = useCallback(async () => {
     if (loading || !hasMore) return;
-    
+
     setLoading(true);
     setError(null);
 
     try {
       const response = await apiPost<{ data: PaginationResponse }>(
-        `/getConversationMessages?page=1&limit=10`,
-        { 
-          senderId: currentUserId, 
-          receiverId
+        `/getConversationMessages?page=${page}&limit=10`,
+        {
+          senderId: currentUserId,
+          receiverId,
         }
       );
 
-      if (!response.data?.data) {
-        throw new Error("Invalid response format from server");
-      }
-
+      if(response){
       const newMessages = response.data.data.map((msg: RawMessage): Message => ({
         type: msg.senderId === currentUserId ? "outgoing" : "incoming",
         name: msg.fullName || "User",
@@ -74,18 +75,17 @@ export const usePaginatedMessages = ({
       setMessages((prev) => [...newMessages.reverse(), ...prev]);
       setHasMore(response.data.pagination.hasNextPage);
       setPage((prev) => prev + 1);
+    }
     } catch (err) {
-      const errorMessage = err instanceof Error 
-        ? err.message 
-        : "Failed to load messages";
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to load messages";
       setError(errorMessage);
       console.error("Failed to fetch messages:", err);
     } finally {
       setLoading(false);
     }
-  }, [page, loading, hasMore, conversationId, currentUserId, receiverId]);
+  }, [page, loading, hasMore, currentUserId, receiverId]);
 
-  // Debounced scroll handler to prevent excessive API calls
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -103,26 +103,67 @@ export const usePaginatedMessages = ({
     };
   }, [fetchMessages, loading, hasMore]);
 
-  // Reset pagination and load first page when conversation changes
   useEffect(() => {
     setMessages([]);
     setPage(1);
     setHasMore(true);
     setError(null);
-    
-    // Small delay to ensure state updates are processed
+
     const timeoutId = setTimeout(() => {
       fetchMessages();
     }, 0);
-    
+
     return () => clearTimeout(timeoutId);
   }, [conversationId, currentUserId, receiverId]);
 
-  return { 
-    messages, 
-    containerRef, 
-    loading, 
+  useEffect(() => {
+    if (!socket || !currentUserId || !receiverId || !conversationId) return;
+
+    const handleReceiveMessage = (data: MessageReceivePayload) => {
+      const isSender = data.senderId === currentUserId;
+      const name = isSender ? "You" : "User";
+
+      const newMessage: Message = {
+        type: isSender ? "outgoing" : "incoming",
+        name,
+        time: new Date(data.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        message: data.content,
+      };
+
+      setMessages((prev) => [...prev, newMessage]);
+
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "auto" });
+      }, 100);
+    };
+
+    socket.emit("userOnline", {
+      id: currentUserId,
+      receiverId,
+      conversationId,
+    });
+
+    socket.on("receiveMessage", handleReceiveMessage);
+
+    return () => {
+      socket.emit("userOffline", {
+        id: currentUserId,
+        receiverId,
+        conversationId,
+      });
+      socket.off("receiveMessage", handleReceiveMessage);
+    };
+  }, [socket, currentUserId, receiverId, conversationId]);
+
+  return {
+    messages,
+    containerRef,
+    bottomRef,
+    loading,
     error,
-    hasMore 
+    hasMore,
   };
 };
