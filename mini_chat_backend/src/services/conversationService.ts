@@ -74,17 +74,13 @@ export class ConversationService {
         parameters.receiverId
       );
       if (messages?.length === 0) return [];
-      else {
-        const sortedMessages = [...messages].sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
 
         const page = paginationParams?.page || 1;
         const limit = paginationParams?.limit || 10;
 
-        return paginate(sortedMessages, page, limit);
+        return paginate(messages, page, limit);
       }
-    } catch (error) {
+      catch (error) {
       throw new AppError('Failed to get conversation messages', 500);
     }
   };
