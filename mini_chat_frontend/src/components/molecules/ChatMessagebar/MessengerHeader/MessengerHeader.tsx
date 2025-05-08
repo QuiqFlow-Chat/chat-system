@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./MessengerHeader.module.css";
 import UserName from "../../../atoms/UserName/UserName";
 import { useSocket } from "../../../../contexts/SocketContext";
-// import { UserGetByParameter } from "../../../../shared/dtosInterfaces/userDtos";
-import { User } from "../../../../services/api/userService";
+//import { User } from "../../../../shared/dtosInterfaces/userDtos";
 
-type MessengerHeaderProps = {
-  user: User;  
+ type MessengerHeaderProps = {
+  user: {
+    id: string;
+    fullName: string;
+  };
 };
 
 const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
