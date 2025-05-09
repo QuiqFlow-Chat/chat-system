@@ -19,7 +19,7 @@ export const authRegisterSchema = Joi.object({
   password: Joi.string()
     .required()
     .min(8)
-    .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&]).{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&~*]).{8,}$/)
     .messages({
       'string.empty': 'Password is required',
       'string.min': 'Password must be at least 8 characters',
@@ -49,7 +49,7 @@ export const authLoginSchema = Joi.object({
   password: Joi.string()
     .required()
     .min(8)
-    .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&]).{8,}$/)
+    .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&~*]).{8,}$/)
     .messages({
       'string.empty': 'Password is required',
       'string.min': 'Password must be at least 8 characters',

@@ -32,36 +32,40 @@ export const registerChatHandlers = (
     }
   });
 
-  socket.on('joinConversation', async (data) => {
+  socket.on('joinConversation', async ({ conversationId }) => {
     try {
-      const { conversationId } = data;
       socket.join(conversationId);
-      console.log('User joined conversation:', conversationId);
+      console.log(`User ${authenticatedUser.id} joined conversation ${conversationId}`);
     } catch (error) {
       socket.emit('error', error instanceof Error ? error.message : 'Failed to join conversation');
+    }
+  });
+
+  socket.on('leaveConversation', ({ conversationId }) => {
+    try {
+      socket.leave(conversationId);
+      console.log(`User ${authenticatedUser.id} left conversation ${conversationId}`);
+    } catch (error) {
+      socket.emit('error', error instanceof Error ? error.message : 'Failed to leave conversation');
     }
   });
 
   socket.on('sendMessage', async (message: MessageCreateParameters) => {
     try {
       console.log('Sending message:', message);
-      // Only allow sending as self
+
       if (message.senderId !== authenticatedUser.id) {
-       // console.error('Unauthorized attempt to send message as another user:', message.senderId);
-        //console.error('Authenticated user:', authenticatedUser.id);
         throw AppError.unauthorized('Unauthorized: Cannot send messages as another user');
       }
 
-      // Use service logic (handles conversation creation if needed)
-      console.log('Sending message:', message);
       const newMessage = await messageService.sendMessage(message);
 
-      // Join the conversation room if not already joined
+      // تحقق إذا المستخدم منضم للمحادثة
       if (!socket.rooms.has(newMessage.conversationId)) {
         socket.join(newMessage.conversationId);
       }
 
-      // Broadcast to both users in the conversation
+      // بث الرسالة للمشاركين بالمحادثة
       io.to(newMessage.conversationId).emit('receiveMessage', {
         id: newMessage.id,
         conversationId: newMessage.conversationId,
@@ -80,20 +84,17 @@ export const registerChatHandlers = (
     }
   });
 
-  socket.on('isTyping', async (data) => {
+  socket.on('isTyping', async ({ conversationId }) => {
     try {
-      const { conversationId } = data;
-      // Notify all in the conversation except sender
       socket.to(conversationId).emit('isTyping', { id: authenticatedUser.id });
-      console.log('User is typing in conversation:', conversationId);
+      console.log(`User ${authenticatedUser.id} is typing in conversation ${conversationId}`);
     } catch (error) {
       socket.emit('error', error instanceof Error ? error.message : 'Failed to send typing indicator');
     }
   });
 
-  // Handler for online users query
-  socket.on('getOnlineUsers', (data, callback) => {
-    if (typeof callback === "function") {
+  socket.on('getOnlineUsers', (_, callback) => {
+    if (typeof callback === 'function') {
       callback(Array.from(onlineUsers));
     }
   });

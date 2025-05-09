@@ -15,6 +15,7 @@ export interface ClientToServerEvents {
   userOffline: () => void;
   sendMessage: (message: MessageCreateParameters) => void;
   joinConversation: (data: { conversationId: string }) => void;
+  leaveConversation: (data: { conversationId: string }) => void;
   isTyping: (data: { conversationId: string }) => void;
   getOnlineUsers: (data: {}, callback: (onlineUsers: string[]) => void) => void; // <-- Added type
 }
