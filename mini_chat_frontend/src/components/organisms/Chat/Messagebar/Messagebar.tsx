@@ -48,15 +48,17 @@ const Messagebar: React.FC<MessagebarProps> = ({
   useEffect(() => {
     if (!socket || !currentUser.id || !otherUser.id) return;
     
-    const userOnlineData = {
-      id: currentUser.id,
-      conversationId,
-    };
+    // Correct emission - no parameters needed per interface
+    socket.emit("userOnline");
     
-    socket.emit("userOnline", userOnlineData);
-    
-    socket.on("isTyping", (userId: string) => {
-      if (userId === otherUser.id) {
+    // Debug incoming typing events
+    socket.on("isTyping", (user: { id: string }) => {
+      // console.log("Typing indicator received from:", user.id);
+      // console.log("Other user id:", otherUser.id);
+      
+      // Check if the typing user is the other user we're chatting with
+      if (user.id === otherUser.id) {
+        // console.log("Setting typing indicator to true");
         setIsTyping(true);
         resetTypingIndicator();
       }
@@ -67,13 +69,8 @@ const Messagebar: React.FC<MessagebarProps> = ({
         clearTimeout(typingTimeoutRef.current);
       }
       
-      const userOfflineData = {
-        id: currentUser.id,
-        conversationId,
-      };
-      
-      socket.emit("userOffline", userOfflineData);
-      socket.off("receiveMessage");
+      // Correct emission - no parameters needed per interface
+      socket.emit("userOffline");
       socket.off("isTyping");
     };
   }, [socket, currentUser.id, otherUser.id, conversationId]);
@@ -91,12 +88,14 @@ const Messagebar: React.FC<MessagebarProps> = ({
   };
 
   const handleTyping = debounce(() => {
-    const typingData = {
-      userId: currentUser.id,
-      receiverId: otherUser.id,
-      conversationId,
-    };
+    // Only emit typing if we have a conversation
+    if (!conversationId) {
+      console.log("Cannot emit typing: no conversationId yet");
+      return;
+    }
     
+    const typingData = { conversationId };
+    console.log("Emitting typing event:", typingData);
     socket.emit("isTyping", typingData);
   }, 300); // Debounce to avoid excessive socket emissions
 

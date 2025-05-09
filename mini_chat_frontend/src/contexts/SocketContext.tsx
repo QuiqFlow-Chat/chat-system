@@ -25,10 +25,29 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const socketRef = useRef<any | null>(null);
 
   useEffect(() => {
+    // Get token and remove any surrounding quotes
+    let token = localStorage.getItem("token");
+    if (token) {
+      token = token.replace(/^"|"$/g, '');  // Remove quotes at start/end
+    }
+    
+    console.log("SocketProvider token (cleaned):", token);
+    
     const socket: any = io('http://localhost:3777', {
       transports: ["websocket"],
-      // withCredentials: false,
-    }as any);
+      auth: {
+        token: token,  // Use the cleaned token
+      },
+    } as any);
+
+    // Add connection event handlers
+    socket.on('connect', () => {
+      console.log('Socket connected successfully');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error.message);
+    });
 
     socketRef.current = socket;
 
