@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./MessengerHeader.module.css";
 import UserName from "../../../atoms/UserName/UserName";
 import { useSocket } from "../../../../contexts/SocketContext";
-//import { User } from "../../../../shared/dtosInterfaces/userDtos";
 
- type MessengerHeaderProps = {
+type MessengerHeaderProps = {
   user: {
     id: string;
     fullName: string;
@@ -16,39 +15,40 @@ const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
   const [status, setStatus] = useState<string>("offline");
 
   useEffect(() => {
-    // console.log("user",user.fullName)
-    if (!user || !user.id) {
-      console.log("MessengerHeader: user is undefined", user);
-      return;
-    }
-  
-    console.log("MessengerHeader: user fullName =", user.fullName);
-    
-    if (!socket || !user.id) return;
-  
-    socket.on("userOnline", (onlineUser: { id: string }) => {
-      if (onlineUser.id === user.id) {
+    if (!user?.id || !socket) return;
+
+    // 1. Initial status check
+    socket.emit("getOnlineUsers", {}, (onlineUsers: string[]) => {
+      if (Array.isArray(onlineUsers) && onlineUsers.includes(user.id)) {
+        console.log("User is online:", user.id);
         setStatus("online");
-      }
-    });
-  
-    socket.on("userOffline", (offlineUser: { id: string }) => {
-      if (offlineUser.id === user.id) {
+      } else {
         setStatus("offline");
       }
     });
-  
+
+    // 2. Listen for real-time status changes
+    const handleUserOnline = (onlineUser: { id: string }) => {
+      if (onlineUser.id === user.id) setStatus("online");
+    };
+    const handleUserOffline = (offlineUser: { id: string }) => {
+      if (offlineUser.id === user.id) setStatus("offline");
+    };
+
+    socket.on("userOnline", handleUserOnline);
+    socket.on("userOffline", handleUserOffline);
+
     return () => {
-      socket.off("userOnline");
-      socket.off("userOffline");
+      socket.off("userOnline", handleUserOnline);
+      socket.off("userOffline", handleUserOffline);
     };
   }, [socket, user?.id]);
-  
+
   return (
     <div className={styles.messengerHeader}>
       <div className={styles.messengerTitle}>
         <div className={styles.activeUser}>
-          <UserName name={user.fullName} />  
+          <UserName name={user.fullName} />
           <div className={styles.userStatus}>
             <span
               className={`${styles.statusIndicator} ${styles[status]}`}
