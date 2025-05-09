@@ -34,7 +34,7 @@
 .Online {
   background-color: var(--quiqflow-color-active);
 }
-.offline {
+.Offline {
   background-color: var(--quiqflow-color-offline);
 }
 /* .idle {

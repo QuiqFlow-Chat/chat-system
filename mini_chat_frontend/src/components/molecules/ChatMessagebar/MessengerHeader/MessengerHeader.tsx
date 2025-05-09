@@ -20,19 +20,19 @@ const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
     // 1. Initial status check
     socket.emit("getOnlineUsers", {}, (onlineUsers: string[]) => {
       if (Array.isArray(onlineUsers) && onlineUsers.includes(user.id)) {
-        console.log("User is online:", user.id);
-        setStatus("online");
+        // console.log("User is online:", user.id);
+        setStatus("Online");
       } else {
-        setStatus("offline");
+        setStatus("Offline");
       }
     });
 
     // 2. Listen for real-time status changes
     const handleUserOnline = (onlineUser: { id: string }) => {
-      if (onlineUser.id === user.id) setStatus("online");
+      if (onlineUser.id === user.id) setStatus("Online");
     };
     const handleUserOffline = (offlineUser: { id: string }) => {
-      if (offlineUser.id === user.id) setStatus("offline");
+      if (offlineUser.id === user.id) setStatus("Offline");
     };
 
     socket.on("userOnline", handleUserOnline);

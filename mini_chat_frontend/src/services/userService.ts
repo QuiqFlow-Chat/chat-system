@@ -40,3 +40,4 @@ export const getAllUsers = async (): Promise<GetAllUsersResponse[]> => {
   );
   return response.data.data;
 };
+

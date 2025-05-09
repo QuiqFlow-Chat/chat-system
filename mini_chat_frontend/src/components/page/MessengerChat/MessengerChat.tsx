@@ -24,10 +24,12 @@ const MessengerChat: React.FC = (): JSX.Element => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [otherUser, setOtherUser] = useState<any | null>(null);
 
+  // UseEffect to load user and contacts when the component mounts
   useEffect(() => {
     const loadUserAndContacts = async () => {
       const loadedUser = userStorage.load();
       if (!loadedUser) return;
+
       setCurrentUser(loadedUser);
 
       try {
@@ -50,7 +52,7 @@ const MessengerChat: React.FC = (): JSX.Element => {
     };
 
     loadUserAndContacts();
-  }, []);
+  }, []); // Only run this effect on component mount (when it first loads)
 
   const handleSelectConversation = (conversationId: string, user: User) => {
     setOtherUser(user);
