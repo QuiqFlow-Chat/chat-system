@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { apiPost } from "../utils/apiUtils";
 import { debounce } from "lodash";
 import { Message } from "../components/organisms/Chat/Messagebar/Messagebar";
 import { useSocket, MessageReceivePayload } from "../contexts/SocketContext";
+import { getConversationMessages } from "../services/messageService";
 
 interface RawMessage {
   id: string;
@@ -17,24 +17,14 @@ interface UsePaginatedMessagesOptions {
   conversationId: string;
   currentUserId: string;
   receiverId: string;
-}
-
-interface PaginationResponse {
-  data: RawMessage[];
-  pagination: {
-    total: number;
-    currentPage: number;
-    totalPages: number;
-    limit: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
+  otherUserName: string;
 }
 
 export const usePaginatedMessages = ({
   conversationId,
   currentUserId,
   receiverId,
+  otherUserName,
 }: UsePaginatedMessagesOptions) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [page, setPage] = useState(1);
@@ -53,29 +43,24 @@ export const usePaginatedMessages = ({
     setError(null);
 
     try {
-      const response = await apiPost<{ data: PaginationResponse }>(
-        `/getConversationMessages?page=${page}&limit=10`,
-        {
-          senderId: currentUserId,
-          receiverId,
-        }
-      );
+      const response = await getConversationMessages(page, currentUserId, receiverId);
 
-      if(response){
-      const newMessages = response.data.data.map((msg: RawMessage): Message => ({
-        type: msg.senderId === currentUserId ? "outgoing" : "incoming",
-        name: msg.fullName || "User",
-        time: new Date(msg.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        message: msg.content,
-      }));
+      if (response) {
+        const newMessages = response.data.map((msg: RawMessage): Message => ({
+          type: msg.senderId === currentUserId ? "outgoing" : "incoming",
+          name: msg.senderId === currentUserId ? "You" : otherUserName,
+          time: new Date(msg.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          message: msg.content,
+        }));
+      
+        setMessages((prev) => [...newMessages.reverse(), ...prev]);
+        setHasMore(response.pagination.hasNextPage);
+        setPage((prev) => prev + 1);
+      }
 
-      setMessages((prev) => [...newMessages.reverse(), ...prev]);
-      setHasMore(response.data.pagination.hasNextPage);
-      setPage((prev) => prev + 1);
-    }
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to load messages";
@@ -118,11 +103,11 @@ export const usePaginatedMessages = ({
 
   useEffect(() => {
     if (!socket || !currentUserId || !receiverId || !conversationId) return;
-
+  
     const handleReceiveMessage = (data: MessageReceivePayload) => {
       const isSender = data.senderId === currentUserId;
-      const name = isSender ? "You" : "User";
-
+      const name = isSender ? "You" : otherUserName;
+  
       const newMessage: Message = {
         type: isSender ? "outgoing" : "incoming",
         name,
@@ -132,22 +117,22 @@ export const usePaginatedMessages = ({
         }),
         message: data.content,
       };
-
+  
       setMessages((prev) => [...prev, newMessage]);
-
+  
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: "auto" });
       }, 100);
     };
-
+  
     socket.emit("userOnline", {
       id: currentUserId,
       receiverId,
       conversationId,
     });
-
+  
     socket.on("receiveMessage", handleReceiveMessage);
-
+  
     return () => {
       socket.emit("userOffline", {
         id: currentUserId,
@@ -156,7 +141,8 @@ export const usePaginatedMessages = ({
       });
       socket.off("receiveMessage", handleReceiveMessage);
     };
-  }, [socket, currentUserId, receiverId, conversationId]);
+  }, [socket, currentUserId, receiverId, conversationId, otherUserName]); 
+  
 
   return {
     messages,

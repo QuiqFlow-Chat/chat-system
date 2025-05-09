@@ -53,12 +53,12 @@ const Messagebar: React.FC<MessagebarProps> = ({
     
     // Debug incoming typing events
     socket.on("isTyping", (user: { id: string }) => {
-      console.log("Typing indicator received from:", user.id);
-      console.log("Other user id:", otherUser.id);
+      // console.log("Typing indicator received from:", user.id);
+      // console.log("Other user id:", otherUser.id);
       
       // Check if the typing user is the other user we're chatting with
       if (user.id === otherUser.id) {
-        console.log("Setting typing indicator to true");
+        // console.log("Setting typing indicator to true");
         setIsTyping(true);
         resetTypingIndicator();
       }

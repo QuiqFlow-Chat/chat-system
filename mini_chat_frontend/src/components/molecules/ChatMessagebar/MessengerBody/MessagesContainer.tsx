@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./MessagesContainer.module.css";
 import IncomingMessage from "./IncomingMessage/IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
@@ -21,20 +20,18 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
   const {
     messages,
     bottomRef,
-    // bottomRef,
     loading,
-    error,
   } = usePaginatedMessages({
     conversationId,
     currentUserId: currentUser.id,
     receiverId: otherUser.id,
+    otherUserName: otherUser.fullName,
   });
-
+  
   return (
     <div className={styles.messengerBody} ref={bottomRef}>
       <div className={styles.messagesContainer}>
         {loading && <div className={styles.loading}>Loading messages...</div>}
-        {error && <div className={styles.error}>{error}</div>}
 
         {messages.map((msg, index) =>
           msg.type === "incoming" ? (
