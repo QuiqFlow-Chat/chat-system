@@ -13,10 +13,10 @@
 .registerPage {
   background-color: var(--quiqflow-color-white);
   box-sizing: border-box;
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-  align-items: center;     
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
   padding: 1rem;
   width: 100%;
