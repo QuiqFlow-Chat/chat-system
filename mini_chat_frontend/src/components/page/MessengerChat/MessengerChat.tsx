@@ -23,6 +23,8 @@ const MessengerChat: React.FC = (): JSX.Element => {
   const [contacts, setContacts] = useState<SidebarContact[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [otherUser, setOtherUser] = useState<any | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  // const [currentconversationId, setCurrentConversationId] = useState<string | null>(null);
 
   // UseEffect to load user and contacts when the component mounts
   useEffect(() => {
@@ -56,6 +58,8 @@ const MessengerChat: React.FC = (): JSX.Element => {
 
   const handleSelectConversation = (conversationId: string, user: User) => {
     setOtherUser(user);
+
+    setConversationId(conversationId);
     
     // Find the selected contact from the contacts list
     const selectedContact = contacts.find(contact => contact.conversationId === conversationId);
@@ -79,6 +83,7 @@ const MessengerChat: React.FC = (): JSX.Element => {
             <Messagebar
               currentUser={currentUser}
               otherUser={otherUser}
+              conversationId={conversationId}
             />
           ) : (
             <div className={styles.emptyMessagebar}>

@@ -1,6 +1,6 @@
 .messengerFooter {
   border-top: 1px solid var(--quiqflow-color-light-grey);
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   padding: 1.5rem;
 }
 

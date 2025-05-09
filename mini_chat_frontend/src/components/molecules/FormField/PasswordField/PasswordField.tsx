@@ -17,7 +17,7 @@ interface PasswordFieldProps {
 export const passwordValidation = Yup.string()
   .min(8, "Password must be at least 8 characters")
   .required("Password is required")
-  .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&]).{8,}$/,
+  .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&*~]).{8,}$/,
   "Use 8 or more characters with a mix of letters, numbers & symbols"
   );
 

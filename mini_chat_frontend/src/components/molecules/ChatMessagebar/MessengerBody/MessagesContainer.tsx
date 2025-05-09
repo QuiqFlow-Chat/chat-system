@@ -29,7 +29,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
   });
   
   return (
-    <div className={styles.messengerBody} ref={bottomRef}>
+    <div className={styles.messengerBody} >
       <div className={styles.messagesContainer}>
         {loading && <div className={styles.loading}>Loading messages...</div>}
 
@@ -59,7 +59,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
           </div>
         )}
 
-        <div ref={bottomRef} />
+      <div ref={bottomRef} />
       </div>
     </div>
   );

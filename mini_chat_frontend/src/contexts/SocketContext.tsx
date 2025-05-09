@@ -31,7 +31,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
       token = token.replace(/^"|"$/g, '');  // Remove quotes at start/end
     }
     
-    console.log("SocketProvider token (cleaned):", token);
+    // console.log("SocketProvider token (cleaned):", token);
     
     const socket: any = io('http://localhost:3777', {
       transports: ["websocket"],

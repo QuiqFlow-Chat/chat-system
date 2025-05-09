@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
 import { Message } from "../components/organisms/Chat/Messagebar/Messagebar";
 import { useSocket, MessageReceivePayload } from "../contexts/SocketContext";
@@ -27,25 +27,25 @@ export const usePaginatedMessages = ({
   otherUserName,
 }: UsePaginatedMessagesOptions) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [page, setPage] = useState(1);
+  const pageRef = useRef(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const containerRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const socket = useSocket();
-
-  const fetchMessages = useCallback(async () => {
+  const conversationKeyRef = useRef(`${conversationId}-${receiverId}`);
+  
+  // Now a regular function, not wrapped in useCallback
+  const fetchMessages = async () => {
     if (loading || !hasMore) return;
-
     setLoading(true);
     setError(null);
-
     try {
-      const response = await getConversationMessages(page, currentUserId, receiverId);
-
-      if (response) {
+      const response = await getConversationMessages(pageRef.current, currentUserId, receiverId);
+     
+      console.log(response);
+      if (response?.data && response?.pagination) {
         const newMessages = response.data.map((msg: RawMessage): Message => ({
           type: msg.senderId === currentUserId ? "outgoing" : "incoming",
           name: msg.senderId === currentUserId ? "You" : otherUserName,
@@ -55,59 +55,58 @@ export const usePaginatedMessages = ({
           }),
           message: msg.content,
         }));
-      
         setMessages((prev) => [...newMessages.reverse(), ...prev]);
         setHasMore(response.pagination.hasNextPage);
-        setPage((prev) => prev + 1);
+        pageRef.current += 1;
+      } else {
+        setError("Invalid response format");
       }
-
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to load messages";
-      setError(errorMessage);
-      console.error("Failed to fetch messages:", err);
+      setError("Error fetching messages");
     } finally {
       setLoading(false);
     }
-  }, [page, loading, hasMore, currentUserId, receiverId]);
+  };
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handleScroll = debounce(() => {
-      if (container.scrollTop === 0 && !loading && hasMore) {
-        fetchMessages();
-      }
-    }, 200);
-
-    container.addEventListener("scroll", handleScroll);
-    return () => {
-      container.removeEventListener("scroll", handleScroll);
-      handleScroll.cancel();
-    };
-  }, [fetchMessages, loading, hasMore]);
-
-  useEffect(() => {
-    setMessages([]);
-    setPage(1);
-    setHasMore(true);
-    setError(null);
-
-    const timeoutId = setTimeout(() => {
+    const newKey = `${conversationId}-${receiverId}`;
+    if (conversationKeyRef.current !== newKey) {
+      // إذا تغيرت المحادثة، أعمل ريست
+      conversationKeyRef.current = newKey;
+      pageRef.current = 1;
+      setMessages([]);
+      setHasMore(true);
+      setError(null);
       fetchMessages();
-    }, 0);
+    }
+  }, [conversationId, receiverId]);
 
-    return () => clearTimeout(timeoutId);
-  }, [conversationId, currentUserId, receiverId]);
+  useEffect(() => {
+    if(messages){
+      fetchMessages();
+    }
+    const timeout = setTimeout(() => {
+      const container = containerRef.current;
+      if (!container) return;
+      const handleScroll = debounce(() => {
+        if (container.scrollTop <= 10 && !loading && hasMore) {
+          fetchMessages();
+        }
+      }, 200);
+      // container.addEventListener("scroll", handleScroll);
+      return () => {
+        container.removeEventListener("scroll", handleScroll);
+        handleScroll.cancel();
+      };
+    }, 100); // تأخير بسيط لضمان جاهزية الـ ref
+    return () => clearTimeout(timeout);
+   }, [containerRef, fetchMessages, loading, hasMore, receiverId]);
 
   useEffect(() => {
     if (!socket || !currentUserId || !receiverId || !conversationId) return;
-  
     const handleReceiveMessage = (data: MessageReceivePayload) => {
       const isSender = data.senderId === currentUserId;
       const name = isSender ? "You" : otherUserName;
-  
       const newMessage: Message = {
         type: isSender ? "outgoing" : "incoming",
         name,
@@ -117,22 +116,17 @@ export const usePaginatedMessages = ({
         }),
         message: data.content,
       };
-  
       setMessages((prev) => [...prev, newMessage]);
-  
-      setTimeout(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "auto" });
-      }, 100);
+      // setTimeout(() => {
+      //   bottomRef.current?.scrollIntoView({ behavior: "auto" });
+      // }, 100);
     };
-  
     socket.emit("userOnline", {
       id: currentUserId,
       receiverId,
       conversationId,
     });
-  
     socket.on("receiveMessage", handleReceiveMessage);
-  
     return () => {
       socket.emit("userOffline", {
         id: currentUserId,
@@ -141,8 +135,7 @@ export const usePaginatedMessages = ({
       });
       socket.off("receiveMessage", handleReceiveMessage);
     };
-  }, [socket, currentUserId, receiverId, conversationId, otherUserName]); 
-  
+  }, [socket, currentUserId, receiverId, conversationId, otherUserName]);
 
   return {
     messages,

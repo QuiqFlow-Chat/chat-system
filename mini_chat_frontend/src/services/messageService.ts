@@ -27,7 +27,7 @@ export const getConversationMessages = async (
   receiverId: string
 ): Promise<PaginationResponse> => {
   const response = await apiPost<{ data: PaginationResponse }>(
-    `/getConversationMessages?page=${page}&limit=10`,
+    `/getConversationMessages?page=${page}&limit=3`,
     { senderId, receiverId }
   );
   return response.data;
