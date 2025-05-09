@@ -75,10 +75,23 @@ export class ConversationService {
         parameters.senderId,
         parameters.receiverId
       );
-      if (messages?.length === 0) return [];
-
+     
       const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
+
+      if (messages?.length === 0) {
+        return {
+          data: [],
+          pagination: {
+            total: 0,
+            currentPage: page,
+            totalPages: 0,
+            limit,
+            hasNextPage: false,
+            hasPrevPage: false,
+          },
+        };
+      }
 
       return paginate(messages, page, limit);
     } catch (error) {
