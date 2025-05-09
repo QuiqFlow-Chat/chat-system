@@ -6,8 +6,12 @@ import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
 import Button from "../../atoms/Button/Button";
 import styles from "./Register.module.css";
 
-import PasswordField, {passwordValidation,} from "../../molecules/FormField/PasswordField/PasswordField";
-import EmailField, {emailValidation,} from "../../molecules/FormField/EmailField/EmailField";
+import PasswordField, {
+  passwordValidation,
+} from "../../molecules/FormField/PasswordField/PasswordField";
+import EmailField, {
+  emailValidation,
+} from "../../molecules/FormField/EmailField/EmailField";
 
 // Component props
 interface LoginFormProps {
@@ -16,6 +20,7 @@ interface LoginFormProps {
     formikHelpers: FormikHelpers<UserLoginParameters>
   ) => void;
   loading?: boolean;
+  error?: string | null;
 }
 
 // Initial values
@@ -30,7 +35,7 @@ const validationSchema = Yup.object({
   password: passwordValidation,
 });
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -43,10 +48,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
         <Form className={styles.form}>
           <EmailField name="email" />
           <PasswordField name="password" />
+          {error && <div className={styles.error}>{error}</div>}
           <div className={styles.buttonContainer}>
-          <Button type="submit" variant="primary" disabled={isSubmitting || loading}>
-            {loading ? "Logging in..." : "Log In"}
-          </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isSubmitting || loading}
+            >
+              {loading ? "Logging in..." : "Log In"}
+            </Button>
           </div>
         </Form>
       )}

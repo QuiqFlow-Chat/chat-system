@@ -7,7 +7,6 @@ import styles from "./LoginPage.module.css";
 
 import LoginForm from "../../organisms/Register/LoginForm";
 
-
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,7 +27,7 @@ const LoginPage: React.FC = () => {
     } catch (error) {
       setError("Login failed. Please try again.");
     } finally {
-      setSubmitting(false); 
+      setSubmitting(false);
       setLoading(false);
     }
   };
@@ -49,9 +48,7 @@ const LoginPage: React.FC = () => {
           <h1 className={styles.registerTitle}>Log In</h1>
         </header>
 
-        {error && <div className={styles.error}>{error}</div>}
-
-        <LoginForm onSubmit={handleSubmit} loading={loading} />
+        <LoginForm onSubmit={handleSubmit} loading={loading} error={error} />
 
         <p className={styles.registerSubtext}>
           Don&apos;t have an account?{" "}
