@@ -138,5 +138,6 @@
 @media (max-width: 768px) {
   :root {
     --quiqflow-font-size-sm: var(--quiqflow-font-size-xs);
+    --quiqflow-font-size-lg: var(--quiqflow-font-size-md);
   }
 }

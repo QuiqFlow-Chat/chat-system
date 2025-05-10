@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FormikHelpers } from "formik";
 import styles from "./signUp.module.css";
 import SignUpForm from "../../organisms/Register/SignUpForm";
-import { signUp } from "../../../services/api/authService";
+import { signUp } from "../../../services/authService";
 import { UserCreateParameters } from "../../../shared/dtosInterfaces/userDtos";
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();

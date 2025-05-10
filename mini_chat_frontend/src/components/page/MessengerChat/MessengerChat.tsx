@@ -35,7 +35,6 @@ const MessengerChat: React.FC = (): JSX.Element => {
       setIsMobile(mobile);
       if (!mobile) {
         setShowSidebar(true); 
-        window.location.reload();
       }
     };
   

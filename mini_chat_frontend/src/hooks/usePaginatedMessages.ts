@@ -74,7 +74,7 @@ export const usePaginatedMessages = ({
     setHasMore(true);
     setError(null);
     pageRef.current = 1;
-    isInitialFetch.current = true; // ضروري عند تغيير المحادثة
+    isInitialFetch.current = true; 
     fetchMessages(); // ✅ ALWAYS fetch messages
   }, [conversationId, receiverId]);
 

@@ -1,7 +1,7 @@
 // src/services/authService.ts
-import { apiPost } from '../../utils/apiUtils';
-import  { tokenStorage, userStorage } from '../../utils/storage';
-import { UserLoginParameters,AuthResponse, UserCreateParameters } from '../../shared/dtosInterfaces/userDtos';
+import { apiPost } from '../utils/apiUtils';
+import  { tokenStorage, userStorage } from '../utils/storage';
+import { UserLoginParameters,AuthResponse, UserCreateParameters } from '../shared/dtosInterfaces/userDtos';
 
 // LogIn
 export const login = async (credentials: UserLoginParameters) => {

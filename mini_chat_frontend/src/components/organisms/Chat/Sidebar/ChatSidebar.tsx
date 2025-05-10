@@ -5,8 +5,9 @@ import styles from "./ChatSidebar.module.css";
 import { User } from "../Messagebar/Messagebar";
 import { useSidebarPagination } from "../../../../hooks/useSidebarPagination";
 import { getAllUsers } from "../../../../services/userService";
-import { useNavigate } from "react-router-dom"; 
-import { logout } from "../../../../services/api/authService";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../../services/authService";
+import Button from "../../../atoms/Button/Button";
 
 interface SidebarContact {
   user: {
@@ -36,7 +37,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     setLoading(true);
     try {
       const users = await getAllUsers();
-  
+
       const transformed = users.map((user) => ({
         user: {
           id: user.id,
@@ -46,7 +47,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         conversationId: "",
         lastMessageTime: "",
       }));
-  
+
       setAllUsers(transformed);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -76,8 +77,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
       contact.user.email.toLowerCase().includes(q.toLowerCase())
   );
 
-
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -123,11 +123,11 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
           )}
         </div>
       </div>
-        <div className={styles.logoutContainer}>
-          <button className={styles.logoutButton} onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
+      <div className={styles.logoutContainer}>
+        <Button className={styles.logoutButton} onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
     </div>
   );
 };
