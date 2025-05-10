@@ -49,42 +49,58 @@ export const registerChatHandlers = (
       socket.emit('error', error instanceof Error ? error.message : 'Failed to leave conversation');
     }
   });
+socket.on('sendMessage', async (message: MessageCreateParameters) => {
+  try {
+    console.log('Sending message:', message);
 
-  socket.on('sendMessage', async (message: MessageCreateParameters) => {
-    try {
-      console.log('Sending message:', message);
-
-      if (message.senderId !== authenticatedUser.id) {
-        throw AppError.unauthorized('Unauthorized: Cannot send messages as another user');
-      }      const result = await messageService.sendMessage(message);
-      const newMessage = result.message;
-      const flag = result.flag;
-
-      // تحقق إذا المستخدم منضم للمحادثة
-      if (!socket.rooms.has(newMessage.conversationId)) {
-        socket.join(newMessage.conversationId);
-      }
-      console.log("New message:", newMessage, "Flag:", flag);
-      
-      // بث الرسالة للمشاركين بالمحادثة
-      io.to(newMessage.conversationId).emit('receiveMessage', {
-        id: newMessage.id,
-        conversationId: newMessage.conversationId,
-        senderId: newMessage.senderId,
-        receiverId: newMessage.receiverId,
-        content: newMessage.content,
-        createdAt: newMessage.createdAt.toISOString(),
-        isRead: newMessage.isRead,
-        flag: flag, // Include the flag property
-      });
-    } catch (error) {
-      if (error instanceof AppError) {
-        socket.emit('error', error.message);
-      } else {
-        socket.emit('error', error instanceof Error ? error.message : 'Failed to send message');
-      }
+    if (message.senderId !== authenticatedUser.id) {
+      throw AppError.unauthorized('Unauthorized: Cannot send messages as another user');
     }
-  });
+
+    const result = await messageService.sendMessage(message);
+    const newMessage = result.message;
+    const flag = result.flag;
+
+    const conversationId = newMessage.conversationId;
+
+    // Ensure the sender is in the room
+    if (!socket.rooms.has(conversationId)) {
+      socket.join(conversationId);
+    }
+
+    const messagePayload = {
+      id: newMessage.id,
+      conversationId,
+      senderId: newMessage.senderId,
+      receiverId: newMessage.receiverId,
+      content: newMessage.content,
+      createdAt: newMessage.createdAt.toISOString(),
+      isRead: newMessage.isRead,
+      flag: flag,
+    };
+
+    // Emit to all users in the conversation room
+    io.to(conversationId).emit('receiveMessage', messagePayload);
+
+    // Also emit directly to receiver if online and not in the room
+    const receiverSocketId = onlineUsers.get(newMessage.receiverId);
+    const conversationRoom = io.sockets.adapter.rooms.get(conversationId);
+    const receiverInRoom = conversationRoom?.has(receiverSocketId);
+
+    if (receiverSocketId && !receiverInRoom) {
+      io.to(receiverSocketId).emit('receiveMessage', messagePayload);
+    }
+
+    console.log("New message sent:", messagePayload);
+
+  } catch (error) {
+    if (error instanceof AppError) {
+      socket.emit('error', error.message);
+    } else {
+      socket.emit('error', error instanceof Error ? error.message : 'Failed to send message');
+    }
+  }
+});
 
   socket.on('isTyping', async ({ conversationId }) => {
     try {
@@ -114,10 +130,10 @@ export const registerChatHandlers = (
   });
 
   socket.on('getOnlineUsers', (_, callback) => {
-    if (typeof callback === 'function') {
-      callback(Array.from(onlineUsers));
-    }
-  });
+  if (typeof callback === 'function') {
+    callback(Array.from(onlineUsers.keys())); // only user IDs
+  }
+});
 
   socket.on('disconnect', () => {
     socket.broadcast.emit('userOffline', { id: authenticatedUser.id });
