@@ -13,7 +13,10 @@ const messageRepository = new MessageRepository();
 const messageService = MessageService.getInstance(messageRepository);
 
 // Simple in-memory set to track online users by user ID
-export const onlineUsers = new Set<string>();
+// OLD: export const onlineUsers = new Set<string>();
+
+// ✅ NEW:
+export const onlineUsers = new Map<string, string>(); // userId -> socketId
 
 export const initializeSocket = async (io: Server) => {
   // Auth middleware
@@ -46,7 +49,9 @@ export const initializeSocket = async (io: Server) => {
   io.on('connection', (socket) => {
     try {
       const user = socket.data.user;
-      onlineUsers.add(user.id); // Mark user as online
+      // OLD: onlineUsers.add(user.id);
+      // ✅ NEW:
+      onlineUsers.set(user.id, socket.id);
       console.log(`⚡ New client connected: ${user.id}`);
       console.log(`[ONLINE USERS] Now online:`, Array.from(onlineUsers));
       // Broadcast to others that this user is online
