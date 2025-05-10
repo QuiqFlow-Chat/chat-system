@@ -27,6 +27,7 @@ export const usePaginatedMessages = ({
   otherUserName,
 }: UsePaginatedMessagesOptions) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversations, setConversations] = useState<any[]>([]); // To store conversation list
   const pageRef = useRef(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -64,7 +65,7 @@ export const usePaginatedMessages = ({
       setError("Error fetching messages");
     } finally {
       setLoading(false);
-      isInitialFetch.current = false; // بعد أول استدعاء فقط
+      isInitialFetch.current = false;
     }
   };
   
@@ -75,7 +76,7 @@ export const usePaginatedMessages = ({
     setError(null);
     pageRef.current = 1;
     isInitialFetch.current = true; 
-    fetchMessages(); // ✅ ALWAYS fetch messages
+    fetchMessages(); // Always fetch messages when these change
   }, [conversationId, receiverId]);
 
   useEffect(() => {
@@ -84,7 +85,6 @@ export const usePaginatedMessages = ({
   
     const handleScroll = debounce(() => {
       if (container.scrollTop === 0 && !loading && hasMore && !isInitialFetch.current) {
-        console.log("*****");
         fetchMessages();
       }
     }, 200);
@@ -96,7 +96,6 @@ export const usePaginatedMessages = ({
       handleScroll.cancel();
     };
   }, [loading, hasMore, receiverId]);
-  
 
   useEffect(() => {
     if (!socket || !currentUserId || !receiverId || !conversationId) return;
@@ -113,10 +112,17 @@ export const usePaginatedMessages = ({
         }),
         message: data.content,
       };
+
+      // Add the new message to the current conversation's list
       setMessages((prev) => [...prev, newMessage]);
+
+      // Update conversation list if this is a new conversation
+      showNewConversationIfNeeded(data);
+
+      // Scroll to the bottom of the chat window when a new message arrives
       setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     };
 
     socket.emit("userOnline", {
@@ -124,7 +130,10 @@ export const usePaginatedMessages = ({
       receiverId,
       conversationId,
     });
+    
+    // Always listen for new messages globally
     socket.on("receiveMessage", handleReceiveMessage);
+
     return () => {
       socket.emit("userOffline", {
         id: currentUserId,
@@ -135,6 +144,20 @@ export const usePaginatedMessages = ({
     };
   }, [socket, currentUserId, receiverId, conversationId, otherUserName]);
 
+  // Function to handle adding new conversations when they arrive
+  const showNewConversationIfNeeded = (message: MessageReceivePayload) => {
+    if (!conversations.some(convo => convo.id === message.conversationId)) {
+      setConversations(prev => [
+        ...prev,
+        {
+          id: message.conversationId,
+          otherUserId: message.senderId,
+          lastMessage: message.content,
+        },
+      ]);
+    }
+  };
+
   return {
     messages,
     containerRef,
@@ -142,5 +165,6 @@ export const usePaginatedMessages = ({
     loading,
     error,
     hasMore,
+    conversations, // Provide the conversations list if needed
   };
 };
