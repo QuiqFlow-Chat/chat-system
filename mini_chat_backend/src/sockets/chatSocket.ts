@@ -85,7 +85,7 @@ socket.on('sendMessage', async (message: MessageCreateParameters) => {
     // Also emit directly to receiver if online and not in the room
     const receiverSocketId = onlineUsers.get(newMessage.receiverId);
     const conversationRoom = io.sockets.adapter.rooms.get(conversationId);
-   const receiverInRoom = receiverSocketId ? conversationRoom?.has(receiverSocketId) : false;
+    const receiverInRoom = receiverSocketId ? conversationRoom?.has(receiverSocketId) : false;
 
     if (receiverSocketId && !receiverInRoom) {
       io.to(receiverSocketId).emit('receiveMessage', messagePayload);
