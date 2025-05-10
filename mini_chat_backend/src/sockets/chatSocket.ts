@@ -56,15 +56,16 @@ export const registerChatHandlers = (
 
       if (message.senderId !== authenticatedUser.id) {
         throw AppError.unauthorized('Unauthorized: Cannot send messages as another user');
-      }
-
-      const newMessage = await messageService.sendMessage(message);
+      }      const result = await messageService.sendMessage(message);
+      const newMessage = result.message;
+      const flag = result.flag;
 
       // تحقق إذا المستخدم منضم للمحادثة
       if (!socket.rooms.has(newMessage.conversationId)) {
         socket.join(newMessage.conversationId);
       }
-      console.log ("new", newMessage);
+      console.log("New message:", newMessage, "Flag:", flag);
+      
       // بث الرسالة للمشاركين بالمحادثة
       io.to(newMessage.conversationId).emit('receiveMessage', {
         id: newMessage.id,
@@ -74,7 +75,7 @@ export const registerChatHandlers = (
         content: newMessage.content,
         createdAt: newMessage.createdAt.toISOString(),
         isRead: newMessage.isRead,
-        flag: newMessage.flag,
+        flag: flag, // Include the flag property
       });
     } catch (error) {
       if (error instanceof AppError) {
