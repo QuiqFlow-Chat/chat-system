@@ -34,18 +34,17 @@ export const usePaginatedMessages = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const socket = useSocket();
-  const conversationKeyRef = useRef(`${conversationId}-${receiverId}`);
-  
-  // Now a regular function, not wrapped in useCallback
+  const isInitialFetch = useRef(true);
+
   const fetchMessages = async () => {
-    if (loading || !hasMore) return;
+    if (loading || (!hasMore && !isInitialFetch.current)) return;
+  
     setLoading(true);
     setError(null);
+  
     try {
       const response = await getConversationMessages(pageRef.current, currentUserId, receiverId);
-     
-      console.log(response);
-      if (response?.data && response?.pagination) {
+      if (response.data && response.pagination) {
         const newMessages = response.data.map((msg: RawMessage): Message => ({
           type: msg.senderId === currentUserId ? "outgoing" : "incoming",
           name: msg.senderId === currentUserId ? "You" : otherUserName,
@@ -61,49 +60,47 @@ export const usePaginatedMessages = ({
       } else {
         setError("Invalid response format");
       }
-    } catch (err) {
+    } catch {
       setError("Error fetching messages");
     } finally {
       setLoading(false);
+      isInitialFetch.current = false; // بعد أول استدعاء فقط
     }
   };
-
+  
   useEffect(() => {
-    const newKey = `${conversationId}-${receiverId}`;
-    if (conversationKeyRef.current !== newKey) {
-      // إذا تغيرت المحادثة، أعمل ريست
-      conversationKeyRef.current = newKey;
-      pageRef.current = 1;
-      setMessages([]);
-      setHasMore(true);
-      setError(null);
-      fetchMessages();
-    }
+    // Reset state when conversation or receiver changes
+    setMessages([]);
+    setHasMore(true);
+    setError(null);
+    pageRef.current = 1;
+    isInitialFetch.current = true; // ضروري عند تغيير المحادثة
+    fetchMessages(); // ✅ ALWAYS fetch messages
   }, [conversationId, receiverId]);
 
   useEffect(() => {
-    if(messages){
-      fetchMessages();
-    }
-    const timeout = setTimeout(() => {
-      const container = containerRef.current;
-      if (!container) return;
-      const handleScroll = debounce(() => {
-        if (container.scrollTop <= 10 && !loading && hasMore) {
-          fetchMessages();
-        }
-      }, 200);
-      // container.addEventListener("scroll", handleScroll);
-      return () => {
-        container.removeEventListener("scroll", handleScroll);
-        handleScroll.cancel();
-      };
-    }, 100); // تأخير بسيط لضمان جاهزية الـ ref
-    return () => clearTimeout(timeout);
-   }, [containerRef, fetchMessages, loading, hasMore, receiverId]);
+    const container = containerRef.current;
+    if (!container) return;
+  
+    const handleScroll = debounce(() => {
+      if (container.scrollTop === 0 && !loading && hasMore && !isInitialFetch.current) {
+        console.log("*****");
+        fetchMessages();
+      }
+    }, 200);
+  
+    container.addEventListener("scroll", handleScroll);
+  
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      handleScroll.cancel();
+    };
+  }, [loading, hasMore, receiverId]);
+  
 
   useEffect(() => {
     if (!socket || !currentUserId || !receiverId || !conversationId) return;
+
     const handleReceiveMessage = (data: MessageReceivePayload) => {
       const isSender = data.senderId === currentUserId;
       const name = isSender ? "You" : otherUserName;
@@ -117,10 +114,11 @@ export const usePaginatedMessages = ({
         message: data.content,
       };
       setMessages((prev) => [...prev, newMessage]);
-      // setTimeout(() => {
-      //   bottomRef.current?.scrollIntoView({ behavior: "auto" });
-      // }, 100);
+      setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
     };
+
     socket.emit("userOnline", {
       id: currentUserId,
       receiverId,

@@ -23,8 +23,9 @@ export class MessageController {
   @catchAsync()
   public async sendMessage(req: Request, res: Response, _next: NextFunction) {
     const parameters: MessageCreateParameters = req.body;
-    await this._messageService.sendMessage(parameters);
-    sendSuccess(res, SuccessCode.created(MESSAGES.MESSAGE.CREATE.SUCCESS));
+    const message = await this._messageService.sendMessage(parameters);
+    sendSuccess(res, SuccessCode.created(MESSAGES.MESSAGE.CREATE.SUCCESS, message));
+    
   }
 
   @catchAsync()

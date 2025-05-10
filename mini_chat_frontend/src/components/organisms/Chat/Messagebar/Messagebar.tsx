@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Messagebar.module.css";
 import MessengerHeader from "../../../molecules/ChatMessagebar/MessengerHeader/MessengerHeader";
 import MessengerFooter from "../../../molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
@@ -47,28 +47,49 @@ const Messagebar: React.FC<MessagebarProps> = ({
   };
 
   useEffect(() => {
-    if (!socket || !currentUser.id || !otherUser.id || !conversationId) return;
-    // المستخدم الحالي أونلاين
-    socket.emit("userOnline");
-    // انضم للمحادثة
+    if (!socket) {
+      console.error("Socket not connected");
+      return;
+    }
+
+    if (!currentUser.id || !otherUser.id) {
+      console.error("Missing user IDs", { currentUser, otherUser });
+      return;
+    }
     
+    if (!conversationId) {
+      console.error("Missing conversationId");
+      return;
+    }
+      
+    // Ensure user is online and joined to conversation
+    socket.emit("userOnline");
     socket.emit("joinConversation", { conversationId });
-    // استقبل حدث الكتابة من الطرف الآخر
-    socket.on("isTyping", (user: { id: string }) => {
-      if (user.id === otherUser.id) {
+    
+    console.log(`Joined conversation: ${conversationId}`);
+    
+    // Listen for typing events
+    socket.on("isTyping", (user) => {
+      console.log("Received isTyping event:", user);
+      
+      // Only show typing indicator if it's from the correct user and conversation
+      if (user.id === otherUser.id && user.conversationId === conversationId) {
+        console.log(`${otherUser.fullName} is typing in conversation ${conversationId}`);
         setIsTyping(true);
         resetTypingIndicator();
       }
     });
+    
     return () => {
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
-      // المستخدم صار أوفلاين
+      if (conversationId) {
+        socket.emit("leaveConversation", { conversationId });
+      }
       socket.emit("userOffline");
-      // غادر المحادثة
-      socket.emit("leaveConversation", { conversationId });
       socket.off("isTyping");
+      console.log("Cleaned up typing event listeners");
     };
   }, [socket, currentUser.id, otherUser.id, conversationId]);
 
@@ -85,17 +106,32 @@ const Messagebar: React.FC<MessagebarProps> = ({
     socket.emit("sendMessage", messageData);
   };
 
-  const handleTyping = debounce(() => {
-    // Only emit typing if we have a conversation
-    if (!conversationId) {
-      console.log("Cannot emit typing: no conversationId yet");
+  // Create a debounced version of the typing emitter
+  const emitTypingEvent = useCallback(
+    debounce(() => {
+      if (!conversationId || !socket?.connected) {
+        console.error("Cannot emit typing: no conversationId or socket not connected");
+        return;
+      }
+      
+      try {
+        socket.emit("isTyping", { conversationId });
+        console.log("Emitted typing event for conversation:", conversationId);
+      } catch (error) {
+        console.error("Error emitting typing event:", error);
+      }
+    }, 1000, { leading: true, trailing: false, maxWait: 2000 }),
+    [socket, conversationId]
+  );
+
+  const handleTyping = () => {
+    if (!conversationId || !socket?.connected) {
       return;
     }
     
-    const typingData = { conversationId };
-    console.log("Emitting typing event:", typingData);
-    socket.emit("isTyping", typingData);
-  }, 300); // Debounce to avoid excessive socket emissions
+    // Simply call the debounced function
+    emitTypingEvent();
+  };
 
   return (
     <div className={styles.chatMain}>

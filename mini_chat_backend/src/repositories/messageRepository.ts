@@ -57,7 +57,7 @@ export class MessageRepository implements IMessageRepository<Message> {
             { senderId: receiverId, receiverId: senderId },
           ],
         },
-        order: [['createdAt', 'ASC']],
+        order: [['createdAt', 'DESC']],
       });
     } catch (error) {
       console.error('Error in getAllBySender_IdAndReceiver_Id:', error);
