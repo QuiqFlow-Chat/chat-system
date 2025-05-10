@@ -1,6 +1,7 @@
 .chatPage{
 display: flex;
 /* flex: 1 1 auto; */
+overflow-y:clip;
 }
 
 .sidebarImage{
@@ -29,4 +30,18 @@ background-color: var(--quiqflow-color-white);
 border-radius: 0.5rem;
 color: var(--quiqflow-color-modal-overlay);
 
+}
+
+
+@media (max-width: 768px) {
+  .sidebarImage {
+    display: none;
+  }
+
+  .chatContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+  }
 }

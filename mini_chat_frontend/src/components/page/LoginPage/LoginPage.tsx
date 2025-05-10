@@ -24,8 +24,9 @@ const LoginPage: React.FC = () => {
       const user = await login(values);
       console.log("Logged in user:", user);
       navigate("/messengerChat");
-    } catch (error) {
-      setError("Login failed. Please try again.");
+    } catch (error: any) {
+      const errorMessage = error?.message || "Login failed. Please try again.";
+      setError(errorMessage);
     } finally {
       setSubmitting(false);
       setLoading(false);

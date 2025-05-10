@@ -131,3 +131,12 @@
   --quiqflow-color-success-bg: rgba(76, 175, 80, 0.12);
   --quiqflow-color-warn-bg: rgba(245, 158, 11, 0.12);
 }
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  :root {
+    --quiqflow-font-size-sm: var(--quiqflow-font-size-xs);
+  }
+}

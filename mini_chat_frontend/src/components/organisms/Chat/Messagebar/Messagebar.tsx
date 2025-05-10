@@ -25,12 +25,14 @@ interface MessagebarProps {
   currentUser: User;
   otherUser: User;
   conversationId?: string | null;
+  onBack?: () => void;
 }
 
 const Messagebar: React.FC<MessagebarProps> = ({
   currentUser,
   otherUser,
   conversationId ,
+  onBack,
 }) => {
   const socket = useSocket();
   const [isTyping, setIsTyping] = useState(false);
@@ -135,6 +137,9 @@ const Messagebar: React.FC<MessagebarProps> = ({
 
   return (
     <div className={styles.chatMain}>
+    {onBack && (
+      <button className={styles.backButton} onClick={onBack}> ☰ </button>
+    )}
       <div className={styles.messengerCard}>
         <MessengerHeader user={otherUser} />
         {conversationId && (
