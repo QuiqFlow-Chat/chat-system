@@ -86,9 +86,27 @@ export const registerChatHandlers = (
 
   socket.on('isTyping', async ({ conversationId }) => {
     try {
-      socket.to(conversationId).emit('isTyping', { id: authenticatedUser.id });
-      console.log(`User ${authenticatedUser.id} is typing in conversation ${conversationId}`);
+      if (!conversationId) {
+        throw new Error('Missing conversationId');
+      }
+
+      // Make sure the user is actually in the conversation room
+      if (!socket.rooms.has(conversationId)) {
+        socket.join(conversationId);
+        console.log(`User ${authenticatedUser.id} auto-joined conversation ${conversationId} while typing`);
+      }
+      
+      const typingData = { 
+        id: authenticatedUser.id,
+        conversationId: conversationId 
+      };
+      
+      // Broadcast typing event to everyone in the conversation EXCEPT the sender
+      socket.to(conversationId).emit('isTyping', typingData);
+      
+      console.log(`User ${authenticatedUser.id} is typing in conversation ${conversationId}`, typingData);
     } catch (error) {
+      console.error('Error in isTyping event handler:', error);
       socket.emit('error', error instanceof Error ? error.message : 'Failed to send typing indicator');
     }
   });

@@ -3,6 +3,7 @@ import IncomingMessage from "./IncomingMessage/IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
 import { usePaginatedMessages } from "../../../../hooks/usePaginatedMessages";
 import { User } from "../../../organisms/Chat/Messagebar/Messagebar";
+import { useEffect } from "react";
 
 interface MessagesContainerProps {
   conversationId: string;
@@ -20,6 +21,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
   const {
     messages,
     bottomRef,
+    containerRef, // Make sure to use this ref
     loading,
   } = usePaginatedMessages({
     conversationId,
@@ -28,10 +30,21 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
     otherUserName: otherUser.fullName,
   });
   
+  useEffect(() => {
+    if (isTyping) {
+      console.log(`Showing typing indicator for ${otherUser.fullName}`);
+      // Ensure the view scrolls to the typing indicator
+      bottomRef?.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [isTyping, otherUser.fullName, bottomRef]);
+
   return (
-    <div className={styles.messengerBody} >
-      <div className={styles.messagesContainer}>
-        {loading && <div className={styles.loading}>Loading messages...</div>}
+    <div className={styles.messengerBody}
+      ref={containerRef} // Attach the ref here
+      >
+      <div 
+        className={styles.messagesContainer}>
+        {loading && <div className={styles.loadingIndicator}>Loading older messages...</div>}
 
         {messages.map((msg, index) =>
           msg.type === "incoming" ? (
@@ -52,18 +65,20 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
         )}
 
         {isTyping && (
-          <div className={styles.typingIndicator}>
+          <div className={styles.typingIndicator}
+          
+          >
+            
             <span className={styles.dot}></span>
             <span className={styles.dot}></span>
             <span className={styles.dot}></span>
           </div>
         )}
 
-      <div ref={bottomRef} />
+        <div ref={bottomRef} />
       </div>
     </div>
   );
 };
-
 
 export default MessagesContainer;

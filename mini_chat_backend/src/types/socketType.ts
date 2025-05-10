@@ -17,7 +17,7 @@ export interface ClientToServerEvents {
   joinConversation: (data: { conversationId: string }) => void;
   leaveConversation: (data: { conversationId: string }) => void;
   isTyping: (data: { conversationId: string }) => void;
-  getOnlineUsers: (data: {}, callback: (onlineUsers: string[]) => void) => void; // <-- Added type
+  getOnlineUsers: (data: {}, callback: (onlineUsers: string[]) => void) => void;
 }
 
 // Events sent from server to client
@@ -33,7 +33,7 @@ export interface ServerToClientEvents {
   }) => void;
   userOnline: (user: { id: string }) => void;
   userOffline: (user: { id: string }) => void;
-  isTyping: (user: { id: string }) => void;
+  isTyping: (user: { id: string; conversationId: string }) => void;
   error: (message: string) => void;
 }
 

@@ -1,65 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useRef} from "react";
 import styles from "./MessengerFooter.module.css";
 import Button from "../../../atoms/Button/Button";
 
 interface MessengerFooterProps {
   onSend: (message: string) => void;
-  onTyping: () => void;
+  onTyping: () => void; // Make sure this prop is being used
 }
 
 const MessengerFooter: React.FC<MessengerFooterProps> = ({ onSend, onTyping }) => {
   const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = () => {
-    const trimmed = message.trim();
-    if (trimmed) {
-      onSend(trimmed);
+    if (message.trim()) {
+      onSend(message.trim());
       setMessage("");
-
-      const typingIndicator = document.getElementById("typing-indicator");
-      if (typingIndicator) {
-        typingIndicator.style.display = "none";
-      }
     }
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setMessage(value);
-
-    const typingIndicator = document.getElementById("typing-indicator");
-    if (typingIndicator) {
-      const shouldShow = value.trim() !== "";
-      typingIndicator.style.display = shouldShow ? "flex" : "none";
-      if (shouldShow) {
-        typingIndicator.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSend();
+    } else {
+      // Call onTyping when user is typing
       onTyping();
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+    // Call onTyping when input changes
+    onTyping();
   };
 
   return (
     <div className={styles.messengerFooter}>
-      <textarea
-        className={styles.messageInput}
-        placeholder="Type a message"
-        value={message}
-        onChange={handleInput}
-        onKeyDown={handleKeyDown}
-        rows={2}
-      />
-      <div className={styles.messageToolbar}>
+      <div className={styles.inputGroup}>
+        <input
+          ref={inputRef}
+          type="text"
+          className={styles.messageInput}
+          placeholder="Type a message..."
+          value={message}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+        />
         <Button
+          className={styles.sendButton}
           onClick={handleSend}
-          variant="primary"
-          size="md"
           disabled={!message.trim()}
         >
           Send

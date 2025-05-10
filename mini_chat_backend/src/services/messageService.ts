@@ -29,7 +29,7 @@ export class MessageService {
     }
     return this._messageServiceInstance;
   }
-  public sendMessage = async (parameters: MessageCreateParameters): Promise<Message> => {
+  public sendMessage = async (parameters: MessageCreateParameters): Promise<any> => {
     try {
       const sender = await this._userRepository.getById(parameters.senderId);
       if (!sender) throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.SENDER_NOT_FOUND);
@@ -57,7 +57,9 @@ export class MessageService {
         content: parameters.content,
       };
       const message = await this._messageRepository.add(createMessage);
-      return message;
+      return {message,
+        flag
+      };
     } catch (error) {
       console.error('error in sendMessage', error);
       throw error instanceof Error ? error : new Error('Failed to send new message');
