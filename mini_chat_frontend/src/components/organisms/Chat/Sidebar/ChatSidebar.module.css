@@ -42,10 +42,12 @@
 }
 
 .logoutButton {
-  background-color: var(--quiqflow-color-error);
-  transition: background-color 0.3s ease;
+  opacity: 0.7;
+  background-color: var(--quiqflow-color-primary);
+  transition: background-color 0.3s ease-in-out;
 }
 
 .logoutButton:hover {
-  background-color: #c6312f;
+  opacity: 1;
+  background-color: var(--quiqflow-color-primary);
 }
