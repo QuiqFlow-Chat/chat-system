@@ -7,6 +7,11 @@ export interface MessageReceivePayload {
   fullName: string;
   content: string;
   createdAt: string;
+  id?: string;
+  conversationId?: string;
+  receiverId?: string;
+  isRead?: boolean;
+  flag?: boolean;
 }
 
 // type TypedSocket =typeof Socket<ServerToClientEvents, ClientToServerEvents>;
