@@ -30,6 +30,7 @@ export interface ServerToClientEvents {
     content: string;
     createdAt: string;
     isRead: boolean;
+    flag: boolean;
   }) => void;
   userOnline: (user: { id: string }) => void;
   userOffline: (user: { id: string }) => void;

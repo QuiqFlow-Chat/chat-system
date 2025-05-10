@@ -64,7 +64,7 @@ export const registerChatHandlers = (
       if (!socket.rooms.has(newMessage.conversationId)) {
         socket.join(newMessage.conversationId);
       }
-
+      console.log ("new", newMessage);
       // بث الرسالة للمشاركين بالمحادثة
       io.to(newMessage.conversationId).emit('receiveMessage', {
         id: newMessage.id,
@@ -74,6 +74,7 @@ export const registerChatHandlers = (
         content: newMessage.content,
         createdAt: newMessage.createdAt.toISOString(),
         isRead: newMessage.isRead,
+        flag: newMessage.flag,
       });
     } catch (error) {
       if (error instanceof AppError) {
