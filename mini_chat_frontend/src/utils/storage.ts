@@ -1,21 +1,21 @@
-class StorageUtil<T> {
+class StorageUtil<StoredValue> {
   private key: string;
 
   constructor(key: string) {
     this.key = key;
   }
 
-  save(value: T): void {
+  save(value: StoredValue): void {
     localStorage.setItem(this.key, JSON.stringify(value));
   }
 
-  load(): T | null {
+  load(): StoredValue | null {
     const item = localStorage.getItem(this.key);
     if (item) {
       try {
-        return JSON.parse(item) as T;
-      } catch (e) {
-        console.error(`Error parsing ${this.key} from localStorage:`, e);
+        return JSON.parse(item) as StoredValue;
+      } catch (error) {
+        console.error(`Error parsing ${this.key} from localStorage:`, error);
         return null;
       }
     }

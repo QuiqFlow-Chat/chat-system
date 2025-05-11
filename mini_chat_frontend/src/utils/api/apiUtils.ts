@@ -1,9 +1,9 @@
 import axios from "axios";
-import axiosInstance from "../services/api/axios";
+import axiosInstance from "./axios";
 
-export const apiGet = async <T>(url: string, config = {}) => {
+export const apiGet = async <ResponseType>(url: string, config = {}) => {
   try {
-    const response = await axiosInstance.get<T>(url, config);
+    const response = await axiosInstance.get<ResponseType>(url, config);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -17,9 +17,9 @@ export const apiGet = async <T>(url: string, config = {}) => {
 };
 
 
-export const apiPost = async <T, B = any>(url: string, body: B, config = {}) => {
+export const apiPost = async <ResponseType, BodyType = any>(url: string, body: BodyType, config = {}) => {
   try {
-    const response = await axiosInstance.post<T>(url, body, config);
+    const response = await axiosInstance.post<ResponseType>(url, body, config);
     return response.data;
   } catch (error) {
     // console.log(error)

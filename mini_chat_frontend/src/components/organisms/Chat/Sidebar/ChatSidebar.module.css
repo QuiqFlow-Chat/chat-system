@@ -35,19 +35,3 @@
   font-style: italic;
   width: 300px;
 }
-
-
-.logoutContainer {
- padding :10px;
-}
-
-.logoutButton {
-  opacity: 0.7;
-  background-color: var(--quiqflow-color-primary);
-  transition: background-color 0.3s ease-in-out;
-}
-
-.logoutButton:hover {
-  opacity: 1;
-  background-color: var(--quiqflow-color-primary);
-}

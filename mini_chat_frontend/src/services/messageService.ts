@@ -1,4 +1,4 @@
-import { apiPost } from "../utils/apiUtils";
+import { apiPost } from "../utils/api/apiUtils";
 
 export interface RawMessage {
   id: string;

@@ -21,6 +21,7 @@ export interface UserUpdateParameters {
 }
 
 export interface AuthResponse {
+  message: any;
   data: any;
   user: {
     id: string;

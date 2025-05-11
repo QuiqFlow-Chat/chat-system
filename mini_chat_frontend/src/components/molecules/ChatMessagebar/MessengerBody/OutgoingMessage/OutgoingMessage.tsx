@@ -8,7 +8,6 @@ import MessageContact from "../SenderData/SenderData";
 interface OutgoingMessageProps {
   name?: string;
   time: string;
-  color?: string;
   message: string;
   imgSrc?: string | null;
 }
@@ -16,7 +15,6 @@ interface OutgoingMessageProps {
 const OutgoingMessage: React.FC<OutgoingMessageProps> = ({
   name = "You",
   time,
-  color = "#f1416c",
   message,
   imgSrc = null,
 }) => {
@@ -27,7 +25,6 @@ const OutgoingMessage: React.FC<OutgoingMessageProps> = ({
           <MessageContact
             name={name}
             time={time}
-            color={color}
             imgSrc={imgSrc}
             reverseOrder={true}
           />

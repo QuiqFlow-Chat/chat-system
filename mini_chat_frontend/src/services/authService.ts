@@ -1,5 +1,5 @@
 // src/services/authService.ts
-import { apiPost } from '../utils/apiUtils';
+import { apiPost } from '../utils/api/apiUtils';
 import  { tokenStorage, userStorage } from '../utils/storage';
 import { UserLoginParameters,AuthResponse, UserCreateParameters } from '../shared/dtosInterfaces/userDtos';
 

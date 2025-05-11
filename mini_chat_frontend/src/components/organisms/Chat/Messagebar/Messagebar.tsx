@@ -31,13 +31,12 @@ interface MessagebarProps {
 const Messagebar: React.FC<MessagebarProps> = ({
   currentUser,
   otherUser,
-  conversationId ,
-  onBack,
+  conversationId,
 }) => {
   const socket = useSocket();
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // Reset typing indicator after delay
   const resetTypingIndicator = () => {
     if (typingTimeoutRef.current) {
@@ -58,30 +57,32 @@ const Messagebar: React.FC<MessagebarProps> = ({
       console.error("Missing user IDs", { currentUser, otherUser });
       return;
     }
-    
+
     if (!conversationId) {
       console.error("Missing conversationId");
-      return;
+      // return;
     }
-      
+
     // Ensure user is online and joined to conversation
     socket.emit("userOnline");
     socket.emit("joinConversation", { conversationId });
-    
+
     console.log(`Joined conversation: ${conversationId}`);
-    
+
     // Listen for typing events
     socket.on("isTyping", (user) => {
       console.log("Received isTyping event:", user);
-      
+
       // Only show typing indicator if it's from the correct user and conversation
       if (user.id === otherUser.id && user.conversationId === conversationId) {
-        console.log(`${otherUser.fullName} is typing in conversation ${conversationId}`);
+        console.log(
+          `${otherUser.fullName} is typing in conversation ${conversationId}`
+        );
         setIsTyping(true);
         resetTypingIndicator();
       }
     });
-    
+
     return () => {
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
@@ -96,9 +97,9 @@ const Messagebar: React.FC<MessagebarProps> = ({
   }, [socket, currentUser.id, otherUser.id, conversationId]);
 
   const handleSend = (newMessage: string) => {
-    console.log(conversationId)
+    console.log("newMessage", newMessage);
     if (!newMessage.trim() || !otherUser.id) return;
-    
+
     const messageData: MessageCreateParameters = {
       senderId: currentUser.id,
       content: newMessage,
@@ -110,19 +111,25 @@ const Messagebar: React.FC<MessagebarProps> = ({
 
   // Create a debounced version of the typing emitter
   const emitTypingEvent = useCallback(
-    debounce(() => {
-      if (!conversationId || !socket?.connected) {
-        console.error("Cannot emit typing: no conversationId or socket not connected");
-        return;
-      }
-      
-      try {
-        socket.emit("isTyping", { conversationId });
-        console.log("Emitted typing event for conversation:", conversationId);
-      } catch (error) {
-        console.error("Error emitting typing event:", error);
-      }
-    }, 1000, { leading: true, trailing: false, maxWait: 2000 }),
+    debounce(
+      () => {
+        if (!conversationId || !socket?.connected) {
+          console.error(
+            "Cannot emit typing: no conversationId or socket not connected"
+          );
+          return;
+        }
+
+        try {
+          socket.emit("isTyping", { conversationId });
+          console.log("Emitted typing event for conversation:", conversationId);
+        } catch (error) {
+          console.error("Error emitting typing event:", error);
+        }
+      },
+      1000,
+      { leading: true, trailing: false, maxWait: 2000 }
+    ),
     [socket, conversationId]
   );
 
@@ -130,26 +137,23 @@ const Messagebar: React.FC<MessagebarProps> = ({
     if (!conversationId || !socket?.connected) {
       return;
     }
-    
+
     // Simply call the debounced function
     emitTypingEvent();
   };
 
   return (
     <div className={styles.chatMain}>
-    {onBack && (
-      <button className={styles.backButton} onClick={onBack}> ☰ </button>
-    )}
       <div className={styles.messengerCard}>
         <MessengerHeader user={otherUser} />
         {conversationId && (
-        <MessagesContainer
-          conversationId={conversationId}
-          currentUser={currentUser}
-          otherUser={otherUser}
-          isTyping={isTyping}
-        />
-      )}
+          <MessagesContainer
+            conversationId={conversationId}
+            currentUser={currentUser}
+            otherUser={otherUser}
+            isTyping={isTyping}
+          />
+        )}
         <MessengerFooter onSend={handleSend} onTyping={handleTyping} />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { tokenStorage } from '../../utils/storage';
+import { tokenStorage } from '../storage';
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:3777/api/miniChat",

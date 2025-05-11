@@ -28,6 +28,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const socketRef = useRef<any | null>(null);
+  console.log("Socket from context:", socketRef);
 
   useEffect(() => {
     // Get token and remove any surrounding quotes

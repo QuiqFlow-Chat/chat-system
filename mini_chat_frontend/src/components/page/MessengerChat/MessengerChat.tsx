@@ -6,7 +6,10 @@ import SidebarImage from "../../../assets/images/sidebar.jpg";
 import { SocketProvider } from "../../../contexts/SocketContext";
 import { userStorage } from "../../../utils/storage";
 import { getUserConversations } from "../../../services/userService";
-
+import { useNavigate } from "react-router-dom";
+import Avatar from "../../atoms/Avatar/Avatar";
+import Button from "../../atoms/Button/Button";
+import { logout } from "../../../services/authService";
 
 interface User {
   id: string;
@@ -29,16 +32,19 @@ const MessengerChat: React.FC = (): JSX.Element => {
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
       if (!mobile) {
-        setShowSidebar(true); 
+        setShowSidebar(true);
       }
     };
-  
+
     window.addEventListener("resize", handleResize);
+    
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -47,7 +53,6 @@ const MessengerChat: React.FC = (): JSX.Element => {
     setConversationId(null);
     setShowSidebar(true);
   };
-
 
   useEffect(() => {
     const loadUserAndContacts = async () => {
@@ -58,15 +63,17 @@ const MessengerChat: React.FC = (): JSX.Element => {
 
       try {
         const conversations = await getUserConversations(loadedUser.id);
-        const formattedContacts: SidebarContact[] = conversations.map((conv) => {
-          const otherUser = conv.users.find(u => u.id !== loadedUser.id)!;
-          const lastMessage = conv.messages?.[conv.messages.length - 1];
-          return {
-            user: otherUser,
-            conversationId: conv.id,
-            lastMessageTime: lastMessage?.createdAt || "No messages",
-          };
-        });
+        const formattedContacts: SidebarContact[] = conversations.map(
+          (conv) => {
+            const otherUser = conv.users.find((u) => u.id !== loadedUser.id)!;
+            const lastMessage = conv.messages?.[conv.messages.length - 1];
+            return {
+              user: otherUser,
+              conversationId: conv.id,
+              lastMessageTime: lastMessage?.createdAt || "No messages",
+            };
+          }
+        );
         setContacts(formattedContacts);
       } catch (error) {
         console.error("Failed to fetch conversations:", error);
@@ -79,56 +86,80 @@ const MessengerChat: React.FC = (): JSX.Element => {
   const handleSelectConversation = (conversationId: string, user: User) => {
     setOtherUser(user);
     setConversationId(conversationId);
-  
-    const selectedContact = contacts.find(contact => contact.conversationId === conversationId);
+
+    const selectedContact = contacts.find(
+      (contact) => contact.conversationId === conversationId
+    );
     if (selectedContact) {
       setOtherUser(selectedContact.user);
     }
-  
+
     if (isMobile) {
-      setShowSidebar(false); 
+      setShowSidebar(false);
     }
   };
 
-  if (!currentUser) 
-  {
+  if (!currentUser) {
     return <div>unauthorized 401</div>;
   }
+
+  const handleLogout = () => {
+    logout();
+    navigate("/loginPage");
+  };
 
   return (
     <SocketProvider>
       <div className={styles.chatPage}>
         {!isMobile && (
-          <img src={SidebarImage} className={styles.sidebarImage} alt="Sidebar" />
+          <img
+            src={SidebarImage}
+            className={styles.sidebarImage}
+            alt="Sidebar"
+          />
         )}
-  
+
         <div className={styles.chatContainer}>
-          {showSidebar && (
-            <ChatSidebar
-              contacts={contacts}
-              onSelectConversation={handleSelectConversation}
-            />
-          )}
-  
-          {otherUser && (
-            <Messagebar
-              currentUser={currentUser}
-              otherUser={otherUser}
-              conversationId={conversationId}
-              onBack={isMobile ? goBackToSidebar : undefined}
-            />
-          )}
-  
-          {!otherUser && !isMobile && (
-            <div className={styles.emptyMessagebar}>
-              <p>Select a conversation to start chatting</p>
+          <div className={styles.logoutContainer}>
+            <div className={styles.currentUser} >
+
+            {isMobile && otherUser && !showSidebar && (
+              <button className={styles.backButton} onClick={goBackToSidebar}>☰</button>
+            )}
+
+              <Avatar className={styles.small} initial={currentUser.fullName[0] || "U"}></Avatar>
+              {currentUser.fullName}
             </div>
-          )}
+            <Button className={styles.logoutButton} onClick={handleLogout}>Logout</Button>
+          </div>
+
+          <div className={styles.chatContent}>
+            {showSidebar && (
+              <ChatSidebar
+                contacts={contacts}
+                onSelectConversation={handleSelectConversation}
+              />
+            )}
+
+            {otherUser ? (
+              <Messagebar
+                currentUser={currentUser}
+                otherUser={otherUser}
+                conversationId={conversationId}
+                onBack={isMobile ? goBackToSidebar : undefined}
+              />
+            ) : (
+              !isMobile && (
+                <div className={styles.emptyMessagebar}>
+                  <p>Select a conversation to start chatting</p>
+                </div>
+              )
+            )}
+          </div>
         </div>
       </div>
     </SocketProvider>
   );
-  
 };
 
 export default MessengerChat;

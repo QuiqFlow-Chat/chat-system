@@ -14,16 +14,6 @@
   flex: 1;
 }
 
-.backButton {
-  text-align: start;
-  background: none;
-  border: none;
-  color: var(--quiqflow-color-bg-dark);
-  font-size: var(--quiqflow-font-size-lg);
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
 @media (min-width: 769px) {
   .backButton {
     display: none;

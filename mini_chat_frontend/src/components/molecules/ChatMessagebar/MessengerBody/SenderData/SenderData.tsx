@@ -6,7 +6,6 @@ import UserName from "../../../../atoms/UserName/UserName";
 interface SenderDataProps {
   name: string;
   time: string;
-  color?: string;
   imgSrc?: string | null;
   reverseOrder?: boolean;
 }
@@ -14,7 +13,6 @@ interface SenderDataProps {
 const SenderData: React.FC<SenderDataProps> = ({
   name,
   time,
-  color = "#f1416c",
   imgSrc = null,
   reverseOrder = false,
 }) => {
@@ -23,7 +21,7 @@ const SenderData: React.FC<SenderDataProps> = ({
       <img src={imgSrc} alt={name} />
     </div>
   ) : (
-      <Avatar initial={name[0]} backgroundColor={color} className={styles.small} />
+      <Avatar initial={name[0]} className={styles.small} />
   );
 
   return (

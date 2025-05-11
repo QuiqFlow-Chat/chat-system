@@ -5,9 +5,6 @@ import styles from "./ChatSidebar.module.css";
 import { User } from "../Messagebar/Messagebar";
 import { useSidebarPagination } from "../../../../hooks/useSidebarPagination";
 import { getAllUsers } from "../../../../services/userService";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../../../../services/authService";
-import Button from "../../../atoms/Button/Button";
 
 interface SidebarContact {
   user: {
@@ -77,13 +74,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
       contact.user.email.toLowerCase().includes(q.toLowerCase())
   );
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/loginPage");
-  };
-
   return (
     <div className={styles.chatSidebar}>
       <div className={styles.contactsCard}>
@@ -122,11 +112,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
             <div className={styles.noResults}>No results found...</div>
           )}
         </div>
-      </div>
-      <div className={styles.logoutContainer}>
-        <Button className={styles.logoutButton} onClick={handleLogout}>
-          Logout
-        </Button>
       </div>
     </div>
   );

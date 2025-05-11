@@ -10,8 +10,8 @@ interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = ({
-  initial = "M",
-  backgroundColor = "#f1416c",
+  initial = " ",
+  backgroundColor = "var(--quiqflow-color-primary)",
   className ,
 }) => {
   return (

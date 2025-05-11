@@ -98,9 +98,19 @@ export const usePaginatedMessages = ({
   }, [loading, hasMore, receiverId]);
 
   useEffect(() => {
+    if (socket) {
+      console.log("Socket connected:", socket.connected);
+      socket.onAny((event, ...args) => {
+        console.log("Received event:", event, args);
+      });
+    }
+  }, [socket]);
+  
+  useEffect(() => {
     if (!socket || !currentUserId || !receiverId || !conversationId) return;
 
     const handleReceiveMessage = (data: MessageReceivePayload) => {
+      console.log({data})
       const isSender = data.senderId === currentUserId;
       const name = isSender ? "You" : otherUserName;
       const newMessage: Message = {

@@ -1,5 +1,5 @@
 // userService.ts
-import { apiGet } from "../utils/apiUtils";
+import { apiGet } from "../utils/api/apiUtils";
 
 
 // getUserConversations
