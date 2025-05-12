@@ -5,26 +5,26 @@ import { useSocket, MessageReceivePayload } from "../contexts/SocketContext";
 import { getConversationMessages } from "../services/messageService";
 
 interface RawMessage {
-  id: string;
   content: string;
-  senderId: string;
-  receiverId: string;
   createdAt: string;
   fullName: string;
+  id: string;
+  receiverId: string;
+  senderId: string;
 }
 
 interface UsePaginatedMessagesOptions {
   conversationId: string;
   currentUserId: string;
-  receiverId: string;
   otherUserName: string;
+  receiverId: string;
 }
 
 export const usePaginatedMessages = ({
   conversationId,
   currentUserId,
-  receiverId,
   otherUserName,
+  receiverId,
 }: UsePaginatedMessagesOptions) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversations, setConversations] = useState<any[]>([]); // To store conversation list

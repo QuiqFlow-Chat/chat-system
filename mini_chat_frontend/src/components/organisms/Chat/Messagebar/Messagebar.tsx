@@ -29,9 +29,9 @@ interface MessagebarProps {
 }
 
 const Messagebar: React.FC<MessagebarProps> = ({
+  conversationId,
   currentUser,
   otherUser,
-  conversationId,
 }) => {
   const socket = useSocket();
   const [isTyping, setIsTyping] = useState(false);
