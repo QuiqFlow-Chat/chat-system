@@ -7,8 +7,8 @@ export const MESSAGES = {
       SUCCESS: 'Registration successful.',
     },
     LOGIN: {
-      INVALID_PASSWORD: 'Invalid password.',
-      INVALID_USER: 'This user is not allowed to log in.',
+      INVALID_PASSWORD: 'Wrong password.',
+      INVALID_USER: 'User doesnt exist.',
       REQUIRED_FIELDS: 'Please enter at least one field.',
       SUCCESS: 'Login successful.',
     },
