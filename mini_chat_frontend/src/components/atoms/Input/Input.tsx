@@ -1,50 +1,70 @@
 import React from "react";
 import styles from "./Input.module.css";
+import { useTranslation } from "react-i18next";
 
-// Props for the Input component
-type InputProps = {
-  type?: "text" | "email" | "password"; // Input type
-  id?: string; // Element ID
-  placeholder?: string; // Placeholder text
-  value: string; // Input value
-  onChange: React.ChangeEventHandler<HTMLInputElement>; // Change handler
-  isInvalid?: boolean; // Show error style
-  isValid?: boolean; // Show valid style
-  className?: string; // Extra class if needed
-  required?: boolean; // Set required
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void; // Blur handler
-  name?: string; // Input name
-};
-// Input component
+export enum ThemeEnum {
+  LIGHT = "light",
+  DARK = "dark",
+}
+
+export enum DirectionEnum {
+  LTR = "ltr",
+  RTL = "rtl",
+}
+
+// Props interface
+export interface InputProps {
+  name?: string;
+  type?: "text" | "email" | "password";
+  id?: string;
+  placeholder?: string;
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  isInvalid?: boolean;
+  isValid?: boolean;
+  required?: boolean;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  direction?: DirectionEnum;
+  theme?: ThemeEnum;
+}
+
 const Input: React.FC<InputProps> = ({
   name,
   type = "text",
   id,
-  placeholder = "",
+  placeholder,
   value,
   onChange,
   isInvalid = false,
   isValid = false,
-  className = "",
   required = false,
-  onBlur = () => {}, // Default empty blur handler
+  onBlur,
+  direction = DirectionEnum.LTR,
+  theme = ThemeEnum.LIGHT,
 }) => {
-  // Set input classes based on validation state
-  let inputClass = `${styles.input} ${className}`;
-  if (isInvalid) inputClass += ` ${styles.isInvalid}`;
-  if (isValid) inputClass += ` ${styles.isValid}`;
+  const { t } = useTranslation();
+
+  const directionClass =
+    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr;
+  const themeClass = theme === ThemeEnum.DARK ? styles.dark : styles.light;
+
+  const inputClasses = [styles.input, directionClass, themeClass];
+  if (isInvalid) inputClasses.push(styles.isInvalid);
+  if (isValid) inputClasses.push(styles.isValid);
+
   return (
     <input
-      type={type}
       id={id}
       name={name}
-      onBlur={onBlur}
-      className={inputClass}
-      placeholder={placeholder}
+      type={type}
+      className={inputClasses.join(" ")}
+      placeholder={placeholder ? t(placeholder) : ""}
       value={value}
       onChange={onChange}
       required={required}
+      onBlur={onBlur}
     />
   );
 };
+
 export default Input;

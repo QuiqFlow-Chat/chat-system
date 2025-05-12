@@ -1,6 +1,39 @@
 .label {
-  color: var(--quiqflow-color-primary-font);
   display: block;
+}
+
+.sizeSm {
   font-size: var(--quiqflow-font-size-sm);
+}
+
+.sizeMd {
+  font-size: var(--quiqflow-font-size-md);
+}
+
+.sizeLg {
+  font-size: var(--quiqflow-font-size-lg);
+}
+
+.weightNormal {
+  font-weight: var(--quiqflow-font-weight-normal);
+}
+
+.weightBold {
   font-weight: var(--quiqflow-font-weight-bold);
+}
+
+.light {
+  color: var(--quiqflow-color-primary-font);
+}
+
+.dark {
+  color: var(--quiqflow-color-white);
+}
+
+.ltr {
+  direction: ltr;
+}
+
+.rtl {
+  direction: rtl;
 }

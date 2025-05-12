@@ -1,55 +1,69 @@
-// src/components/atoms/Button/Button.tsx
 import React from "react";
 import styles from "./Button.module.css";
 import { useTranslation } from "react-i18next";
 
-type ButtonProps = {
+export enum ButtonVariantEnum {
+  PRIMARY = "primary",
+  SECONDARY = "secondary",
+}
+
+export enum ButtonSizeEnum {
+  SM = "sm",
+  MD = "md",
+  LG = "lg",
+}
+
+export enum ThemeEnum {
+  LIGHT = "light",
+  DARK = "dark",
+}
+
+export enum DirectionEnum {
+  LTR = "ltr",
+  RTL = "rtl",
+}
+
+export interface ButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "secondary";
-  size?: "sm" | "md" | "lg";
-  disabled?: boolean;
-  loading?: boolean;
-  type?: "button" | "submit" | "reset";
+  direction?: DirectionEnum;
+  isDisabled?: boolean;
+  isLoading?: boolean;
   onClick?: () => void;
-  className?: string;
-};
+  size?: ButtonSizeEnum;
+  theme?: ThemeEnum;
+  type?: "button" | "submit" | "reset";
+  variant?: ButtonVariantEnum;
+}
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  variant = "primary",
-  size = "md",
-  disabled = false,
-  loading = false,
+  variant = ButtonVariantEnum.PRIMARY,
+  size = ButtonSizeEnum.MD,
+  isDisabled = false,
+  isLoading = false,
   type = "button",
   onClick,
-  className = "",
+  theme = ThemeEnum.LIGHT,
+  direction = DirectionEnum.LTR,
 }) => {
+  const { t } = useTranslation();
+
   const classNames = [
-    className,
-    loading ? styles.buttonLoading : "",
     styles.button,
-    styles[`button${variant.charAt(0).toUpperCase() + variant.slice(1)}`], // camelCase class
+    styles[`button${variant.charAt(0).toUpperCase() + variant.slice(1)}`],
+    styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`],
+    theme === ThemeEnum.DARK ? styles.buttonDark : styles.buttonLight,
+    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
   ].join(" ");
 
-  const style: React.CSSProperties = {
-    padding:
-      size === "sm"
-        ? "0.5rem 1rem"
-        : size === "lg"
-        ? "1rem 2rem"
-        : "0.75rem 1.5rem",
-  };
-
-  const { t } = useTranslation();
   return (
     <button
       type={type}
       className={classNames}
-      style={style}
-      disabled={disabled}
+      disabled={isDisabled}
       onClick={onClick}
     >
-      {loading ? t("loading") : children}
+      {isLoading ? t("loading") : children}
     </button>
   );
 };

@@ -1,40 +1,68 @@
 import React from "react";
 import styles from "./Label.module.css";
+import { useTranslation } from "react-i18next";
 
-// Define the props for the Label component
-interface LabelProps {
-  htmlFor: string; // HTML 'for' attribute to associate with form elements
-  fontSize?: string; // Optional font size for the label
-  color?: string; // Optional color for the label text
-  fontWeight?: string; // Optional font weight for the label
-  margin?: string; // Optional margin (default is 0.5rem)
-  onClick?: () => void; // Optional click event handler
-  children: React.ReactNode; // Content to display inside the label
+export enum ThemeEnum {
+  LIGHT = "light",
+  DARK = "dark",
 }
 
-// Label component definition
+export enum DirectionEnum {
+  LTR = "ltr",
+  RTL = "rtl",
+}
+
+export enum LabelSizeEnum {
+  SM = "sm",
+  MD = "md",
+  LG = "lg",
+}
+
+export enum LabelWeightEnum {
+  NORMAL = "normal",
+  BOLD = "bold",
+}
+
+export interface LabelProps {
+  htmlFor: string;
+  size?: LabelSizeEnum;
+  weight?: LabelWeightEnum;
+  theme?: ThemeEnum;
+  direction?: DirectionEnum;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
 const Label: React.FC<LabelProps> = ({
   htmlFor,
-  fontSize , 
-  color , 
-  fontWeight , 
-  margin , 
+  size = LabelSizeEnum.MD,
+  weight = LabelWeightEnum.NORMAL,
+  theme = ThemeEnum.LIGHT,
+  direction = DirectionEnum.LTR,
   onClick,
   children,
 }) => {
+  const { t } = useTranslation();
+
+  const sizeClass =
+    styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`];
+  const weightClass =
+    styles[`weight${weight.charAt(0).toUpperCase() + weight.slice(1)}`];
+  const themeClass = theme === ThemeEnum.DARK ? styles.dark : styles.light;
+  const directionClass =
+    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr;
+
+  const labelClasses = [
+    styles.label,
+    sizeClass,
+    weightClass,
+    themeClass,
+    directionClass,
+  ].join(" ");
+
   return (
-    <label
-      htmlFor={htmlFor} // Link to the form element
-      className={styles.label}
-      style={{
-        fontSize, // Set the font size
-        color, // Set the font color
-        fontWeight, // Set the font weight
-        marginBottom: margin, // Set margin for bottom
-      }}
-      onClick={onClick} // Click handler for the label
-    >
-      {children} {/* Display the children (label text) */}
+    <label htmlFor={htmlFor} className={labelClasses} onClick={onClick}>
+      {t(children as string)}
     </label>
   );
 };

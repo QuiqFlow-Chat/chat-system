@@ -1,14 +1,42 @@
-/* src/components/atoms/Avatar/Avatar.module.css */
 .avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: var(--quiqflow-font-size-lg);
   color: var(--quiqflow-color-white);
+  border-radius: 50%;
+}
+
+.primary {
+  background-color: var(--quiqflow-color-primary);
+}
+
+.secondary {
+  background-color: var(--quiqflow-color-secondary);
+}
+
+.avatarLight {
+  background-color: var(--quiqflow-color-light-bg);
+}
+
+.avatarDark {
+  background-color: var(--quiqflow-color-dark-bg);
+}
+
+.ltr {
+  direction: ltr;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+@media (min-width: 768px) {
+  .avatar {
+    width: 45px;
+    height: 45px;
+  }
 }
 
 @media (max-width: 768px) {

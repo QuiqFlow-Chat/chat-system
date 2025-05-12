@@ -1,30 +1,40 @@
 .input {
-  border-radius: 0.375rem;
+  border-radius: var(--quiqflow-radius-button);
   border: 1px solid var(--quiqflow-color-border-muted);
   color: var(--quiqflow-color-grey);
   font-size: var(--quiqflow-font-size-md);
   font-weight: var(--quiqflow-font-weight-normal);
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
 }
 
 .input:focus {
   outline: none;
+  border-color: var(--quiqflow-color-primary);
+  box-shadow: var(--quiqflow-box-shadow-focus);
 }
 
-/* form styles */
 .isInvalid {
   border-color: var(--quiqflow-color-error);
-  /* box-shadow: var(--quiqflow-box-shadow-error); */
 }
 
 .isValid {
   border-color: var(--quiqflow-color-success);
-  /* box-shadow: var(--quiqflow-box-shadow-success); */
 }
 
-.isFocused {
-  border-color: var(--quiqflow-color-primary);
-  box-shadow: var(--quiqflow-box-shadow-focus);
+.dark {
+  filter: brightness(0.8);
+}
+
+.light {
+  filter: brightness(1);
+}
+
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
 }
