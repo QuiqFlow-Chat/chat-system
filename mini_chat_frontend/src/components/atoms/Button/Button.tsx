@@ -1,6 +1,7 @@
 // src/components/atoms/Button/Button.tsx
 import React from "react";
 import styles from "./Button.module.css";
+import { useTranslation } from "react-i18next";
 
 type ButtonProps = {
   children: React.ReactNode;
@@ -24,10 +25,10 @@ const Button: React.FC<ButtonProps> = ({
   className = "",
 }) => {
   const classNames = [
+    className,
+    loading ? styles.buttonLoading : "",
     styles.button,
     styles[`button${variant.charAt(0).toUpperCase() + variant.slice(1)}`], // camelCase class
-    loading ? styles.buttonLoading : "",
-    className,
   ].join(" ");
 
   const style: React.CSSProperties = {
@@ -39,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({
         : "0.75rem 1.5rem",
   };
 
+  const { t } = useTranslation();
   return (
     <button
       type={type}
@@ -47,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       onClick={onClick}
     >
-      {loading ? "Loading..." : children}
+      {loading ? t("loading") : children}
     </button>
   );
 };

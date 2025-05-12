@@ -8,26 +8,26 @@ import { useEffect } from "react";
 interface MessagesContainerProps {
   conversationId: string;
   currentUser: User;
-  otherUser: User;
   isTyping: boolean;
+  otherUser: User;
 }
 
 const MessagesContainer: React.FC<MessagesContainerProps> = ({
   conversationId,
   currentUser,
-  otherUser,
   isTyping,
+  otherUser,
 }) => {
   const {
-    messages,
     bottomRef,
     containerRef, // Make sure to use this ref
     loading,
+    messages,
   } = usePaginatedMessages({
     conversationId,
     currentUserId: currentUser.id,
-    receiverId: otherUser.id,
     otherUserName: otherUser.fullName,
+    receiverId: otherUser.id,
   });
   
   useEffect(() => {

@@ -18,7 +18,7 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({ onSend, onTyping }) =
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSend();
     } else {
@@ -26,6 +26,7 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({ onSend, onTyping }) =
       onTyping();
     }
   };
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -43,7 +44,7 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({ onSend, onTyping }) =
           placeholder="Type a message..."
           value={message}
           onChange={handleChange}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
         />
         <Button
           className={styles.sendButton}
