@@ -1,24 +1,24 @@
 .label {
   display: block;
 }
-
-.sizeSm {
+/* size */
+.sm {
   font-size: var(--quiqflow-font-size-sm);
 }
 
-.sizeMd {
+.md {
   font-size: var(--quiqflow-font-size-md);
 }
 
-.sizeLg {
+.lg {
   font-size: var(--quiqflow-font-size-lg);
 }
-
-.weightNormal {
+/* weight */
+.normal {
   font-weight: var(--quiqflow-font-weight-normal);
 }
 
-.weightBold {
+.bold {
   font-weight: var(--quiqflow-font-weight-bold);
 }
 

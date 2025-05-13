@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./IncomingMessage.module.css";
 import MessageText, { MessageVariantEnum } from "../../../../atoms/Message/MessageText";
-import MessageContact from "../SenderData/SenderData";
+import SenderData from "../SenderData/SenderData";
 
 interface IncomingMessageProps {
   name: string;
@@ -19,7 +19,7 @@ const IncomingMessage: React.FC<IncomingMessageProps> = ({
   return (
     <div className={`${styles.message} ${styles.incoming}`}>
       <div className={styles.wrapper}>
-        <MessageContact
+        <SenderData
           name={name}
           time={time}
           imgSrc={imgSrc}

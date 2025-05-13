@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";  
 import styles from "./Avatar.module.css";
 
 export enum ThemeEnum {
@@ -25,23 +26,27 @@ export interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = ({
-  initial = "",
-  variant = AvatarVariant.LARGE,
-  theme = ThemeEnum.LIGHT,
   direction = Direction.LTR,
+  initial = "",
+  theme = ThemeEnum.LIGHT,
+  variant = AvatarVariant.LARGE,
 }) => {
   const { t } = useTranslation();
 
-  const classes = [
+  const avatarClassName = clsx(
     styles.avatar,
-    styles[variant],
-    direction === Direction.RTL ? styles.rtl : styles.ltr,
-    theme === ThemeEnum.DARK ? styles.avatarDark : styles.avatarLight,
-  ];
+    styles[variant], 
+    {
+      [styles.rtl]: direction === Direction.RTL,
+      [styles.ltr]: direction === Direction.LTR,
+      [styles.avatarDark]: theme === ThemeEnum.DARK,
+      [styles.avatarLight]: theme === ThemeEnum.LIGHT,
+    }
+  );
 
   return (
-    <div className={classes.join(" ")}>
-      {(initial || t("unknown")).toUpperCase()}
+    <div className={avatarClassName}>
+      {(initial || t("chatSidebar.noUserName")).toUpperCase()}
     </div>
   );
 };

@@ -29,7 +29,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
   return (
     <div className={styles.contactItem} onClick={onClick}>
       <div className={styles.contactDetails}>
-        <Avatar initial={user.fullName[0] || "U"} variant={AvatarVariant.LARGE} />
+        <Avatar initial={user.fullName[0]} variant={AvatarVariant.LARGE} />
         <div className={styles.contactInfo}>
           <div className={styles.contactName}>{user.fullName}</div>
           <div className={styles.contactEmail}>{user.email}</div>

@@ -2,6 +2,7 @@
 import React, { forwardRef } from "react";
 import styles from "./Input.module.css";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 
 export enum ThemeEnum {
   LIGHT = "light",
@@ -57,25 +58,25 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
 }, ref) => {
   const { t } = useTranslation();
 
-  const classNames = [
+  const inputClassName = clsx(
     styles.input,
-    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
-    theme === ThemeEnum.DARK ? styles.dark : styles.light,
-    variant === InputVariantEnum.AUTH
-      ? styles.authInput
-      : variant === InputVariantEnum.SEARCH
-      ? styles.searchInput
-      : variant === InputVariantEnum.MESSAGE
-      ? styles.messageInput
-      : styles.defaultInput,
-  ];
-
-  if (isInvalid) classNames.push(styles.isInvalid);
-  if (isValid) classNames.push(styles.isValid);
+    {
+      [styles.rtl]: direction === DirectionEnum.RTL,
+      [styles.ltr]: direction === DirectionEnum.LTR,
+      [styles.dark]: theme === ThemeEnum.DARK,
+      [styles.light]: theme === ThemeEnum.LIGHT,
+      [styles.authInput]: variant === InputVariantEnum.AUTH,
+      [styles.searchInput]: variant === InputVariantEnum.SEARCH,
+      [styles.messageInput]: variant === InputVariantEnum.MESSAGE,
+      [styles.defaultInput]: variant === InputVariantEnum.DEFAULT,
+      [styles.isInvalid]: isInvalid,
+      [styles.isValid]: isValid,
+    }
+  );
 
   return (
     <input
-      className={classNames.join(" ")}
+      className={inputClassName}
       id={id}
       name={name}
       onBlur={onBlur}

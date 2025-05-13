@@ -1,6 +1,6 @@
 .input {
   border-radius: var(--quiqflow-radius-button);
-  border: 1px solid var(--quiqflow-color-border-muted);
+  border: 1px solid ;
   color: var(--quiqflow-color-grey);
   font-size: var(--quiqflow-font-size-md);
   font-weight: var(--quiqflow-font-weight-normal);
@@ -11,8 +11,6 @@
 
 .input:focus {
   outline: none;
-  border-color: var(--quiqflow-color-primary);
-  box-shadow: var(--quiqflow-box-shadow-focus);
 }
 
 /* authInput */

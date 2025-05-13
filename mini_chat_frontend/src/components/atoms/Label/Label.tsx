@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";  // تأكد من تثبيت مكتبة clsx: npm install clsx
 import styles from "./Label.module.css";
 import { useTranslation } from "react-i18next";
 
@@ -44,24 +45,20 @@ const Label: React.FC<LabelProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const sizeClass =
-    styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`];
-  const weightClass =
-    styles[`weight${weight.charAt(0).toUpperCase() + weight.slice(1)}`];
-  const themeClass = theme === ThemeEnum.DARK ? styles.dark : styles.light;
-  const directionClass =
-    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr;
-
-  const labelClasses = [
+  const labelClassName = clsx(
     styles.label,
-    sizeClass,
-    weightClass,
-    themeClass,
-    directionClass,
-  ].join(" ");
+    styles[size],
+    styles[weight],
+    {
+      [styles.dark]: theme === ThemeEnum.DARK,
+      [styles.light]: theme === ThemeEnum.LIGHT,
+      [styles.rtl]: direction === DirectionEnum.RTL,
+      [styles.ltr]: direction === DirectionEnum.LTR,
+    }
+  );
 
   return (
-    <label htmlFor={htmlFor} className={labelClasses} onClick={onClick}>
+    <label htmlFor={htmlFor} className={labelClassName} onClick={onClick}>
       {t(children as string)}
     </label>
   );

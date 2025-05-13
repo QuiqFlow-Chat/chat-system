@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import styles from "./MessageText.module.css";
 
 export enum ThemeEnum {
@@ -25,7 +26,7 @@ interface MessageTextProps {
 
 const MessageText: React.FC<MessageTextProps> = ({
   text,
-  variant = "default",
+  variant = MessageVariantEnum.INCOMING,
   theme = ThemeEnum.LIGHT,
   direction = DirectionEnum.LTR,
 }) => {
@@ -37,16 +38,20 @@ const MessageText: React.FC<MessageTextProps> = ({
     </React.Fragment>
   ));
   
-  const classes = [
+  const MessageClassName = clsx(
     styles.messageText,
-    theme === ThemeEnum.DARK ? styles.dark : styles.light,
-    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
-    variant === MessageVariantEnum.OUTGOING ? styles.outgoingText : styles.incomingText,
-  ].join(" ");
+    {
+      [styles.dark]: theme === ThemeEnum.DARK,
+      [styles.light]: theme === ThemeEnum.LIGHT,
+      [styles.rtl]: direction === DirectionEnum.RTL,
+      [styles.ltr]: direction === DirectionEnum.LTR,
+      [styles.outgoingText]: variant === MessageVariantEnum.OUTGOING,
+      [styles.incomingText]: variant === MessageVariantEnum.INCOMING,
+    }
+  );
     
-  
   return (
-    <div className={classes}>{formattedText}</div>
+    <div className={MessageClassName}>{formattedText}</div>
   );
 };
 

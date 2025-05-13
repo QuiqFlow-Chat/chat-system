@@ -46,7 +46,8 @@
 
       "chatSidebar": {
         "searchPlaceholder": "Search by username or email...",
-        "timeUnit": "hrs"
+        "timeUnit": "hrs",
+        "noUserName":"U"
       },
 
       "chat": {

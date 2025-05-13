@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Button.module.css";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 
 export enum ButtonVariantEnum {
   PRIMARY = "primary",
@@ -48,20 +49,24 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const classNames = [
+  const buttonClassName = clsx(
     styles.button,
     styles[variant],
-    styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`],
-    theme === ThemeEnum.DARK ? styles.buttonDark : styles.buttonLight,
-    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
-  ];
+    styles[size], 
+    {
+      [styles.buttonDark]: theme === ThemeEnum.DARK,
+      [styles.buttonLight]: theme === ThemeEnum.LIGHT,
+      [styles.rtl]: direction === DirectionEnum.RTL,
+      [styles.ltr]: direction === DirectionEnum.LTR,
+    }
+  );
 
   return (
     <button
-      type={type}
-      className={classNames.join(" ")}
+      className={buttonClassName}
       disabled={isDisabled}
       onClick={onClick}
+      type={type}
     >
       {isLoading ? t("loading") : children}
     </button>

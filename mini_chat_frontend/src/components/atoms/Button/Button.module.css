@@ -31,15 +31,15 @@
   cursor: not-allowed;
 }
 
-.sizeSm {
+.sm {
   padding: 8px 16px;
 }
 
-.sizeMd {
+.md {
   padding: 12px 24px;
 }
 
-.sizeLg {
+.lg {
   padding: 16px 32px;
 }
 

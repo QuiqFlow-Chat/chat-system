@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./OutgoingMessage.module.css";
 import MessageText, { MessageVariantEnum } from "../../../../atoms/Message/MessageText";
-import MessageContact from "../SenderData/SenderData";
+import SenderData from "../SenderData/SenderData";
 
 interface OutgoingMessageProps {
   name?: string;
@@ -20,7 +20,7 @@ const OutgoingMessage: React.FC<OutgoingMessageProps> = ({
     <div className={`${styles.message} ${styles.outgoing}`}>
       <div className={styles.messageWrapper}>
         <div className={styles.messageContact}>
-          <MessageContact
+          <SenderData
             name={name}
             time={time}
             imgSrc={imgSrc}
