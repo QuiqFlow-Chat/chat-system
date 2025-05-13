@@ -1,24 +1,22 @@
 import React from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-
-import Button from "../../atoms/Button/Button";
+import { useTranslation } from "react-i18next";
 import styles from "./Register.module.css";
-
-import EmailField, {
-  emailValidation,
-} from "../../molecules/FormField/EmailField/EmailField";
-import PasswordField, {
-  passwordValidation,
-} from "../../molecules/FormField/PasswordField/PasswordField";
+import Button, { ButtonVariantEnum } from "@/components/atoms/Button/Button";
 import ConfirmPasswordField, {
   confirmPasswordValidation,
-} from "../../molecules/FormField/ConfirmPasswordField/ConfirmPasswordField";
+} from "@/components/molecules/FormField/ConfirmPasswordField/ConfirmPasswordField";
+import EmailField, {
+  emailValidation,
+} from "@/components/molecules/FormField/EmailField/EmailField";
+import { UserCreateParameters } from "@/shared/dtosInterfaces/userDtos";
+import PasswordField, {
+  passwordValidation,
+} from "@/components/molecules/FormField/PasswordField/PasswordField";
 import FullNameField, {
   fullNameValidation,
-} from "../../molecules/FormField/FullNameField/FullNameField";
-
-import { UserCreateParameters } from "../../../shared/dtosInterfaces/userDtos";
+} from "@/components/molecules/FormField/FullNameField/FullNameField";
 
 interface SignUpFormProps {
   onSubmit: (
@@ -43,6 +41,8 @@ const validationSchema = Yup.object({
 });
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, loading }) => {
+  const { t } = useTranslation();
+
   return (
     <Formik
       initialValues={initialValues}
@@ -64,10 +64,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, loading }) => {
           <div className={styles.buttonContainer}>
             <Button
               type="submit"
-              variant="primary"
-              disabled={isSubmitting || loading}
+              variant={ButtonVariantEnum.PRIMARY}
+              isDisabled={isSubmitting || loading}
             >
-              {loading ? "Signing up..." : "Sign Up"}
+              {loading
+                ? t("Register.signUpForm.signingUp")
+                : t("Register.signUpForm.signUp")}
             </Button>
           </div>
         </Form>

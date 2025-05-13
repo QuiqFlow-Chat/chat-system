@@ -1,17 +1,16 @@
 import React from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
-
-import Button from "../../atoms/Button/Button";
+import { useTranslation } from "react-i18next";
 import styles from "./Register.module.css";
-
 import PasswordField, {
   passwordValidation,
-} from "../../molecules/FormField/PasswordField/PasswordField";
+} from "@/components/molecules/FormField/PasswordField/PasswordField";
 import EmailField, {
   emailValidation,
-} from "../../molecules/FormField/EmailField/EmailField";
+} from "@/components/molecules/FormField/EmailField/EmailField";
+import Button, { ButtonVariantEnum } from "@/components/atoms/Button/Button";
+import { UserLoginParameters } from "@/shared/dtosInterfaces/userDtos";
 
 // Component props
 interface LoginFormProps {
@@ -36,6 +35,8 @@ const validationSchema = Yup.object({
 });
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
+  const { t } = useTranslation();
+
   return (
     <Formik
       initialValues={initialValues}
@@ -48,14 +49,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
         <Form className={styles.form}>
           <EmailField name="email" />
           <PasswordField name="password" />
-          {error && <div className={styles.error}>{error}</div>}
+          {error && <div className={styles.error}>{t(error)}</div>}
           <div className={styles.buttonContainer}>
             <Button
               type="submit"
-              variant="primary"
-              disabled={isSubmitting || loading}
+              variant={ButtonVariantEnum.PRIMARY}
+              isDisabled={isSubmitting || loading}
             >
-              {loading ? "Logging in..." : "Log In"}
+              {loading
+                ? t("Register.loginForm.loggingIn")
+                : t("Register.loginForm.loggingIn.logIn")}
             </Button>
           </div>
         </Form>
