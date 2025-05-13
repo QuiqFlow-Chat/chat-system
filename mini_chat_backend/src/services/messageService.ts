@@ -1,18 +1,17 @@
-import { MessageRepository } from '../repositories/messageRepository';
+import { MessageRepository } from '@/repositories/messageRepository';
 import {
-  MessageCreateFullParameters,
-  MessageUpdateParameters,
-} from '../shared/dtosInterfaces/messageDtos';
+  IMessageCreateFullParameters,
+  IMessageUpdateParameters,
+} from '@/types/dtosInterfaces/messageDtos';
 import {
-  MessageCreateParameters,
-  MessageGetByParameter,
-} from '../shared/dtosInterfaces/messageDtos';
-import { ConversationsRepository } from '../repositories/conversationsRepository';
-import { UserRepository } from '../repositories/userRepository';
-import { UserConversationRepository } from '../repositories/userConversationRepository';
-import { MESSAGES } from '../constants/messages';
-import { AppError } from '../middlewares/errorMiddlewares';
-import Message from '../models/Message';
+  IMessageCreateParameters,
+  IMessageGetByParameter,
+} from '@/types/dtosInterfaces/messageDtos';
+import { ConversationsRepository } from '@/repositories/conversationsRepository';
+import { UserRepository } from '@/repositories/userRepository';
+import { UserConversationRepository } from '@/repositories/userConversationRepository';
+import { MESSAGES } from '@/constants/messages';
+import { AppError } from '@/middlewares/errorMiddlewares';
 export class MessageService {
   _userRepository: UserRepository;
   _conversationRepository: ConversationsRepository;
@@ -29,7 +28,7 @@ export class MessageService {
     }
     return this._messageServiceInstance;
   }
-  public sendMessage = async (parameters: MessageCreateParameters): Promise<any> => {
+  public sendMessage = async (parameters: IMessageCreateParameters): Promise<unknown> => {
     try {
       const sender = await this._userRepository.getById(parameters.senderId);
       if (!sender) throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.SENDER_NOT_FOUND);
@@ -37,9 +36,9 @@ export class MessageService {
       const receiver = await this._userRepository.getById(parameters.receiverId);
       if (!receiver) throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.RECEIVER_NOT_FOUND);
 
-      const flag = await this.shouldCreateConversation(parameters.senderId, parameters.receiverId);
+      const shouldCreateConversation  = await this.shouldCreateConversation(parameters.senderId, parameters.receiverId);
       let conversation_Id: string;
-      if (flag) {
+      if (shouldCreateConversation ) {
         const conversation = await this._conversationRepository.add();
         conversation_Id = conversation.id;
         await this.addUsersToConversation(
@@ -50,7 +49,7 @@ export class MessageService {
       } else {
         conversation_Id = await this.getConversation_Id(parameters.senderId, parameters.receiverId);
       }
-      const createMessage: MessageCreateFullParameters = {
+      const createMessage: IMessageCreateFullParameters = {
         senderId: parameters.senderId,
         receiverId: parameters.receiverId,
         conversationId: conversation_Id,
@@ -58,7 +57,7 @@ export class MessageService {
       };
       const message = await this._messageRepository.add(createMessage);
       return {message,
-        flag
+        shouldCreateConversation 
       };
     } catch (error) {
       console.error('error in sendMessage', error);
@@ -66,7 +65,7 @@ export class MessageService {
     }
   };
 
-  public deleteMessage = async (parameter: MessageGetByParameter): Promise<void> => {
+  public deleteMessage = async (parameter: IMessageGetByParameter): Promise<void> => {
     try {
       const message = await this._messageRepository.getById(parameter.id);
       if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);
@@ -77,7 +76,7 @@ export class MessageService {
     }
   };
 
-  public updateMessageContent = async (parameters: MessageUpdateParameters): Promise<void> => {
+  public updateMessageContent = async (parameters: IMessageUpdateParameters): Promise<void> => {
     try {
       const message = await this._messageRepository.getById(parameters.id);
       if (!message) throw AppError.notFound(MESSAGES.MESSAGE.NOT_FOUND);

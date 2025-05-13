@@ -1,14 +1,15 @@
-import User from '../models/User';
-import Conversation from '../models/Conversation';
+import User from '@/models/User';
+import Conversation from '@/models/Conversation';
 import { Op } from 'sequelize';
-import { IUserRepository } from './userRepositoryInterface';
-import Message from '../models/Message';
+import { IUserRepository } from '@/repositories/userRepositoryInterface';
+import Message from '@/models/Message';
 import { Sequelize } from 'sequelize-typescript';
+import { IUserAttributes } from '@/types/dtosInterfaces/userDtos';
 
 export class UserRepository implements IUserRepository<User> {
-  public add = async (data: any): Promise<void> => {
+  public add = async (data: unknown): Promise<void> => {
     try {
-      await User.create(data);
+      await User.create(data as IUserAttributes);
     } catch (error) {
       console.error('Error in add user:', error);
       throw new Error(`Failed to add user:`);
@@ -110,7 +111,7 @@ export class UserRepository implements IUserRepository<User> {
   public delete = async (entity: User): Promise<void> => {
     try {
       await User.destroy({
-        where: { id: (entity as any).id },
+        where: { id: (entity as User).id },
       });
     } catch (error) {
       console.error('Error in delete user:', error);

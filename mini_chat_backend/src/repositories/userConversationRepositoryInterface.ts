@@ -1,5 +1,5 @@
 export interface IUserConversationRepository<UserConversation> {
-  add(data: any): Promise<void>;
+  add(data: unknown): Promise<void>;
   getAll(): Promise<UserConversation[]>;
   getById(id: string): Promise<UserConversation | null>;
   getByUser_IdAndConversation_Id(

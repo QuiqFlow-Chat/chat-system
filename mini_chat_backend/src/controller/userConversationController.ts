@@ -1,9 +1,9 @@
-import { UserConversationService } from './../services/userConversationService';
+import { UserConversationService } from '@/services/userConversationService';
 import { NextFunction, Request, Response } from 'express';
-import { UserConversationGetByParameter } from '../shared/dtosInterfaces/userConversationDtos';
-import { MESSAGES } from '../constants/messages';
-import { catchAsync } from '../decorators/try_catchDecorators';
-import { SuccessCode, sendSuccess } from '../utils/successCode';
+import { IUserConversationGetByParameter } from '@/types/dtosInterfaces/userConversationDtos';
+import { MESSAGES } from '@/constants/messages';
+import { catchAsync } from '@/decorators/try_catchDecorators';
+import { SuccessCode, sendSuccess } from '@/utils/successCode';
 
 export class UserConversationController {
   private static _userConvControllerInstance: UserConversationController;
@@ -33,7 +33,7 @@ export class UserConversationController {
 
   @catchAsync()
   public async deleteUserConversations(req: Request, res: Response, _next: NextFunction) {
-    const parameter: UserConversationGetByParameter = req.body;
+    const parameter: IUserConversationGetByParameter = req.body;
     await this._userConversationService.deleteUserConversations(parameter);
     sendSuccess(res, SuccessCode.ok(MESSAGES.USER_CONVERSATION.DELETED));
   }

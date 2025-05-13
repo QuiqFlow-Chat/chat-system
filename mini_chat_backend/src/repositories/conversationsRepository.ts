@@ -1,7 +1,7 @@
-import Conversation from '../models/Conversation';
-import Message from '../models/Message';
-import User from '../models/User';
-import { IConversationRepository } from './conversationRepositoryInterface';
+import Conversation from '@/models/Conversation';
+import Message from '@/models/Message';
+import User from '@/models/User';
+import { IConversationRepository } from '@/repositories/conversationRepositoryInterface'
 export class ConversationsRepository implements IConversationRepository<Conversation> {
   public add = async (): Promise<Conversation> => {
     try {
@@ -54,7 +54,7 @@ export class ConversationsRepository implements IConversationRepository<Conversa
   public delete = async (entity: Conversation): Promise<void> => {
     try {
       await Conversation.destroy({
-        where: { id: (entity as any).id },
+        where: { id: (entity as Conversation).id },
       });
     } catch (error) {
       console.error('Error in delete conversation :', error);

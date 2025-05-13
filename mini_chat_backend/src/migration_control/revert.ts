@@ -1,4 +1,4 @@
-import umzug from '../config/umzug';
+import umzug from '@/config/umzug';
 
 const undoAllMigrations = async () => {
   try {

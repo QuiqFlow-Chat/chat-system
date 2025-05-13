@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import { TypedSocket } from '../types/socketType';
 import { UserService } from '../services/userService';
 import { MessageService } from '../services/messageService';
-import { MessageCreateParameters } from '../shared/dtosInterfaces/messageDtos';
+import { MessageCreateParameters } from '../types/dtosInterfaces/messageDtos';
 import { AppError } from '../middlewares/errorMiddlewares';
 import { onlineUsers } from '../config/socket';
 

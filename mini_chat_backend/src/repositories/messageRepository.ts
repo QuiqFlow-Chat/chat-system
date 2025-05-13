@@ -1,11 +1,12 @@
 import { Op } from 'sequelize';
-import Message from '../models/Message';
-import { IMessageRepository } from './messageRepositoryInterface';
+import Message from '@/models/Message';
+import { IMessageRepository } from '@/repositories/messageRepositoryInterface';
+import { IMessageAttributes } from '@/types/dtosInterfaces/messageDtos';
 
 export class MessageRepository implements IMessageRepository<Message> {
-  public add = async (data: any): Promise<Message> => {
+  public add = async (data: unknown): Promise<Message> => {
     try {
-      return await Message.create(data);
+      return await Message.create(data as IMessageAttributes);
     } catch (error) {
       console.error('Error in add message:', error);
       throw new Error(`Failed to add message`);
@@ -67,7 +68,7 @@ export class MessageRepository implements IMessageRepository<Message> {
   public delete = async (entity: Message): Promise<void> => {
     try {
       await Message.destroy({
-        where: { id: (entity as any).id },
+        where: { id: (entity as Message).id },
       });
     } catch (error) {
       console.error('Error in delete message:', error);

@@ -1,8 +1,8 @@
-import { MESSAGES } from '../constants/messages';
-import { UserConversationGetByParameter } from '../shared/dtosInterfaces/userConversationDtos';
-import { AppError } from '../middlewares/errorMiddlewares';
-import UserConversation from '../models/UserConversation';
-import { UserConversationRepository } from '../repositories/userConversationRepository';
+import { MESSAGES } from '@/constants/messages';
+import { IUserConversationGetByParameter } from '@/types/dtosInterfaces/userConversationDtos';
+import { AppError } from '@/middlewares/errorMiddlewares';
+import UserConversation from '@/models/UserConversation';
+import { UserConversationRepository } from '@/repositories/userConversationRepository';
 
 export class UserConversationService {
   private static _userConvServiceInstance: UserConversationService;
@@ -41,7 +41,7 @@ export class UserConversationService {
   };
 
   public deleteUserConversations = async (
-    parameter: UserConversationGetByParameter
+    parameter: IUserConversationGetByParameter
   ): Promise<void> => {
     try {
       const userConversation = await this._userConversationRepository.getById(parameter.id);

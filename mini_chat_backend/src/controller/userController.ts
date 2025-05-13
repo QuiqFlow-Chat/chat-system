@@ -1,10 +1,10 @@
-import { UserGetByParameter, UserUpdateParameters } from '../shared/dtosInterfaces/userDtos';
+import { IUserGetByParameter, IUserUpdateParameters } from '../types/dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/userService';
 import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
-import { PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
+import { IPaginationParams } from '../types/dtosInterfaces/paginationDtos';
 
 export class UserController {
   private static _userControllerInstance: UserController;
@@ -22,7 +22,7 @@ export class UserController {
     const page = req.query.page ? parseInt(req.query.page as string) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
 
-    const paginationParams: PaginationParams | undefined =
+    const paginationParams: IPaginationParams | undefined =
       page !== undefined && limit !== undefined ? { page, limit } : undefined;
 
     const paginatedUsers = await this._userService.getAllUsers(paginationParams);
@@ -38,14 +38,14 @@ export class UserController {
 
   @catchAsync()
   public async deleteUser(req: Request, res: Response, _next: NextFunction) {
-    const parameter: UserGetByParameter = req.body;
+    const parameter: IUserGetByParameter = req.body;
     await this._userService.deleteUser(parameter);
     sendSuccess(res, SuccessCode.ok(MESSAGES.USER.DELETED));
   }
 
   @catchAsync()
   public async updateUser(req: Request, res: Response, _next: NextFunction) {
-    const parameters: UserUpdateParameters = req.body;
+    const parameters: IUserUpdateParameters = req.body;
     await this._userService.updateUser(parameters);
     sendSuccess(res, SuccessCode.ok(MESSAGES.USER.UPDATED));
   }

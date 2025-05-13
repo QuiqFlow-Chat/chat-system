@@ -1,4 +1,4 @@
-import { Server } from './server';
+import { Server } from '@/server';
 
 export class App {
   constructor(private port: number) {

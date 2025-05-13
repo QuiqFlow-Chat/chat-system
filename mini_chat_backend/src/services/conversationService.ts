@@ -1,19 +1,17 @@
 import {
-  ConversationGetByParameter,
-  ConversationMessagesGetByParameters,
-} from '../shared/dtosInterfaces/conversationDtos';
-import { ConversationsRepository } from '../repositories/conversationsRepository';
-import Conversation from '../models/Conversation';
-import Message from '../models/Message';
-import { MESSAGES } from '../constants/messages';
-import { AppError } from '../middlewares/errorMiddlewares';
-import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
-import { paginate } from '../utils/paginationUtils';
-import { UserRepository } from '../repositories/userRepository';
-import User from '../models/User';
-import { MessageRepository } from '../repositories/messageRepository';
-import { Sequelize } from 'sequelize-typescript';
-import { Op } from 'sequelize';
+  IConversationGetByParameter,
+  IConversationMessagesGetByParameters,
+} from '@/types/dtosInterfaces/conversationDtos';
+import { ConversationsRepository } from '@/repositories/conversationsRepository';
+import Conversation from '@/models/Conversation';
+import Message from '@/models/Message';
+import { MESSAGES } from '@/constants/messages';
+import { AppError } from '@/middlewares/errorMiddlewares';
+import { IPaginatedResult, IPaginationParams } from '@/types/dtosInterfaces/paginationDtos';
+import { paginate } from '@/utils/paginationUtils';
+import { UserRepository } from '@/repositories/userRepository';
+import User from '@/models/User';
+import { MessageRepository } from '@/repositories/messageRepository';
 
 export class ConversationService {
   _userRepository: UserRepository;
@@ -30,7 +28,7 @@ export class ConversationService {
     return this._conversationServiceInstance;
   }
 
-  public deleteConversation = async (parameter: ConversationGetByParameter): Promise<void> => {
+  public deleteConversation = async (parameter: IConversationGetByParameter): Promise<void> => {
     try {
       const conversation = await this._conversationRepository.getById(parameter.id);
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
@@ -67,9 +65,9 @@ export class ConversationService {
   };
 
   public getConversationMessages = async (
-    parameters: ConversationMessagesGetByParameters,
-    paginationParams?: PaginationParams
-  ): Promise<PaginatedResult<Message> | []> => {
+    parameters: IConversationMessagesGetByParameters,
+    paginationParams?: IPaginationParams
+  ): Promise<IPaginatedResult<Message> | []> => {
     try {
       const messages = await this._messageRepository.getAllBySender_IdAndReceiver_Id(
         parameters.senderId,
@@ -130,8 +128,8 @@ export class ConversationService {
 
   public getUserConversations = async (
     userId: string,
-    paginationParams?: PaginationParams
-  ): Promise<PaginatedResult<Conversation>> => {
+    paginationParams?: IPaginationParams
+  ): Promise<IPaginatedResult<Conversation>> => {
     try {
       const conversations = await this._userRepository.getUserConversations(userId);
 

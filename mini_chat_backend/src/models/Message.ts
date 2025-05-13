@@ -9,19 +9,10 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import User from './User';
-import Conversation from './Conversation';
+import User from '@/models/User';
+import Conversation from '@/models/Conversation';
+import { IMessageAttributes } from '@/types/dtosInterfaces/messageDtos';
 
-interface MessageCreateAttributes {
-  id: string;
-  senderId: string;
-  receiverId: string;
-  conversationId: string;
-  isRead: boolean;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 @Table({
   tableName: 'Messages',
@@ -41,7 +32,7 @@ interface MessageCreateAttributes {
     },
   ],
 })
-class Message extends Model<MessageCreateAttributes> implements MessageCreateAttributes {
+class Message extends Model<IMessageAttributes> implements IMessageAttributes {
   @PrimaryKey
   @Column({
     type: DataType.UUID,
