@@ -1,0 +1,53 @@
+/* FormFieldShared.module.css */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.invalidFeedback {
+  color: var(--quiqflow-color-error);
+  font-size: var(--quiqflow-font-size-xs);
+  margin: 0.25rem;
+}
+
+
+/* ConfirmPasswordField */
+.passwordWrapper {
+  position: relative;
+}
+ 
+.passwordHint {
+  color: var(--quiqflow-color-grey);
+  font-size: var(--quiqflow-font-size-xs);
+  margin-top: 0.5rem;
+}
+
+/* FullNameField */
+.error {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* PasswordField */
+.passwordWrapper {
+  position: relative;
+}
+
+.passwordToggle {
+  background: transparent;
+  border: none;
+  color: var(--quiqflow-color-grey);
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.passwordToggle:focus {
+  box-shadow: none;
+  outline: none;
+}

@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import styles from "./MessagesContainer.module.css";
 import IncomingMessage from "./IncomingMessage/IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
 import { usePaginatedMessages } from "../../../../hooks/usePaginatedMessages";
 import { User } from "../../../organisms/Chat/Messagebar/Messagebar";
-import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface MessagesContainerProps {
   conversationId: string;
@@ -18,9 +19,11 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
   isTyping,
   otherUser,
 }) => {
+  const { t } = useTranslation();
+
   const {
     bottomRef,
-    containerRef, // Make sure to use this ref
+    containerRef,
     loading,
     messages,
   } = usePaginatedMessages({
@@ -29,22 +32,21 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
     otherUserName: otherUser.fullName,
     receiverId: otherUser.id,
   });
-  
+
   useEffect(() => {
     if (isTyping) {
-      console.log(`Showing typing indicator for ${otherUser.fullName}`);
-      // Ensure the view scrolls to the typing indicator
-      bottomRef?.current?.scrollIntoView({ behavior: 'smooth' });
+      bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [isTyping, otherUser.fullName, bottomRef]);
 
   return (
-    <div className={styles.messengerBody}
-      ref={containerRef} // Attach the ref here
-      >
-      <div 
-        className={styles.messagesContainer}>
-        {loading && <div className={styles.loadingIndicator}>Loading older messages...</div>}
+    <div className={styles.messengerBody} ref={containerRef}>
+      <div className={styles.messagesContainer}>
+        {loading && (
+          <div className={styles.loadingIndicator}>
+            {t("chat.loadingOlderMessages")}
+          </div>
+        )}
 
         {messages.map((msg, index) =>
           msg.type === "incoming" ? (
@@ -65,10 +67,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
         )}
 
         {isTyping && (
-          <div className={styles.typingIndicator}
-          
-          >
-            
+          <div className={styles.typingIndicator}>
             <span className={styles.dot}></span>
             <span className={styles.dot}></span>
             <span className={styles.dot}></span>

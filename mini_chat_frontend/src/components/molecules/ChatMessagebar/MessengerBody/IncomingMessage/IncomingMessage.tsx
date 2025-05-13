@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./IncomingMessage.module.css";
-import MessageText from "../../../../atoms/Message/MessageText";
+import MessageText, { MessageVariantEnum } from "../../../../atoms/Message/MessageText";
 import MessageContact from "../SenderData/SenderData";
 
 interface IncomingMessageProps {
@@ -25,9 +25,9 @@ const IncomingMessage: React.FC<IncomingMessageProps> = ({
           imgSrc={imgSrc}
           reverseOrder={false}
         />
-        <MessageText
-          text={message}
-          backgroundColor="var(--quiqflow-color-primary-light)" 
+        <MessageText 
+          text={message} 
+          variant={MessageVariantEnum.INCOMING}
         />
       </div>
     </div>

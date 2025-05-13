@@ -1,5 +1,3 @@
-/* src/components/molecules/ChatSidebar/Search/Search.module.css */
-
 .contactsHeader {
   padding: 1rem;
 }
@@ -9,26 +7,10 @@
 }
 
 .searchIcon {
-  position: absolute;
+  color: var(--quiqflow-color-grey);
   left: 1rem;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--quiqflow-color-grey);
 }
 
-.searchInput {
-  background-color: var(--quiqflow-color-white);
-  border-radius: 0.3rem;
-  border: solid var(--quiqflow-color-grey-border);
-  color: var(--quiqflow-color-modal-overlay);
-  font-size: var(--quiqflow-font-size-sm);
-  padding: 0.75rem 1rem 0.75rem 3rem;
-  width: 100%;
-  font-weight: var(--quiqflow-font-weight-normal);
-}
-
-.searchInput:focus {
-  outline: none;
-  border-color: var(--quiqflow-color-selected-border);
-  color: var(--quiqflow-color-bg-dark);
-}

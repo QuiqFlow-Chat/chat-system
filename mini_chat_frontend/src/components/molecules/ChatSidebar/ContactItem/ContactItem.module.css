@@ -1,18 +1,17 @@
-/* src/components/molecules/ChatSidebar/ContactItem/ContactItem.module.css */
-
-.contactItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem ;
-  gap: 2rem;
-  border-bottom: 1px dashed var(--quiqflow-color-light-grey);
+.avatar.small {
+  height: 35px;
+  width: 35px;
 }
 
 .contactDetails {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 1rem;
+}
+
+.contactEmail {
+  color: var(--quiqflow-color-modal-overlay);
+  font-size: var(--quiqflow-font-size-sm);
 }
 
 .contactInfo {
@@ -20,48 +19,37 @@
   flex-direction: column;
 }
 
-.avatar.small{
-  width: 35px;
-  height: 35px;
+.contactItem {
+  align-items: center;
+  border-bottom: 1px dashed var(--quiqflow-color-light-grey);
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  padding: 1rem;
 }
 
 .contactName {
-  cursor: pointer;
-  font-weight: bold;
   color: var(--quiqflow-color-bg-dark);
-  margin-bottom: 0.25rem;
+  cursor: pointer;
   font-size: var(--quiqflow-font-size-md);
+  font-weight: bold;
+  margin-bottom: 0.25rem;
 }
 
 .contactName:hover {
   color: var(--quiqflow-color-primary);
 }
 
-.contactEmail {
-  font-size: var(--quiqflow-font-size-sm);
-  color: var(--quiqflow-color-modal-overlay);
-}
-
 .contactTime {
-  font-size: var(--quiqflow-font-size-sm);
-  /* font-weight: var(--quiqflow-font-weight-bold); */
   color: var(--quiqflow-color-modal-overlay);
+  font-size: var(--quiqflow-font-size-sm);
   width: 50px;
 }
 
-
-
 @media (max-width: 768px) {
-  .contactItem {
-    flex-direction: column; 
-    align-items: flex-start;
-    gap: 0;
-    padding: 0.75rem;
-  }
-
   .contactDetails {
-    flex-direction: row;
     align-items: center;
+    flex-direction: row;
     gap: 0.75rem;
     width: 100%;
   }
@@ -70,8 +58,14 @@
     width: 100%;
   }
 
-  .contactTime {
-    display:none;
+  .contactItem {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.75rem;
   }
 
+  .contactTime {
+    display: none;
+  }
 }

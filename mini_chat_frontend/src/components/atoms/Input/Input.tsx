@@ -1,4 +1,5 @@
-import React from "react";
+// mini_chat_frontend/src/components/atoms/Input/Input.tsx
+import React, { forwardRef } from "react";
 import styles from "./Input.module.css";
 import { useTranslation } from "react-i18next";
 
@@ -12,59 +13,84 @@ export enum DirectionEnum {
   RTL = "rtl",
 }
 
-// Props interface
-export interface InputProps {
-  name?: string;
-  type?: "text" | "email" | "password";
-  id?: string;
-  placeholder?: string;
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  isInvalid?: boolean;
-  isValid?: boolean;
-  required?: boolean;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  direction?: DirectionEnum;
-  theme?: ThemeEnum;
+export enum InputVariantEnum {
+  AUTH = "auth",
+  DEFAULT = "default",
+  MESSAGE = "message",
+  SEARCH = "search",
 }
 
-const Input: React.FC<InputProps> = ({
-  name,
-  type = "text",
+export interface InputProps {
+  direction?: DirectionEnum;
+  id?: string;
+  isInvalid?: boolean;
+  isValid?: boolean;
+  name?: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>; 
+  placeholder?: string;
+  required?: boolean;
+  theme?: ThemeEnum;
+  type?: "text" | "email" | "password";
+  value: string;
+  variant?: InputVariantEnum;
+}
+
+const Input = forwardRef<HTMLInputElement, InputProps>(({
+  direction = DirectionEnum.LTR,
   id,
-  placeholder,
-  value,
-  onChange,
   isInvalid = false,
   isValid = false,
-  required = false,
+  name,
   onBlur,
-  direction = DirectionEnum.LTR,
+  onChange,
+  onFocus,
+  onKeyDown,
+  placeholder,
+  required = false,
   theme = ThemeEnum.LIGHT,
-}) => {
+  type = "text",
+  value,
+  variant = InputVariantEnum.DEFAULT,
+}, ref) => {
   const { t } = useTranslation();
 
-  const directionClass =
-    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr;
-  const themeClass = theme === ThemeEnum.DARK ? styles.dark : styles.light;
+  const classNames = [
+    styles.input,
+    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
+    theme === ThemeEnum.DARK ? styles.dark : styles.light,
+    variant === InputVariantEnum.AUTH
+      ? styles.authInput
+      : variant === InputVariantEnum.SEARCH
+      ? styles.searchInput
+      : variant === InputVariantEnum.MESSAGE
+      ? styles.messageInput
+      : styles.defaultInput,
+  ];
 
-  const inputClasses = [styles.input, directionClass, themeClass];
-  if (isInvalid) inputClasses.push(styles.isInvalid);
-  if (isValid) inputClasses.push(styles.isValid);
+  if (isInvalid) classNames.push(styles.isInvalid);
+  if (isValid) classNames.push(styles.isValid);
 
   return (
     <input
+      className={classNames.join(" ")}
       id={id}
       name={name}
-      type={type}
-      className={inputClasses.join(" ")}
-      placeholder={placeholder ? t(placeholder) : ""}
-      value={value}
-      onChange={onChange}
-      required={required}
       onBlur={onBlur}
+      onChange={onChange}
+      onFocus={onFocus}
+      onKeyDown={onKeyDown}
+      placeholder={placeholder ? t(placeholder) : ""}
+      ref={ref}
+      required={required}
+      type={type}
+      value={value}
     />
   );
-};
+});
+
+Input.displayName = "Input";
 
 export default Input;

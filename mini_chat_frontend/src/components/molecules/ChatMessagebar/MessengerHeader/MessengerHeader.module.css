@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: var(--quiqflow-spacing-lg, 1.5rem);
   border-bottom: 1px solid var(--quiqflow-color-light-grey);
 }
 
@@ -14,7 +14,7 @@
 .activeUser {
   display: grid;
   grid-template-rows: auto auto;
-  row-gap: 4px;
+  row-gap: var(--quiqflow-spacing-xs, 4px);
 }
 
 .userStatus {
@@ -24,10 +24,10 @@
 }
 
 .statusIndicator {
-  width: 10px;
-  height: 10px;
+  width: var(--quiqflow-size-indicator, 10px);
+  height: var(--quiqflow-size-indicator, 10px);
   border-radius: 50%;
-  margin-right: 0.5rem;
+  margin-inline-end: 0.5rem;
 }
 
 /* status color modifiers */
@@ -37,12 +37,6 @@
 .Offline {
   background-color: var(--quiqflow-color-offline);
 }
-/* .idle {
-  background-color: var(--quiqflow-color-idle);
-} */
-/* .dnd {
-  background-color: var(--quiqflow-color-dnd);
-} */
 
 .statusText {
   color: var(--quiqflow-color-modal-overlay);

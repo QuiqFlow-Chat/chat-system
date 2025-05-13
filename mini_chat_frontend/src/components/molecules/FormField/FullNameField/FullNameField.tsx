@@ -1,40 +1,33 @@
-// FullNameField.tsx
 import React from "react";
-
-import * as Yup from "yup";
 import { useField } from "formik";
+import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
 
 import Label from "../../../atoms/Label/Label";
-import Input from "../../../atoms/Input/Input";
+import Input, { InputVariantEnum } from "../../../atoms/Input/Input";
 
-import styles from "../../FormField/FormField.module.css";
+import styles from "../FormFieldStyles.module.css";
 
-// Props for the full name input
 interface FullNameFieldProps {
   name: string;
 }
 
-// Updated full name validation
 export const fullNameValidation = Yup.string()
-  .required("Full name is required")
-  .test(
-    "has-two-words",
-    "Please enter at least first and last name",
-    (value) => {
-      if (!value) return false;
-      const parts = value.trim().split(/\s+/);
-      return parts.length >= 2;
-    }
-  )
-  .test("word-lengths", "Each name must be 3–15 characters", (value) => {
+  .required("validation.fullName.required")
+  .test("has-two-words", "validation.fullName.twoWords", (value) => {
+    if (!value) return false;
+    const parts = value.trim().split(/\s+/);
+    return parts.length >= 2;
+  })
+  .test("word-lengths", "validation.fullName.wordLengths", (value) => {
     if (!value) return false;
     const parts = value.trim().split(/\s+/);
     return parts.every((word) => word.length >= 3 && word.length <= 15);
   });
 
 const FullNameField: React.FC<FullNameFieldProps> = ({ name }) => {
+  const { t } = useTranslation();
   const [field, meta] = useField(name);
-
   const showError = meta.touched && meta.error;
 
   return (
@@ -42,21 +35,23 @@ const FullNameField: React.FC<FullNameFieldProps> = ({ name }) => {
       className={`${styles.formGroup} ${showError ? styles.error : ""}`}
       data-fullname-field
     >
-      <Label htmlFor={name}>Full Name</Label>
+      <Label htmlFor={name}>{t("form.fullNameLabel")}</Label>
 
       <Input
-        className={styles.authInput}
         id={name}
         isInvalid={!!showError}
         name={field.name}
         onBlur={field.onBlur}
         onChange={field.onChange}
-        placeholder="Enter your full name"
+        placeholder={t("form.fullNamePlaceholder")}
         type="text"
         value={field.value}
+        variant={InputVariantEnum.AUTH}
       />
 
-      {showError && <p className={styles.invalidFeedback}>{meta.error}</p>}
+      {showError && (
+        <p className={styles.invalidFeedback}>{t(meta.error as string)}</p>
+      )}
     </div>
   );
 };

@@ -1,21 +1,33 @@
-// src/components/molecules/ChatSidebar/Search/Search.tsx
-
+// mini_chat_frontend/src/components/molecules/Search/Search.tsx
 import React from "react";
 import styles from "./Search.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
+import { DirectionEnum } from "@/components/atoms/Button/Button";
+import Input, { InputVariantEnum } from "@/components/atoms/Input/Input";
+
 
 interface SearchProps {
-  query: string;
-  setQuery: (value: string) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: () => void;
+  query: string;
+  setQuery: (value: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ query, setQuery, onChange, onFocus }) => {
+const Search: React.FC<SearchProps> = ({
+  onChange,
+  onFocus,
+  query,
+  setQuery,
+}) => {
+  const { t, i18n } = useTranslation();
+  const direction =
+    i18n.dir() === "rtl" ? DirectionEnum.RTL : DirectionEnum.LTR;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    onChange?.(e); 
+    onChange?.(e);
   };
 
   return (
@@ -24,13 +36,13 @@ const Search: React.FC<SearchProps> = ({ query, setQuery, onChange, onFocus }) =
         <span className={styles.searchIcon}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </span>
-        <input
-          type="text"
-          className={styles.searchInput}
-          placeholder="Search by username or email..."
-          value={query}
+        <Input
+          direction={direction}
           onChange={handleChange}
           onFocus={onFocus}
+          placeholder={t("chatSidebar.searchPlaceholder")}
+          value={query}
+          variant={InputVariantEnum.SEARCH}
         />
       </div>
     </div>

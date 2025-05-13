@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./MessageText.module.css";
-import { useTranslation } from "react-i18next";
 
 export enum ThemeEnum {
   LIGHT = "light",
@@ -12,9 +11,14 @@ export enum DirectionEnum {
   RTL = "rtl",
 }
 
+export enum MessageVariantEnum {
+  INCOMING = "incoming",
+  OUTGOING = "outgoing"
+}
+
 interface MessageTextProps {
   text: string;
-  variant?: "default" | "highlight";
+  variant?: MessageVariantEnum;
   theme?: ThemeEnum;
   direction?: DirectionEnum;
 }
@@ -25,26 +29,24 @@ const MessageText: React.FC<MessageTextProps> = ({
   theme = ThemeEnum.LIGHT,
   direction = DirectionEnum.LTR,
 }) => {
-  const { t } = useTranslation();
 
   const formattedText = text.split("\n").map((line, index) => (
     <React.Fragment key={index}>
-      {t(line)}
+      {line}
       <br />
     </React.Fragment>
   ));
-
-  const themeClass = theme === ThemeEnum.DARK ? styles.dark : styles.light;
-  const directionClass =
-    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr;
-  const variantClass = styles[variant];
-
+  
+  const classes = [
+    styles.messageText,
+    theme === ThemeEnum.DARK ? styles.dark : styles.light,
+    direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
+    variant === MessageVariantEnum.OUTGOING ? styles.outgoingText : styles.incomingText,
+  ].join(" ");
+    
+  
   return (
-    <div
-      className={`${styles.messageText} ${themeClass} ${directionClass} ${variantClass}`}
-    >
-      {formattedText}
-    </div>
+    <div className={classes}>{formattedText}</div>
   );
 };
 

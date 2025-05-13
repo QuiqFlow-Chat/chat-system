@@ -12,38 +12,35 @@ export enum Direction {
   RTL = "rtl",
 }
 
-export enum AvatarVariantEnum {
-  PRIMARY = "primary",
-  SECONDARY = "secondary",
+export enum AvatarVariant {
+  SMALL = "small",
+  LARGE = "large",
 }
 
 export interface AvatarProps {
   initial?: string;
-  variant?: AvatarVariantEnum;
+  variant?: AvatarVariant;
   theme?: ThemeEnum;
   direction?: Direction;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
   initial = "",
-  variant = AvatarVariantEnum.PRIMARY,
+  variant = AvatarVariant.LARGE,
   theme = ThemeEnum.LIGHT,
   direction = Direction.LTR,
 }) => {
   const { t } = useTranslation();
 
-  const getDirectionClass = () =>
-    direction === Direction.RTL ? styles.rtl : styles.ltr;
-
-  const getThemeClass = () =>
-    theme === ThemeEnum.DARK ? styles.avatarDark : styles.avatarLight;
+  const classes = [
+    styles.avatar,
+    styles[variant],
+    direction === Direction.RTL ? styles.rtl : styles.ltr,
+    theme === ThemeEnum.DARK ? styles.avatarDark : styles.avatarLight,
+  ];
 
   return (
-    <div
-      className={`${styles.avatar} ${
-        styles[variant]
-      } ${getDirectionClass()} ${getThemeClass()}`}
-    >
+    <div className={classes.join(" ")}>
       {(initial || t("unknown")).toUpperCase()}
     </div>
   );

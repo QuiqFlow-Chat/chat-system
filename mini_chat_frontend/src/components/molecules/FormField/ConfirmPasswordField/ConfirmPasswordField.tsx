@@ -1,12 +1,12 @@
 import React from "react";
 import { useField, useFormikContext } from "formik";
-
+import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
 import Label from "../../../atoms/Label/Label";
-import Input from "../../../atoms/Input/Input";
+import Input, { InputVariantEnum } from "../../../atoms/Input/Input";
 
-import styles from "../../FormField/FormField.module.css";
+import styles from "../FormFieldStyles.module.css";
 
 interface AuthFormValues {
   password: string;
@@ -15,20 +15,16 @@ interface AuthFormValues {
 
 export const confirmPasswordValidation = (refField: string) =>
   Yup.string()
-    .oneOf([Yup.ref(refField)], "Passwords do not match")
-    .required("Please confirm your password");
+    .oneOf([Yup.ref(refField)], "validation.confirmPassword.mismatch")
+    .required("validation.confirmPassword.required");
 
 interface Props {
   name: keyof AuthFormValues;
-  label?: string;
   passwordFieldName: keyof AuthFormValues;
 }
 
-const ConfirmPasswordField: React.FC<Props> = ({
-  name,
-  label = "Confirm Password",
-  passwordFieldName,
-}) => {
+const ConfirmPasswordField: React.FC<Props> = ({ name, passwordFieldName }) => {
+  const { t } = useTranslation();
   const [field] = useField(name);
   const { values, touched } = useFormikContext<AuthFormValues>();
 
@@ -42,30 +38,30 @@ const ConfirmPasswordField: React.FC<Props> = ({
 
   return (
     <div className={styles.formGroup} data-confirm-password-field>
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name}>{t("form.confirmPasswordLabel")}</Label>
 
       <div className={styles.passwordWrapper}>
         <Input
-          className={styles.authInput}
           id={name}
           isInvalid={showError}
           name={field.name}
           onBlur={field.onBlur}
           onChange={field.onChange}
-          placeholder="Re-enter your password"
+          placeholder={t("form.confirmPasswordPlaceholder")}
           required
           type="password"
           value={field.value}
+          variant={InputVariantEnum.AUTH}
         />
 
         {showError && (
-          <p className={styles.invalidFeedback}>Passwords do not match</p>
+          <p className={styles.invalidFeedback}>
+            {t("form.confirmPasswordMismatch")}
+          </p>
         )}
       </div>
 
-      <p className={styles.passwordHint}>
-        Use 8 or more characters with a mix of letters, numbers & symbols
-      </p>
+      <p className={styles.passwordHint}>{t("form.passwordHint")}</p>
     </div>
   );
 };

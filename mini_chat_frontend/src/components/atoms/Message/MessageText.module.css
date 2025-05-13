@@ -1,18 +1,22 @@
 .messageText {
   border-radius: var(--quiqflow-radius-chat-bubble);
   font-weight: var(--quiqflow-font-weight-normal);
+  color: var(--quiqflow-color-black);
   padding: 16px;
   word-wrap: break-word;
   animation: messagePopIn 0.3s ease-out;
   max-width: 500px;
+  margin-top: 4px
 }
 
-.default {
-  background-color: var(--quiqflow-color-white);
+.incomingText {
+  background-color: var(--quiqflow-color-primary-light);
+  align-self: flex-start;
 }
 
-.highlight {
-  background-color: var(--quiqflow-color-highlight);
+.outgoingText {
+  background-color: var(--quiqflow-color-black-lightest);
+  align-self: flex-end;
 }
 
 .dark {

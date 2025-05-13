@@ -2,5 +2,56 @@
     "no_status": "No status",
     "unknown": "Unknown",
     "greeting": "Hello, {{name}}",
-    "loading": "Loading..."
+    "loading": "Loading...",
+
+    "form": {
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "confirmPasswordLabel": "Confirm Password",
+        "confirmPasswordPlaceholder": "Re-enter your password",
+        "confirmPasswordMismatch": "Passwords do not match",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Enter your email",
+        "fullNameLabel": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "passwordHint": "Use 8 or more characters with a mix of letters, numbers & symbols",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password"
+      },
+
+      "validation": {
+        "password": {
+          "min": "Password must be at least 8 characters",
+          "required": "Password is required",
+          "pattern": "Use 8 or more characters with a mix of letters, numbers & symbols"
+        },
+
+        "confirmPassword": {
+          "mismatch": "Passwords do not match",
+          "required": "Please confirm your password"
+        },
+
+        "email": {
+          "required": "Email is required",
+          "invalid": "Invalid email",
+          "format": "Invalid email format"
+        },
+
+        "fullName": {
+          "required": "Full name is required",
+          "twoWords": "Please enter at least first and last name",
+          "wordLengths": "Each name must be 3–15 characters"
+        }
+      },
+
+      "chatSidebar": {
+        "searchPlaceholder": "Search by username or email...",
+        "timeUnit": "hrs"
+      },
+
+      "chat": {
+        "loadingOlderMessages": "Loading older messages..."
+      }
+
 }
+

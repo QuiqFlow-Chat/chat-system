@@ -1,24 +1,28 @@
-.senderData {
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-
-.small {
-  width: 35px;
-  height: 35px;
-}
-
 .avatarWrapper {
-  width: 35px;
-  height: 35px;
   border-radius: 50%;
+  height: 35px;
   overflow: hidden;
+  width: 35px;
 }
 
 .avatarWrapper img {
-  width: 100%;
   height: 100%;
   object-fit: cover;
+  width: 100%;
+}
+
+.messageTime {
+  color: var(--quiqflow-color-modal-overlay);
+  font-size: var(--quiqflow-font-size-xs); 
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.senderData {
+  display: flex;
+  margin-bottom: 0.5rem;
 }
 
 .userDetails {
@@ -26,15 +30,6 @@
   display: flex;
   gap: 1rem;
   margin-left: 0.5rem;
-}
-
-.messageTime {
-  color: var(--quiqflow-color-modal-overlay);
-  font-size: 0.75rem;
-}
-
-.reverse {
-  flex-direction: row-reverse;
 }
 
 .userDetailsReverse {

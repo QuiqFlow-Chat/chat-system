@@ -50,16 +50,16 @@ const Button: React.FC<ButtonProps> = ({
 
   const classNames = [
     styles.button,
-    styles[`button${variant.charAt(0).toUpperCase() + variant.slice(1)}`],
+    styles[variant],
     styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`],
     theme === ThemeEnum.DARK ? styles.buttonDark : styles.buttonLight,
     direction === DirectionEnum.RTL ? styles.rtl : styles.ltr,
-  ].join(" ");
+  ];
 
   return (
     <button
       type={type}
-      className={classNames}
+      className={classNames.join(" ")}
       disabled={isDisabled}
       onClick={onClick}
     >

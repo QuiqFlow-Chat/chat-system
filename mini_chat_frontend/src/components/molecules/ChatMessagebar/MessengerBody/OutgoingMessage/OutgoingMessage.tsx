@@ -1,8 +1,6 @@
-// src/components/molecules/ChatMessagebar/MessengerBody/OutgoingMessage/OutgoingMessage.tsx
-
 import React from "react";
 import styles from "./OutgoingMessage.module.css";
-import MessageText from "../../../../atoms/Message/MessageText";
+import MessageText, { MessageVariantEnum } from "../../../../atoms/Message/MessageText";
 import MessageContact from "../SenderData/SenderData";
 
 interface OutgoingMessageProps {
@@ -26,12 +24,12 @@ const OutgoingMessage: React.FC<OutgoingMessageProps> = ({
             name={name}
             time={time}
             imgSrc={imgSrc}
-            reverseOrder={true}
+            reverseOrder
           />
         </div>
         <MessageText
           text={message}
-          backgroundColor="var(--quiqflow-color-black-lightest)"
+          variant={MessageVariantEnum.OUTGOING}
         />
       </div>
     </div>

@@ -1,19 +1,37 @@
-import React, { useState, useRef} from "react";
+// src/components/molecules/MessengerFooter/MessengerFooter.tsx
+import React, { useState, useRef } from "react";
 import styles from "./MessengerFooter.module.css";
-import Button from "../../../atoms/Button/Button";
+import Button, {
+  ButtonSizeEnum,
+  ButtonVariantEnum,
+  ThemeEnum,
+  DirectionEnum,
+} from "../../../atoms/Button/Button";
+import Input, {
+  InputVariantEnum,
+} from "../../../atoms/Input/Input";
+import { useTranslation } from "react-i18next";
 
 interface MessengerFooterProps {
   onSend: (message: string) => void;
-  onTyping: () => void; // Make sure this prop is being used
+  onTyping: () => void;
 }
 
-const MessengerFooter: React.FC<MessengerFooterProps> = ({ onSend, onTyping }) => {
+const MessengerFooter: React.FC<MessengerFooterProps> = ({
+  onSend,
+  onTyping,
+}) => {
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t, i18n } = useTranslation();
+
+  const direction =
+    i18n.dir() === "rtl" ? DirectionEnum.RTL : DirectionEnum.LTR;
 
   const handleSend = () => {
-    if (message.trim()) {
-      onSend(message.trim());
+    const trimmed = message.trim();
+    if (trimmed) {
+      onSend(trimmed);
       setMessage("");
     }
   };
@@ -22,36 +40,36 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({ onSend, onTyping }) =
     if (e.key === "Enter") {
       handleSend();
     } else {
-      // Call onTyping when user is typing
       onTyping();
     }
   };
-  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
-    // Call onTyping when input changes
     onTyping();
   };
 
   return (
     <div className={styles.messengerFooter}>
       <div className={styles.inputGroup}>
-        <input
+        <Input
           ref={inputRef}
-          type="text"
-          className={styles.messageInput}
-          placeholder="Type a message..."
           value={message}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          direction={direction}
+          theme={ThemeEnum.LIGHT}
+          variant={InputVariantEnum.MESSAGE}
+          placeholder="typeMessage"
         />
         <Button
-          className={styles.sendButton}
           onClick={handleSend}
-          disabled={!message.trim()}
+          isDisabled={!message.trim()}
+          variant={ButtonVariantEnum.PRIMARY}
+          size={ButtonSizeEnum.MD}
+          direction={direction}
         >
-          Send
+          {t("send")}
         </Button>
       </div>
     </div>

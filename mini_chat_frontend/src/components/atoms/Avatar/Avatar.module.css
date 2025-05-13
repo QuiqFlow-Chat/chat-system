@@ -8,16 +8,21 @@
   border-radius: 50%;
 }
 
-.primary {
-  background-color: var(--quiqflow-color-primary);
+.large{
+  width: 45px;
+  height: 45px;
+  font-size: var(--quiqflow-font-size-lg);
 }
 
-.secondary {
-  background-color: var(--quiqflow-color-secondary);
+.small {
+  width: 35px;
+  height: 35px;
+  font-size: var(--quiqflow-font-size-sm);
 }
+
 
 .avatarLight {
-  background-color: var(--quiqflow-color-light-bg);
+  background-color: var(--quiqflow-color-primary);
 }
 
 .avatarDark {
@@ -30,18 +35,4 @@
 
 .rtl {
   direction: rtl;
-}
-
-@media (min-width: 768px) {
-  .avatar {
-    width: 45px;
-    height: 45px;
-  }
-}
-
-@media (max-width: 768px) {
-  .avatar {
-    width: 35px;
-    height: 36px;
-  }
 }

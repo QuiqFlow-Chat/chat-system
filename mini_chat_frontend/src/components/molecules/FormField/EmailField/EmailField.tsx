@@ -1,50 +1,53 @@
-// EmailField.tsx
 import React from "react";
-
-import * as Yup from "yup";
 import { useField } from "formik";
+import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
 
 import Label from "../../../atoms/Label/Label";
-import Input from "../../../atoms/Input/Input";
+import Input, { InputVariantEnum } from "../../../atoms/Input/Input";
 
-import styles from "../../FormField/FormField.module.css";
+import styles from "../FormFieldStyles.module.css";
+import { EMAIL_REGEX } from "@/constants/regex";
 
-// Props for the email field component
 interface EmailFieldProps {
-  name: string; // Formik field name
-  id?: string; // Optional input ID
-  placeholder?: string; // Optional placeholder
-  className?: string;
+  name: string;
+  id?: string;
+  placeholder?: string;
 }
 
 export const emailValidation = Yup.string()
-  .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format")
-  .email("Invalid email")
-  .required("Email is required");
+  .matches(EMAIL_REGEX , "validation.email.format")
+  .email("validation.email.invalid")
+  .required("validation.email.required");
 
 const EmailField: React.FC<EmailFieldProps> = ({
   name,
   id = "email",
-  placeholder = "Enter your email",
+  placeholder,
 }) => {
+  const { t } = useTranslation();
   const [field, meta] = useField(name);
-
   const isInvalid = meta.touched && !!meta.error;
 
   return (
     <div className={styles.formGroup} data-email-field>
-      <Label htmlFor={id}>Email</Label>
+      <Label htmlFor={id}>{t("form.emailLabel")}</Label>
 
       <Input
-        type="email"
         id={id}
-        placeholder={placeholder}
-        value={field.value}
-        onChange={field.onChange}
         isInvalid={isInvalid}
-        className={styles.authInput}
+        name={field.name}
+        onBlur={field.onBlur}
+        onChange={field.onChange}
+        placeholder={placeholder ?? t("form.emailPlaceholder")}
+        type="email"
+        value={field.value}
+        variant={InputVariantEnum.AUTH}
       />
-      {isInvalid && <p className={styles.invalidFeedback}>{meta.error}</p>}
+
+      {isInvalid && (
+        <p className={styles.invalidFeedback}>{t(meta.error as string)}</p>
+      )}
     </div>
   );
 };

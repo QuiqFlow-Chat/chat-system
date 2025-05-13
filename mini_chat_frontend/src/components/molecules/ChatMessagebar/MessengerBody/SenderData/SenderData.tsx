@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./SenderData.module.css";
-import Avatar from "../../../../atoms/Avatar/Avatar";
+import Avatar, { AvatarVariant } from "../../../../atoms/Avatar/Avatar";
 import UserName from "../../../../atoms/UserName/UserName";
 
 interface SenderDataProps {
@@ -17,30 +17,37 @@ const SenderData: React.FC<SenderDataProps> = ({
   reverseOrder = false,
 }) => {
   const avatarContent = imgSrc ? (
-    <div className={`${styles.avatarWrapper} ${styles.small}`}>
+    <div className={styles.avatarWrapper}>
       <img src={imgSrc} alt={name} />
     </div>
   ) : (
-      <Avatar initial={name[0]} className={styles.small} />
+    <Avatar 
+      initial={name[0]} 
+      variant={AvatarVariant.SMALL} 
+    />
   );
 
   return (
     <div className={`${styles.senderData} ${reverseOrder ? styles.reverse : ""}`}>
-    {avatarContent}
-    <div className={`${styles.userDetails} ${reverseOrder ? styles.userDetailsReverse : ""}`}>
-      {reverseOrder ? (
-        <>
-          <div className={styles.messageTime}>{time}</div>
-          <UserName name={name} />
-        </>
-      ) : (
-        <>
-          <UserName name={name} />
-          <div className={styles.messageTime}>{time}</div>
-        </>
-      )}
+      {avatarContent}
+      <div
+        className={`${styles.userDetails} ${
+          reverseOrder ? styles.userDetailsReverse : ""
+        }`}
+      >
+        {reverseOrder ? (
+          <>
+            <div className={styles.messageTime}>{time}</div>
+            <UserName name={name} />
+          </>
+        ) : (
+          <>
+            <UserName name={name} />
+            <div className={styles.messageTime}>{time}</div>
+          </>
+        )}
+      </div>
     </div>
-  </div>  
   );
 };
 
