@@ -1,19 +1,18 @@
-// src/services/authService.ts
-import { apiPost } from '../utils/api/apiUtils';
-import  { tokenStorage, userStorage } from '../utils/storage';
-import { UserLoginParameters,AuthResponse, UserCreateParameters } from '../shared/dtosInterfaces/userDtos';
+import { apiPost } from '@/services/api/requests';
+import  { tokenStorage, userStorage } from '../../utils/localStorageUtil';
+import { UserLoginParameters,AuthResponse, UserCreateParameters } from '../../shared/dtosInterfaces/userDtos';
 
 // LogIn
 export const login = async (credentials: UserLoginParameters) => {
   const response = await apiPost<AuthResponse, UserLoginParameters>('/login', credentials);
-  // localStorage
   userStorage.save(response.data.user);
-  console.log("for storage",response.data.user)
+  console.log('for storage',response.data.user)
   tokenStorage.save(response.data.token);
 
   return response.data.user;
 };
 
+// signUp
 export const signUp = async (userData: UserCreateParameters) => {
   const response = await apiPost<AuthResponse, UserCreateParameters>('/register', userData);
 

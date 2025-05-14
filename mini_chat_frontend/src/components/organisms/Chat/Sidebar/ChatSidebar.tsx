@@ -1,70 +1,49 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import ContactItem from "../../../molecules/ChatSidebar/ContactItem/ContactItem";
 import Search from "../../../molecules/ChatSidebar/Search/Search";
 import styles from "./ChatSidebar.module.css";
-import { User } from "../Messagebar/Messagebar";
-import { useSidebarPagination } from "../../../../hooks/useSidebarPagination";
-import { getAllUsers } from "../../../../services/userService";
 
-interface SidebarContact {
-  user: {
-    id: string;
-    email: string;
-    fullName: string;
-  };
-  conversationId: string;
-  lastMessageTime: string;
-}
-
-interface ChatSidebarProps {
-  contacts: SidebarContact[];
-  onSelectConversation: (conversationId: string, user: User) => void;
-}
+import { useSidebarPagination } from "@/hooks/useSidebarPagination";
+import { ChatSidebarProps, SidebarContact } from "@/types/chatTypes";
+import { fetchAllUsers } from "@/services/chat/fetchAllUsersService";
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
   contacts,
   onSelectConversation,
 }) => {
-  const [query, setQuery] = useState("");
+  const { t } = useTranslation();
+
   const [allUsers, setAllUsers] = useState<SidebarContact[] | null>(null);
-  const [searchActive, setSearchActive] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const fetchAllUsers = async () => {
-    setLoading(true);
-    try {
-      const users = await getAllUsers();
-
-      const transformed = users.map((user) => ({
-        user: {
-          id: user.id,
-          email: user.email,
-          fullName: user.fullName,
-        },
-        conversationId: "",
-        lastMessageTime: "",
-      }));
-
-      setAllUsers(transformed);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      setAllUsers([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const delay = setTimeout(() => {
-      if (searchActive && !allUsers) {
-        fetchAllUsers();
+      if (isSearchActive && !allUsers) {
+        loadUsers();
       }
     }, 500);
-    console.log("allUsers", allUsers);
-    return () => clearTimeout(delay);
-  }, [searchActive, allUsers]);
 
-  const baseContacts = searchActive ? allUsers ?? [] : contacts;
+    return () => clearTimeout(delay);
+  }, [isSearchActive, allUsers]);
+
+  const loadUsers = async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchAllUsers();
+      setAllUsers(data);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+      setAllUsers([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const baseContacts = isSearchActive ? allUsers ?? [] : contacts;
 
   const { visibleItems: filteredContacts, observerRef } = useSidebarPagination(
     baseContacts,
@@ -81,15 +60,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
           query={query}
           setQuery={(value) => {
             setQuery(value);
-            setSearchActive(value.trim() !== "");
+            setIsSearchActive(value.trim() !== "");
           }}
-          onFocus={() => {
-            fetchAllUsers();
-          }}
+          onFocus={loadUsers}
         />
         <div className={styles.contactsList}>
-          {loading ? (
-            <div>Loading...</div>
+          {isLoading ? (
+            <div>{t("loading")}</div>
           ) : filteredContacts.length > 0 ? (
             <>
               {filteredContacts.map((contact, index) => (
@@ -105,11 +82,12 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
                   }
                 />
               ))}
-
-              <div ref={observerRef} style={{ height: "1px" }} />
+              <div ref={observerRef} className={styles.observerSpacer} />
             </>
           ) : (
-            <div className={styles.noResults}>No results found...</div>
+            <div className={styles.noResults}>
+              {t("chatSidebar.noResultsFound")}
+            </div>
           )}
         </div>
       </div>

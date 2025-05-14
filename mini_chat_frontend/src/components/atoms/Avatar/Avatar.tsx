@@ -46,7 +46,7 @@ const Avatar: React.FC<AvatarProps> = ({
 
   return (
     <div className={avatarClassName}>
-      {(initial || t("chatSidebar.noUserName")).toUpperCase()}
+      {(initial || t("chat.noUserName")).toUpperCase()}
     </div>
   );
 };

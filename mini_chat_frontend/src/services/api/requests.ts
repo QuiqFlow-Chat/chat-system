@@ -1,6 +1,7 @@
 import axios from "axios";
 import axiosInstance from "./axios";
 
+
 export const apiGet = async <ResponseType>(url: string, config = {}) => {
   try {
     const response = await axiosInstance.get<ResponseType>(url, config);

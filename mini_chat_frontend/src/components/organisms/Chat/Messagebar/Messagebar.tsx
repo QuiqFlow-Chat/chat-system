@@ -1,25 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import styles from "./Messagebar.module.css";
-import MessengerHeader from "../../../molecules/ChatMessagebar/MessengerHeader/MessengerHeader";
-import MessengerFooter from "../../../molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
-import MessagesContainer from "../../../molecules/ChatMessagebar/MessengerBody/MessagesContainer";
-import { useSocket } from "../../../../contexts/SocketContext";
-import { MessageCreateParameters } from "../../../../shared/dtosInterfaces/messageDtos";
-import { debounce } from "lodash";
 
-// Shared interfaces for consistency
-export interface User {
-  id: string;
-  email: string;
-  fullName: string;
-}
-
-export interface Message {
-  type: "incoming" | "outgoing";
-  name: string;
-  time: string;
-  message: string;
-}
+import MessengerHeader from "@/components/molecules/ChatMessagebar/MessengerHeader/MessengerHeader";
+import MessagesContainer from "@/components/molecules/ChatMessagebar/MessengerBody/MessagesContainer";
+import MessengerFooter from "@/components/molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
+import { MessageCreateParameters } from "@/shared/dtosInterfaces/messageDtos";
+import { useSocket } from "@/contexts/SocketContext";
+import { User } from "@/types/chatTypes";
+import {setupMessageSocket,createEmitTypingEvent,emitSendMessage,} from "@/services/socket/messageSocketHandlers";
 
 interface MessagebarProps {
   currentUser: User;
@@ -37,67 +25,42 @@ const Messagebar: React.FC<MessagebarProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Reset typing indicator after delay
-  const resetTypingIndicator = () => {
+  const handleResetTypingIndicator = () => {
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
+
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
     }, 3000);
   };
 
   useEffect(() => {
-    if (!socket) {
-      console.error("Socket not connected");
-      return;
-    }
+    if (!socket) return;
 
-    if (!currentUser.id || !otherUser.id) {
-      console.error("Missing user IDs", { currentUser, otherUser });
-      return;
-    }
-
-    if (!conversationId) {
-      console.error("Missing conversationId");
-      // return;
-    }
-
-    // Ensure user is online and joined to conversation
-    socket.emit("userOnline");
-    socket.emit("joinConversation", { conversationId });
-
-    console.log(`Joined conversation: ${conversationId}`);
-
-    // Listen for typing events
-    socket.on("isTyping", (user) => {
-      console.log("Received isTyping event:", user);
-
-      // Only show typing indicator if it's from the correct user and conversation
-      if (user.id === otherUser.id && user.conversationId === conversationId) {
-        console.log(
-          `${otherUser.fullName} is typing in conversation ${conversationId}`
-        );
-        setIsTyping(true);
-        resetTypingIndicator();
+    const cleanup = setupMessageSocket(
+      socket,
+      currentUser.id,
+      otherUser.id,
+      conversationId,
+      (user) => {
+        console.log(user)
+        if (
+          user.id === otherUser.id &&
+          user.conversationId === conversationId
+        ) {
+          setIsTyping(true);
+          handleResetTypingIndicator();
+        }
       }
-    });
-
+    );
     return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-      if (conversationId) {
-        socket.emit("leaveConversation", { conversationId });
-      }
-      socket.emit("userOffline");
-      socket.off("isTyping");
-      console.log("Cleaned up typing event listeners");
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      cleanup?.();
     };
   }, [socket, currentUser.id, otherUser.id, conversationId]);
 
   const handleSend = (newMessage: string) => {
-    console.log("newMessage", newMessage);
     if (!newMessage.trim() || !otherUser.id) return;
 
     const messageData: MessageCreateParameters = {
@@ -106,39 +69,16 @@ const Messagebar: React.FC<MessagebarProps> = ({
       receiverId: otherUser.id,
     };
 
-    socket.emit("sendMessage", messageData);
+    emitSendMessage(socket, messageData);
   };
 
-  // Create a debounced version of the typing emitter
-  const emitTypingEvent = useCallback(
-    debounce(
-      () => {
-        if (!conversationId || !socket?.connected) {
-          console.error(
-            "Cannot emit typing: no conversationId or socket not connected"
-          );
-          return;
-        }
-
-        try {
-          socket.emit("isTyping", { conversationId });
-          console.log("Emitted typing event for conversation:", conversationId);
-        } catch (error) {
-          console.error("Error emitting typing event:", error);
-        }
-      },
-      1000,
-      { leading: true, trailing: false, maxWait: 2000 }
-    ),
+  const emitTypingEvent = useMemo(
+    () => createEmitTypingEvent(socket, conversationId),
     [socket, conversationId]
   );
 
   const handleTyping = () => {
-    if (!conversationId || !socket?.connected) {
-      return;
-    }
-
-    // Simply call the debounced function
+    if (!conversationId || !socket?.connected) return;
     emitTypingEvent();
   };
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { tokenStorage } from '../storage';
+import { tokenStorage } from '../../utils/localStorageUtil';
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3777/api/miniChat",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
     },

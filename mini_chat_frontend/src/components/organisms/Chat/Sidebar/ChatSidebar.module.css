@@ -10,14 +10,9 @@
 }
 
 .contactsCard {
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); */
   background-color: var(--quiqflow-color-white);
   border-radius: 0.5rem;
 }
-
-/* .contactsBody {
-
-} */
 
 .contactsList {
   display: flex;
@@ -30,7 +25,7 @@
 
 .noResults {
   text-align: center;
-  color: #888;
+  color: var(--quiqflow-color-modal-overlay);
   padding: 1rem;
   font-style: italic;
   width: 300px;

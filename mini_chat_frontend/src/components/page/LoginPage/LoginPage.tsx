@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../../services/authService";
+import { login } from "../../../services/auth/authService";
 import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
 import styles from "./LoginPage.module.css";
 

@@ -4,6 +4,9 @@
   "greeting": "Hello, {{name}}",
   "loading": "Loading...",
 
+  "logout": "Logout",
+  "unauthorized": "Unauthorized access",
+
   "form": {
     "passwordLabel": "Password",
     "passwordPlaceholder": "Enter your password",
@@ -44,16 +47,18 @@
     }
   },
 
+  "chat": {
+    "noUserName": "U",
+    "loadingOlderMessages": "Loading older messages...",
+    "selectConversation": "Select a conversation to start chatting"
+  },
+
   "chatSidebar": {
     "searchPlaceholder": "Search by username or email...",
     "timeUnit": "hrs",
-    "noUserName": "U"
+    "noResultsFound": "No results found..."
   },
-
-  "chat": {
-    "loadingOlderMessages": "Loading older messages..."
-  },
-
+  
   "Register": {
     "loginForm": {
       "logIn": "Log In",

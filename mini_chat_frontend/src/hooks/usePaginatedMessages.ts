@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
-import { Message } from "../components/organisms/Chat/Messagebar/Messagebar";
 import { useSocket, MessageReceivePayload } from "../contexts/SocketContext";
-import { getConversationMessages } from "../services/messageService";
+import { getConversationMessages } from "../services/chat/messageService";
+import { Message } from "@/types/chatTypes";
 
 interface RawMessage {
   content: string;
