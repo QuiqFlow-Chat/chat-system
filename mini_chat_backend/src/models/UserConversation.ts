@@ -3,7 +3,6 @@ import User from '@/models/User';
 import Conversation from '@/models/Conversation';
 import { IUserConversationAttributes } from '@/types/dtosInterfaces/userConversationDtos';
 
-
 @Table({
   tableName: 'UserConversations',
   timestamps: true,

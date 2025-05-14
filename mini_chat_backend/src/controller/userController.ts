@@ -1,10 +1,11 @@
-import { IUserGetByParameter, IUserUpdateParameters } from '../types/dtosInterfaces/userDtos';
+import { IUserGetByParameter, IUserUpdateParameters } from '@/types/dtosInterfaces/userDtos';
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../services/userService';
-import { MESSAGES } from '../constants/messages';
-import { catchAsync } from '../decorators/try_catchDecorators';
-import { SuccessCode, sendSuccess } from '../utils/successCode';
-import { IPaginationParams } from '../types/dtosInterfaces/paginationDtos';
+import { UserService } from '@/services/userService';
+import { MESSAGES } from '@/constants/messages';
+import { catchAsync } from '@/decorators/try_catchDecorators';
+import { SuccessCode, sendSuccess } from '@/utils/successCode';
+import { IPaginationParams } from '@/types/dtosInterfaces/paginationDtos';
+import { AppError } from '@/middlewares/errorMiddlewares';
 
 export class UserController {
   private static _userControllerInstance: UserController;
@@ -45,7 +46,14 @@ export class UserController {
 
   @catchAsync()
   public async updateUser(req: Request, res: Response, _next: NextFunction) {
-    const parameters: IUserUpdateParameters = req.body;
+    const { fullNam, password } = req.body;
+    const user = req.user;
+    if (!user) throw AppError.unauthorized(MESSAGES.AUTH.TOKEN.MISSING);
+    const parameters: IUserUpdateParameters = {
+      id: user.id,
+      fullName: fullNam,
+      password: password,
+    };
     await this._userService.updateUser(parameters);
     sendSuccess(res, SuccessCode.ok(MESSAGES.USER.UPDATED));
   }

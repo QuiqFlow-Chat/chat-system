@@ -52,4 +52,9 @@ export interface ServerToClientEvents {
   error: (message: string) => void;
 }
 
-export type TypedSocket = Socket<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>;
+export type TypedSocket = Socket<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  Record<string, never>,
+  SocketData
+>;

@@ -8,11 +8,6 @@ export const userIdSchema = Joi.object({
 });
 
 export const userUpdateSchema = Joi.object({
-  id: Joi.string().uuid().required().messages({
-    'string.base': 'ID must be a string',
-    'string.empty': 'ID is required',
-    'string.guid': 'ID must be a valid UUID',
-  }),
   fullName: Joi.string().min(3).max(15).optional().allow('').messages({
     'string.base': 'Full name must be a string',
     'string.empty': 'Full name is required',

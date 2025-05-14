@@ -8,6 +8,7 @@ import {
 import { MESSAGES } from '@/constants/messages';
 import { catchAsync } from '@/decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '@/utils/successCode';
+import { AppError } from '@/middlewares/errorMiddlewares';
 
 export class MessageController {
   private static _messageControllerInstance: MessageController;
@@ -22,10 +23,17 @@ export class MessageController {
 
   @catchAsync()
   public async sendMessage(req: Request, res: Response, _next: NextFunction) {
-    const parameters: IMessageCreateParameters = req.body;
+    const { receiverId, conversationId, content } = req.body;
+    const sender = req.user;
+    if (!sender) throw AppError.unauthorized(MESSAGES.AUTH.TOKEN.MISSING);
+    const parameters: IMessageCreateParameters = {
+      senderId: sender.id,
+      receiverId: receiverId,
+      conversationId: conversationId,
+      content: content,
+    };
     const message = await this._messageService.sendMessage(parameters);
     sendSuccess(res, SuccessCode.created(MESSAGES.MESSAGE.CREATE.SUCCESS, message));
-    
   }
 
   @catchAsync()

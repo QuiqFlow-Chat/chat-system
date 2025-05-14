@@ -52,6 +52,7 @@ export const MESSAGES = {
     DELETE_FAILED: 'Failed to delete conversation',
     GET_ALL_FAILED: 'Failed to get all conversations',
     GET_BY_ID_FAILED: 'Failed to get conversation by ID',
+    CHECK_OR_CREATE_FAILED: 'Failed to check or create new conversation',
     GET_MESSAGES_FAILED: 'Failed to get conversation messages',
     GET_USERS_FAILED: 'Failed to get conversation users',
     GET_USER_CONVS_FAILED: 'Failed to get user conversations',
@@ -176,11 +177,11 @@ export const HTTP_STATUS_CODES = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500
+  INTERNAL_SERVER_ERROR: 500,
 };
 
 export const ERROR_CONSTANTS = {
-  STATUS: 'error'
+  STATUS: 'error',
 };
 
 export const DB_CONSTANTS = {
@@ -189,60 +190,61 @@ export const DB_CONSTANTS = {
     USERS: 'Users',
     CONVERSATIONS: 'Conversations',
     USER_CONVERSATIONS: 'UserConversations',
-    MESSAGES: 'Messages'
-  }
+    MESSAGES: 'Messages',
+  },
 };
 
 export const SUCCESS_STATUS_CODE = {
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,
-  NO_CONTENT: 204
+  NO_CONTENT: 204,
 };
 
 export const RESPONSE_STATUS = {
-  SUCCESS: 'success'
+  SUCCESS: 'success',
 };
 
 export const PAGINATION_CONSTANTS = {
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 10,
-  MIN_VALUE: 1
+  MIN_VALUE: 1,
 };
 
 export const ROUTES = {
-  BASE:{
-  API_PATH : '/api/miniChat'
+  BASE: {
+    API_PATH: '/api/miniChat',
   },
-  
+
   AUTH: {
     LOGIN: '/login',
-    REGISTER: '/register'
+    REGISTER: '/register',
   },
   USER: {
     ALL: '/getAllUsers',
     BY_ID: '/:id/getUserById',
     LAST_ACTIVITY: '/:id/getUserLastActivity',
     DELETE: '/deleteUser',
-    UPDATE: '/updateUser'
+    UPDATE: '/updateUser',
   },
   CONVERSATION: {
     ALL: '/getAllConversations',
     BY_ID: '/:id/getConversationById',
     USERS: '/:id/getConversationUsers',
-    USER_CONVERSATIONS: '/:id/getUserConversations',
-    MESSAGES: '/getConversationMessages',
-    DELETE: '/deleteConversationAsync'
+    USER_CONVERSATIONS: '/getUserConversations',
+    MESSAGES: '/:conversationId/getConversationMessages',
+    DELETE: '/deleteConversationAsync',
+    CHECK_OR_CREATE: '/:receiverId/checkOrCreateNewConversation',
   },
   MESSAGE: {
     SEND: '/sendMessage',
     DELETE: '/deleteMessage',
     UPDATE_CONTENT: '/updateMessageContent',
-    UPDATE_STATUS: '/:id/updateMessageStatus'
+    UPDATE_STATUS: '/:id/updateMessageStatus',
   },
   USER_CONVERSATION: {
     ALL: '/getAllUserConversations',
     BY_ID: '/:id/getUserConversationsById',
-    DELETE: '/deleteUserConversations'
-  }
+    DELETE: '/deleteUserConversations',
+  },
 };

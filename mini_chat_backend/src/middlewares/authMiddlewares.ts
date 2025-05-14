@@ -12,10 +12,12 @@ declare global {
         id: string;
         email: string;
       };
-    }  }
+    }
+  }
 }
 
-export class AuthMiddleware {  @catchAsync()
+export class AuthMiddleware {
+  @catchAsync()
   static async authenticate(req: Request, _res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
     const hasValidAuthHeader = authHeader && authHeader.startsWith(AUTH_CONSTANTS.TOKEN_PREFIX);
@@ -37,7 +39,7 @@ export class AuthMiddleware {  @catchAsync()
       next();
     } catch (err) {
       const isJsonWebTokenError = err instanceof jwt.JsonWebTokenError;
-      
+
       if (isJsonWebTokenError) {
         throw AppError.unauthorized(AUTH_MESSAGES.INVALID_TOKEN);
       } else {

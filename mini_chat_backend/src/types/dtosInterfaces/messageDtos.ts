@@ -12,12 +12,6 @@ export interface IMessageAttributes {
 export interface IMessageCreateParameters {
   senderId: string;
   receiverId: string;
-  content: string;
-}
-
-export interface IMessageCreateFullParameters {
-  senderId: string;
-  receiverId: string;
   conversationId: string;
   content: string;
 }

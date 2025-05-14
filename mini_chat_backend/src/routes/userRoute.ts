@@ -11,7 +11,7 @@ export class UserRoute extends BaseRoute {
   private _userRepository: UserRepository;
   private _userService: UserService;
   private _userController: UserController;
-  
+
   constructor(app: Application) {
     super(app);
     this._userRepository = new UserRepository();
@@ -28,14 +28,14 @@ export class UserRoute extends BaseRoute {
       AuthMiddleware.authenticate,
       this._userController.getAllUsers.bind(this._userController)
     );
-    
+
     this.router.get(
       ROUTES.USER.BY_ID,
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'params'),
       this._userController.getUserById.bind(this._userController)
     );
-    
+
     this.router.get(
       ROUTES.USER.LAST_ACTIVITY,
       AuthMiddleware.authenticate,
@@ -43,7 +43,7 @@ export class UserRoute extends BaseRoute {
       this._userController.getUserLastActivity.bind(this._userController)
     );
   };
-  
+
   private initDeleteHttpMethod = () => {
     this.router.delete(
       ROUTES.USER.DELETE,
@@ -52,7 +52,7 @@ export class UserRoute extends BaseRoute {
       this._userController.deleteUser.bind(this._userController)
     );
   };
-  
+
   private initUpdateHttpMethod = () => {
     this.router.patch(
       ROUTES.USER.UPDATE,

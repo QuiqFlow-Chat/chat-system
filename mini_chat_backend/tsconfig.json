@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-     "baseUrl": "src",
+    "baseUrl": "src",
     "paths": {
       "@/*": ["*"]
     },
@@ -19,9 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    
-
+    "allowUnusedLabels": false
   },
   "include": ["src/**/*.ts"],
   "compileOnSave": true

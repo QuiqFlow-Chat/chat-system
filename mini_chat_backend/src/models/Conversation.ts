@@ -18,10 +18,7 @@ import { IConversationAttributes } from '@/types/dtosInterfaces/conversationDtos
   tableName: 'Conversations',
   timestamps: true,
 })
-class Conversation
-  extends Model<IConversationAttributes>
-  implements IConversationAttributes
-{
+class Conversation extends Model<IConversationAttributes> implements IConversationAttributes {
   @PrimaryKey
   @Column({
     type: DataType.UUID,

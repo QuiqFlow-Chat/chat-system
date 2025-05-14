@@ -29,9 +29,10 @@ export class AuthUtils {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 
-  public static generateToken(
-    { payload, expiresIn = this.TOKEN_EXPIRATION }: TokenOptions
-  ): string {
+  public static generateToken({
+    payload,
+    expiresIn = this.TOKEN_EXPIRATION,
+  }: TokenOptions): string {
     const now = Math.floor(Date.now() / 1000);
     const enhancedPayload = {
       ...payload,

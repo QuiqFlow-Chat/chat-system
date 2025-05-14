@@ -1,10 +1,10 @@
-import { ConversationService } from './../services/conversationService';
-import { IConversationMessagesGetByParameters } from '../types/dtosInterfaces/conversationDtos';
+import { ConversationService } from '@/services/conversationService';
 import { NextFunction, Request, Response } from 'express';
-import { IConversationGetByParameter } from '../types/dtosInterfaces/conversationDtos';
-import { MESSAGES } from '../constants/messages';
-import { catchAsync } from '../decorators/try_catchDecorators';
-import { SuccessCode, sendSuccess } from '../utils/successCode';
+import { IConversationGetByParameter } from '@/types/dtosInterfaces/conversationDtos';
+import { MESSAGES } from '@/constants/messages';
+import { catchAsync } from '@/decorators/try_catchDecorators';
+import { SuccessCode, sendSuccess } from '@/utils/successCode';
+import { AppError } from '@/middlewares/errorMiddlewares';
 
 export class ConversationController {
   private static _conversationControllerInstance: ConversationController;
@@ -16,7 +16,17 @@ export class ConversationController {
     }
     return this._conversationControllerInstance;
   }
-
+  @catchAsync()
+  public async checkOrCreateNewConversation(req: Request, res: Response, _next: NextFunction) {
+    const sender = req.user;
+    const { receiverId } = req.params;
+    if (!sender) throw AppError.unauthorized(MESSAGES.AUTH.TOKEN.MISSING);
+    const conversationId = await this._conversationService.checkOrCreateNewConversation(
+      sender.id,
+      receiverId
+    );
+    sendSuccess(res, SuccessCode.ok(MESSAGES.CONVERSATION.SUCCESS.FETCHED, conversationId));
+  }
   @catchAsync()
   public async deleteConversation(req: Request, res: Response, _next: NextFunction) {
     const parameter: IConversationGetByParameter = req.body;
@@ -39,12 +49,11 @@ export class ConversationController {
 
   @catchAsync()
   public async getConversationMessages(req: Request, res: Response, _next: NextFunction) {
-    const parameters: IConversationMessagesGetByParameters = req.body;
-    // Extract pagination parameters from query string
+    const { conversationId } = req.params;
     const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
 
-    const messages = await this._conversationService.getConversationMessages(parameters, {
+    const messages = await this._conversationService.getConversationMessages(conversationId, {
       page: page || 1,
       limit: limit || 10,
     });
@@ -63,12 +72,12 @@ export class ConversationController {
 
   @catchAsync()
   public async getUserConversations(req: Request, res: Response, __next: NextFunction) {
-    const { id } = req.params;
-    // Extract pagination parameters from query string
+    const user = req.user;
+    if (!user) throw AppError.unauthorized(MESSAGES.AUTH.TOKEN.MISSING);
     const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;
 
-    const userConversations = await this._conversationService.getUserConversations(id, {
+    const userConversations = await this._conversationService.getUserConversations(user.id, {
       page: page || 1,
       limit: limit || 10,
     });

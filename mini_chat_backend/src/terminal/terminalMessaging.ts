@@ -5,7 +5,7 @@ import { MESSAGES } from '@/constants/messages';
 const SERVER_URL = 'http://localhost:3777';
 const COMMANDS = {
   EXIT: '/exit',
-  TYPING: '/typing'
+  TYPING: '/typing',
 };
 
 interface UserInfo {
@@ -49,7 +49,9 @@ socket.on('receiveMessage', (message: MessageInfo) => {
 });
 
 socket.on('isTyping', (user: UserInfo) => {
-  console.log(`${MESSAGES.SOCKET.MESSAGE.TYPING} ${user.id} ${MESSAGES.SOCKET.MESSAGE.TYPING_SUFFIX}`);
+  console.log(
+    `${MESSAGES.SOCKET.MESSAGE.TYPING} ${user.id} ${MESSAGES.SOCKET.MESSAGE.TYPING_SUFFIX}`
+  );
 });
 
 socket.on('userOnline', (user: UserInfo) => {
@@ -79,7 +81,7 @@ const main = async (): Promise<void> => {
 
   rl.on('line', (input: string) => {
     const trimmedInput = input.trim();
-    
+
     if (trimmedInput === COMMANDS.EXIT) {
       socket.emit('userOffline', { id: userId } as UserInfo);
       console.log(MESSAGES.TERMINAL.GOODBYE);
@@ -87,9 +89,9 @@ const main = async (): Promise<void> => {
       socket.disconnect();
       process.exit(0);
     } else if (trimmedInput === COMMANDS.TYPING) {
-      socket.emit('isTyping', { 
-        conversationId, 
-        userId 
+      socket.emit('isTyping', {
+        conversationId,
+        userId,
       } as TypingInfo);
     } else {
       socket.emit('sendMessage', {

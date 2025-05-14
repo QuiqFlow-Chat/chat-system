@@ -1,4 +1,3 @@
-
 export interface IConversationAttributes {
   id: string;
   createdAt: Date;
@@ -6,10 +5,5 @@ export interface IConversationAttributes {
 }
 
 export interface IConversationGetByParameter {
-  id: string;
-}
-
-export interface IConversationMessagesGetByParameters {
-  senderId: string;
-  receiverId: string;
+  conversationId: string;
 }

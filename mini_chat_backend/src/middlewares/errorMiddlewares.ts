@@ -27,7 +27,8 @@ export class ErrorMiddleware {
   static handleError(err: unknown, req: Request, res: Response, _next: NextFunction): void {
     const isAppError = err instanceof AppError;
     const statusCode = isAppError ? err.statusCode : HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR;
-    const message = isAppError ? err.message : `${MESSAGES.ERROR.INTERNAL_SERVER_ERROR}${err}`;    console.error(`[${req.method}] ${req.originalUrl} - ${message}`);
+    const message = isAppError ? err.message : `${MESSAGES.ERROR.INTERNAL_SERVER_ERROR}${err}`;
+    console.error(`[${req.method}] ${req.originalUrl} - ${message}`);
 
     res.status(statusCode).json({
       status: ERROR_CONSTANTS.STATUS,

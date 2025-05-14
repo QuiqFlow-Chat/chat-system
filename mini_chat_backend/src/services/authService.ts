@@ -39,9 +39,7 @@ export class AuthService {
         lastActivity: new Date(),
       });
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError(MESSAGES.AUTH.REGISTER.FAILED, 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.AUTH.REGISTER.FAILED, 500);
     }
   };
 
@@ -59,11 +57,12 @@ export class AuthService {
 
       if (!isPasswordValid) {
         throw AppError.unauthorized(MESSAGES.AUTH.LOGIN.INVALID_PASSWORD);
-      }      const token = AuthUtils.generateToken({
+      }
+      const token = AuthUtils.generateToken({
         payload: {
           id: existingUser.id,
           email: existingUser.email,
-        }
+        },
       });
 
       return {
@@ -75,9 +74,7 @@ export class AuthService {
         token,
       };
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError(MESSAGES.AUTH.LOGIN.FAILED, 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.AUTH.LOGIN.FAILED, 500);
     }
   };
 }

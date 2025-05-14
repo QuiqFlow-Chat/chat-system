@@ -1,7 +1,35 @@
 import UserConversation from '@/models/UserConversation';
 import { IUserConversationAttributes } from '@/types/dtosInterfaces/userConversationDtos';
 import { IUserConversationRepository } from '@/repositories/userConversationRepositoryInterface';
+
 export class UserConversationRepository implements IUserConversationRepository<UserConversation> {
+  public getSharedConversation = async (
+    senderId: string,
+    receiverId: string
+  ): Promise<UserConversation[]|null> => {
+   try {
+    
+    const senderConversations = await UserConversation.findAll({
+      where: { userId: senderId },
+    });
+
+   
+    const conversationIds = senderConversations.map((uc) => uc.conversationId);
+
+   
+    const sharedConversations = await UserConversation.findAll({
+      where: {
+        conversationId: conversationIds,
+        userId: receiverId,
+      },
+    });
+
+    return sharedConversations.length > 0 ? sharedConversations : null;
+    } catch (error) {
+      console.error('Error in get shared conversation:', error);
+      throw new Error(`Failed to get shared conversation`);
+    }
+  };
   public add = async (data: unknown): Promise<void> => {
     try {
       await UserConversation.create(data as IUserConversationAttributes);
@@ -24,22 +52,6 @@ export class UserConversationRepository implements IUserConversationRepository<U
     } catch (error) {
       console.error('Error in get userConversation by id:', error);
       throw new Error(`Failed to get the userConversation`);
-    }
-  };
-  public getByUser_IdAndConversation_Id = async (
-    userId: string,
-    conversationId: string
-  ): Promise<UserConversation | null> => {
-    try {
-      return await UserConversation.findOne({
-        where: {
-          userId,
-          conversationId,
-        },
-      });
-    } catch (error) {
-      console.error('Error in get userConversation by user and conversation id :', error);
-      throw new Error(`Failed to get user conversation`);
     }
   };
   public delete = async (entity: UserConversation): Promise<void> => {

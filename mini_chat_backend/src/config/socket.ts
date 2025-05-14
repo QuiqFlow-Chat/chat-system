@@ -16,7 +16,6 @@ const MESSAGE_SERVICE = MessageService.getInstance(MESSAGE_REPOSITORY);
 
 export const ONLINE_USERS = new Map<string, string>();
 
-
 interface InitializeSocketParams {
   io: Server<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>;
 }
@@ -29,7 +28,7 @@ export const initializeSocket = async ({ io }: InitializeSocketParams) => {
       if (!token) {
         return next(new Error(MESSAGES.SOCKET.AUTH.TOKEN_MISSING));
       }
-      
+
       const user = AuthUtils.verifyToken(token);
       socket.data.user = user;
 
@@ -55,7 +54,7 @@ export const initializeSocket = async ({ io }: InitializeSocketParams) => {
         io,
         socket,
         userService: USER_SERVICE,
-        messageService: MESSAGE_SERVICE
+        messageService: MESSAGE_SERVICE,
       });
 
       socket.on('disconnect', () => {

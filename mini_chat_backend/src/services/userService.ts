@@ -24,17 +24,16 @@ export class UserService {
     try {
       const users = await this._userRepository.getAll();
       const hasNoUsers = users.length === 0;
-      
+
       if (hasNoUsers) {
         throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-      }      const page = paginationParams?.page || 1;
+      }
+      const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
 
       return paginate({ items: users, page, limit });
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError(MESSAGES.USER.GET_ALL_FAILED, 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.USER.GET_ALL_FAILED, 500);
     }
   };
 
@@ -44,9 +43,7 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return user;
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError(MESSAGES.USER.GET_FAILED, 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.USER.GET_FAILED, 500);
     }
   };
 
@@ -56,9 +53,7 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       await this._userRepository.delete(user);
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError(MESSAGES.USER.DELETE_FAILED, 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.USER.DELETE_FAILED, 500);
     }
   };
 
@@ -79,9 +74,7 @@ export class UserService {
 
       await this._userRepository.update(user);
     } catch (error) {
-      throw error instanceof AppError
-        ? error
-        : new AppError(MESSAGES.USER.UPDATE_FAILED, 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.USER.UPDATE_FAILED, 500);
     }
   };
 

@@ -12,7 +12,6 @@ interface RegisterChatHandlersParams {
   socket: TypedSocket;
   userService: UserService;
   messageService: MessageService;
-
 }
 
 interface TypingData {
@@ -28,13 +27,12 @@ interface MessagePayload {
   content: string;
   createdAt: string;
   isRead: boolean;
-  flag: boolean;
 }
 
 export const registerChatHandlers = ({
   io,
   socket,
-  messageService
+  messageService,
 }: RegisterChatHandlersParams) => {
   const authenticatedUser = socket.data.user;
 
@@ -42,7 +40,10 @@ export const registerChatHandlers = ({
     try {
       socket.broadcast.emit('userOnline', { id: authenticatedUser.id });
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.ONLINE_STATUS_FAILED);
+      socket.emit(
+        'error',
+        error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.ONLINE_STATUS_FAILED
+      );
     }
   });
 
@@ -50,7 +51,10 @@ export const registerChatHandlers = ({
     try {
       socket.broadcast.emit('userOffline', { id: authenticatedUser.id });
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.OFFLINE_STATUS_FAILED);
+      socket.emit(
+        'error',
+        error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.OFFLINE_STATUS_FAILED
+      );
     }
   });
 
@@ -58,7 +62,10 @@ export const registerChatHandlers = ({
     try {
       socket.join(conversationId);
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.JOIN_CONVERSATION_FAILED);
+      socket.emit(
+        'error',
+        error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.JOIN_CONVERSATION_FAILED
+      );
     }
   });
 
@@ -66,7 +73,10 @@ export const registerChatHandlers = ({
     try {
       socket.leave(conversationId);
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.LEAVE_CONVERSATION_FAILED);
+      socket.emit(
+        'error',
+        error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.LEAVE_CONVERSATION_FAILED
+      );
     }
   });
 
@@ -79,9 +89,8 @@ export const registerChatHandlers = ({
 
       const result: any = await messageService.sendMessage(message);
       const newMessage = result.message;
-      const flag = result.flag;
       const conversationId = newMessage.conversationId;
-      
+
       const isUserInRoom = socket.rooms.has(conversationId);
       if (!isUserInRoom) {
         socket.join(conversationId);
@@ -89,17 +98,16 @@ export const registerChatHandlers = ({
 
       const messagePayload: MessagePayload = {
         id: newMessage.id,
-        conversationId,
+        conversationId: newMessage.conversationId,
         senderId: newMessage.senderId,
         receiverId: newMessage.receiverId,
         content: newMessage.content,
         createdAt: newMessage.createdAt.toISOString(),
         isRead: newMessage.isRead,
-        flag: flag,
       };
 
       io.to(conversationId).emit('receiveMessage', messagePayload);
-      
+
       const receiverSocketId = ONLINE_USERS.get(newMessage.receiverId);
       const conversationRoom = io.sockets.adapter.rooms.get(conversationId);
       const isReceiverInRoom = receiverSocketId ? conversationRoom?.has(receiverSocketId) : false;
@@ -112,7 +120,10 @@ export const registerChatHandlers = ({
       if (error instanceof AppError) {
         socket.emit('error', error.message);
       } else {
-        socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.SEND_MESSAGE_FAILED);
+        socket.emit(
+          'error',
+          error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.SEND_MESSAGE_FAILED
+        );
       }
     }
   });
@@ -128,15 +139,18 @@ export const registerChatHandlers = ({
       if (!isUserInRoom) {
         socket.join(conversationId);
       }
-      
-      const typingData: TypingData = { 
+
+      const typingData: TypingData = {
         id: authenticatedUser.id,
-        conversationId: conversationId 
+        conversationId: conversationId,
       };
-      
+
       socket.to(conversationId).emit('isTyping', typingData);
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.TYPING_INDICATOR_FAILED);
+      socket.emit(
+        'error',
+        error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.TYPING_INDICATOR_FAILED
+      );
     }
   });
 

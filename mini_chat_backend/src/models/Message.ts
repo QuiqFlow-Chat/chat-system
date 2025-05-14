@@ -13,7 +13,6 @@ import User from '@/models/User';
 import Conversation from '@/models/Conversation';
 import { IMessageAttributes } from '@/types/dtosInterfaces/messageDtos';
 
-
 @Table({
   tableName: 'Messages',
   timestamps: true,

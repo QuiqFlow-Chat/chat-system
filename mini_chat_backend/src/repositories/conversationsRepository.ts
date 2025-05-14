@@ -1,7 +1,7 @@
 import Conversation from '@/models/Conversation';
 import Message from '@/models/Message';
 import User from '@/models/User';
-import { IConversationRepository } from '@/repositories/conversationRepositoryInterface'
+import { IConversationRepository } from '@/repositories/conversationRepositoryInterface';
 export class ConversationsRepository implements IConversationRepository<Conversation> {
   public add = async (): Promise<Conversation> => {
     try {

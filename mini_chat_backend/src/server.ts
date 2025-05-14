@@ -14,18 +14,22 @@ import express from 'express';
 import { ClientToServerEvents, SocketData } from './types/socketType';
 import { ServerToClientEvents } from './types/socketType';
 
-
-
 export class Server {
   port: number;
   app: Application;
   httpServer: http.Server;
   io: SocketIOServer<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>;
 
-  constructor(port: number) {    this.port = port;
+  constructor(port: number) {
+    this.port = port;
     this.app = express();
     this.httpServer = http.createServer(this.app);
-    this.io = new SocketIOServer<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>(this.httpServer, {
+    this.io = new SocketIOServer<
+      ClientToServerEvents,
+      ServerToClientEvents,
+      Record<string, never>,
+      SocketData
+    >(this.httpServer, {
       cors: {
         origin: '*', // Allow all origins
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

@@ -1,14 +1,14 @@
 import Joi from 'joi';
 export const sendMessageSchema = Joi.object({
-  senderId: Joi.string().uuid().required().messages({
-    'string.base': 'ID must be a string',
-    'string.empty': 'ID is required',
-    'string.guid': 'ID must be a valid UUID',
-  }),
   receiverId: Joi.string().uuid().required().messages({
-    'string.base': 'ID must be a string',
-    'string.empty': 'ID is required',
-    'string.guid': 'ID must be a valid UUID',
+    'string.base': 'ReceiverId must be a string',
+    'string.empty': 'ReceiverId is required',
+    'string.guid': 'ReceiverId must be a valid UUID',
+  }),
+  conversationId: Joi.string().uuid().required().messages({
+    'string.base': 'ConversationId must be a string',
+    'string.empty': 'ConversationId is required',
+    'string.guid': 'ConversationId must be a valid UUID',
   }),
   content: Joi.string().min(1).required().messages({
     'string.base': 'Content must be a string',

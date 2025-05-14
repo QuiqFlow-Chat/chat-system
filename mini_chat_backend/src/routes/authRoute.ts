@@ -11,7 +11,7 @@ export class AuthRoute extends BaseRoute {
   private _userRepository: UserRepository;
   private _authService: AuthService;
   private _authController: AuthController;
-  
+
   constructor(app: Application) {
     super(app);
     this._userRepository = new UserRepository();
@@ -26,7 +26,7 @@ export class AuthRoute extends BaseRoute {
       validateRequest(authRegisterSchema, 'body'),
       this._authController.register.bind(this._authController)
     );
-    
+
     this.router.post(
       ROUTES.AUTH.LOGIN,
       validateRequest(authLoginSchema, 'body'),

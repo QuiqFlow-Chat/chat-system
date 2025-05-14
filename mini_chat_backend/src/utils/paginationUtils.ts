@@ -7,10 +7,10 @@ interface PaginateOptions<T> {
   limit?: number;
 }
 
-export function paginate<T>({ 
-  items, 
-  page = PAGINATION_CONSTANTS.DEFAULT_PAGE, 
-  limit = PAGINATION_CONSTANTS.DEFAULT_LIMIT 
+export function paginate<T>({
+  items,
+  page = PAGINATION_CONSTANTS.DEFAULT_PAGE,
+  limit = PAGINATION_CONSTANTS.DEFAULT_LIMIT,
 }: PaginateOptions<T>): IPaginatedResult<T> {
   const validPage = Math.max(PAGINATION_CONSTANTS.MIN_VALUE, page);
   const validLimit = Math.max(PAGINATION_CONSTANTS.MIN_VALUE, limit);
@@ -21,7 +21,8 @@ export function paginate<T>({
   const endIndex = Math.min(startIndex + validLimit, total);
 
   return {
-    data: items.slice(startIndex, endIndex),    pagination: {
+    data: items.slice(startIndex, endIndex),
+    pagination: {
       total,
       currentPage: validPage,
       totalPages,

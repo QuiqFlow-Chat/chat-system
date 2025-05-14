@@ -8,6 +8,5 @@ export const conversationIdSchema = Joi.object({
 });
 
 export const conversationIdSchemaforMessages = Joi.object({
-  senderId: Joi.string().uuid(),
-  receiverId: Joi.string().uuid(),
+  conversationId: Joi.string().uuid(),
 });

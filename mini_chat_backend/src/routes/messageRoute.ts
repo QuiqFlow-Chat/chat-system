@@ -12,7 +12,7 @@ export class MessageRoute extends BaseRoute {
   private _messageRepository: MessageRepository;
   private _messageService: MessageService;
   private _messageController: MessageController;
-  
+
   constructor(app: Application) {
     super(app);
     this._messageRepository = new MessageRepository();
@@ -23,7 +23,7 @@ export class MessageRoute extends BaseRoute {
     this.initDeleteHttpMethod();
     this.initGetHttpMethod();
   }
-  
+
   private initGetHttpMethod() {
     this.router.get(
       ROUTES.MESSAGE.UPDATE_STATUS,
@@ -32,7 +32,7 @@ export class MessageRoute extends BaseRoute {
       this._messageController.updateMessageStatus.bind(this._messageController)
     );
   }
-  
+
   private initPostHttpMethod = () => {
     this.router.post(
       ROUTES.MESSAGE.SEND,
@@ -41,7 +41,7 @@ export class MessageRoute extends BaseRoute {
       this._messageController.sendMessage.bind(this._messageController)
     );
   };
-  
+
   private initDeleteHttpMethod = () => {
     this.router.delete(
       ROUTES.MESSAGE.DELETE,
@@ -50,7 +50,7 @@ export class MessageRoute extends BaseRoute {
       this._messageController.deleteMessage.bind(this._messageController)
     );
   };
-  
+
   private initUpdateHttpMethod = () => {
     this.router.patch(
       ROUTES.MESSAGE.UPDATE_CONTENT,

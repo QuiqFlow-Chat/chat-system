@@ -46,22 +46,16 @@ export class MessageRepository implements IMessageRepository<Message> {
       throw new Error(`Failed to get message`);
     }
   };
-  public getAllBySender_IdAndReceiver_Id = async (
-    senderId: string,
-    receiverId: string
-  ): Promise<Message[]> => {
+  public getAllByConversationId = async (conversationId: string): Promise<Message[]> => {
     try {
       return await Message.findAll({
         where: {
-          [Op.or]: [
-            { senderId, receiverId },
-            { senderId: receiverId, receiverId: senderId },
-          ],
+          conversationId,
         },
         order: [['createdAt', 'DESC']],
       });
     } catch (error) {
-      console.error('Error in getAllBySender_IdAndReceiver_Id:', error);
+      console.error('Error in getAllByConversationId', error);
       throw new Error(`Failed to get all messages`);
     }
   };

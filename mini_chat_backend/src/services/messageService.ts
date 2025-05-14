@@ -1,8 +1,5 @@
 import { MessageRepository } from '@/repositories/messageRepository';
-import {
-  IMessageCreateFullParameters,
-  IMessageUpdateParameters,
-} from '@/types/dtosInterfaces/messageDtos';
+import { IMessageUpdateParameters } from '@/types/dtosInterfaces/messageDtos';
 import {
   IMessageCreateParameters,
   IMessageGetByParameter,
@@ -36,29 +33,11 @@ export class MessageService {
       const receiver = await this._userRepository.getById(parameters.receiverId);
       if (!receiver) throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.RECEIVER_NOT_FOUND);
 
-      const shouldCreateConversation  = await this.shouldCreateConversation(parameters.senderId, parameters.receiverId);
-      let conversation_Id: string;
-      if (shouldCreateConversation ) {
-        const conversation = await this._conversationRepository.add();
-        conversation_Id = conversation.id;
-        await this.addUsersToConversation(
-          parameters.senderId,
-          parameters.receiverId,
-          conversation_Id
-        );
-      } else {
-        conversation_Id = await this.getConversation_Id(parameters.senderId, parameters.receiverId);
-      }
-      const createMessage: IMessageCreateFullParameters = {
-        senderId: parameters.senderId,
-        receiverId: parameters.receiverId,
-        conversationId: conversation_Id,
-        content: parameters.content,
-      };
-      const message = await this._messageRepository.add(createMessage);
-      return {message,
-        shouldCreateConversation 
-      };
+      const conversation = await this._conversationRepository.getById(parameters.conversationId);
+      if (!conversation) throw AppError.unauthorized(MESSAGES.CONVERSATION.NOT_FOUND);
+
+      const message = await this._messageRepository.add(parameters);
+      return message;
     } catch (error) {
       console.error('error in sendMessage', error);
       throw error instanceof Error ? error : new Error('Failed to send new message');
@@ -98,39 +77,5 @@ export class MessageService {
       console.error('error in updateMessageStatus', error);
       throw error instanceof Error ? error : new Error('Failed to update message status');
     }
-  };
-
-  //Validation methods of send message
-  public shouldCreateConversation = async (
-    senderId: string,
-    receiverId: string
-  ): Promise<boolean> => {
-    const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
-      senderId,
-      receiverId
-    );
-    if (message) return false;
-    return true;
-  };
-
-  public getConversation_Id = async (senderId: string, receiverId: string): Promise<string> => {
-    const message = await this._messageRepository.getBySender_IdAndReceiver_Id(
-      senderId,
-      receiverId
-    );
-    if (message) return message.conversationId;
-    return '';
-  };
-
-  public addUsersToConversation = async (
-    user1_Id: string,
-    user2_Id: string,
-    conversationId: string
-  ) => {
-    const users = [user1_Id, user2_Id];
-
-    await Promise.all(
-      users.map((userId) => this._userConversationRepository.add({ userId, conversationId }))
-    );
   };
 }

@@ -11,7 +11,7 @@ const runSeeds = async (): Promise<void> => {
 
   try {
     console.log(MESSAGES.SEED.START);
-    
+
     await seedUsers({ context: queryInterface });
     await seedConversations({ context: queryInterface });
     await seedUserConversations({ context: queryInterface });

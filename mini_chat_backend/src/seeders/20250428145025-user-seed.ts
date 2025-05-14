@@ -5,7 +5,8 @@ import users from '@/data/users.json';
 import { QueryInterfaceSeedFn } from '@/types/seedTypes';
 import { DB_CONSTANTS } from '@/constants/messages';
 
-export const up: QueryInterfaceSeedFn = async ({ context: queryInterface }) => {  const hashedUsers = await Promise.all(
+export const up: QueryInterfaceSeedFn = async ({ context: queryInterface }) => {
+  const hashedUsers = await Promise.all(
     users.map(async (user) => ({
       ...user,
       password: await bcrypt.hash(user.password, DB_CONSTANTS.BCRYPT_SALT_ROUNDS),
