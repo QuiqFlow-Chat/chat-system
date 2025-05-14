@@ -1,7 +1,7 @@
 import Conversation from '../models/Conversation';
 
 export interface IUserRepository<User> {
-  add(data: any): Promise<void>;
+  add(data: unknown): Promise<void>;
   getAll(): Promise<User[]>;
   getUserConversations(id: string): Promise<Conversation[] | []>;
   getByEmail(email: string): Promise<User | null>;

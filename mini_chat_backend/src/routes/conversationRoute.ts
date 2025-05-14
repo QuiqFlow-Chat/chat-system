@@ -1,14 +1,14 @@
-import { ConversationService } from './../services/conversationService';
-import { ConversationsRepository } from './../repositories/conversationsRepository';
+import { ConversationService } from '@/services/conversationService';
+import { ConversationsRepository } from '@/repositories/conversationsRepository';
 import { Application } from 'express';
-import { BaseRoute } from './baseRoute';
-import { ConversationController } from '../controller/conversationController';
-import { AuthMiddleware } from '../middlewares/authMiddlewares';
-import { validateRequest } from '../middlewares/validationMiddleware';
+import { BaseRoute } from '@/routes/baseRoute';
+import { ConversationController } from '@/controller/conversationController';
+import { AuthMiddleware } from '@/middlewares/authMiddlewares';
+import { validateRequest } from '@/middlewares/validationMiddleware';
 import {
   conversationIdSchema,
   conversationIdSchemaforMessages,
-} from '../shared/validations/conversationValidation';
+} from '@/validations/conversationValidation';
 
 export class ConversationRoute extends BaseRoute {
   conversationRepository: ConversationsRepository;

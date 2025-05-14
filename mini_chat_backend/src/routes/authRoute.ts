@@ -1,10 +1,10 @@
 import { Application } from 'express';
-import { AuthController } from '../controller/authController';
-import { UserRepository } from '../repositories/userRepository';
-import { AuthService } from '../services/authService';
-import { BaseRoute } from './baseRoute';
-import { authLoginSchema, authRegisterSchema } from '../shared/validations/authValidation';
-import { validateRequest } from '../middlewares/validationMiddleware';
+import { AuthController } from '@/controller/authController';
+import { UserRepository } from '@/repositories/userRepository';
+import { AuthService } from '@/services/authService';
+import { BaseRoute } from '@/routes/baseRoute';
+import { authLoginSchema, authRegisterSchema } from '@/validations/authValidation';
+import { validateRequest } from '@/middlewares/validationMiddleware';
 
 export class AuthRoute extends BaseRoute {
   userRepository: UserRepository;

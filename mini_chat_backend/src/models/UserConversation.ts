@@ -1,12 +1,8 @@
 import { Column, DataType, ForeignKey, PrimaryKey, Table, Model } from 'sequelize-typescript';
-import User from './User';
-import Conversation from './Conversation';
+import User from '@/models/User';
+import Conversation from '@/models/Conversation';
+import { IUserConversationAttributes } from '@/types/dtosInterfaces/userConversationDtos';
 
-interface UserConversationCreateAttributes {
-  id: string;
-  userId: string;
-  conversationId: string;
-}
 
 @Table({
   tableName: 'UserConversations',
@@ -27,8 +23,8 @@ interface UserConversationCreateAttributes {
   ],
 })
 class UserConversation
-  extends Model<UserConversationCreateAttributes>
-  implements UserConversationCreateAttributes
+  extends Model<IUserConversationAttributes>
+  implements IUserConversationAttributes
 {
   @PrimaryKey
   @Column({

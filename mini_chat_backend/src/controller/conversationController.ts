@@ -1,7 +1,7 @@
 import { ConversationService } from './../services/conversationService';
-import { ConversationMessagesGetByParameters } from './../shared/dtosInterfaces/conversationDtos';
+import { IConversationMessagesGetByParameters } from '../types/dtosInterfaces/conversationDtos';
 import { NextFunction, Request, Response } from 'express';
-import { ConversationGetByParameter } from '../shared/dtosInterfaces/conversationDtos';
+import { IConversationGetByParameter } from '../types/dtosInterfaces/conversationDtos';
 import { MESSAGES } from '../constants/messages';
 import { catchAsync } from '../decorators/try_catchDecorators';
 import { SuccessCode, sendSuccess } from '../utils/successCode';
@@ -19,7 +19,7 @@ export class ConversationController {
 
   @catchAsync()
   public async deleteConversation(req: Request, res: Response, _next: NextFunction) {
-    const parameter: ConversationGetByParameter = req.body;
+    const parameter: IConversationGetByParameter = req.body;
     await this._conversationService.deleteConversation(parameter);
     sendSuccess(res, SuccessCode.ok(MESSAGES.CONVERSATION.DELETED));
   }
@@ -39,7 +39,7 @@ export class ConversationController {
 
   @catchAsync()
   public async getConversationMessages(req: Request, res: Response, _next: NextFunction) {
-    const parameters: ConversationMessagesGetByParameters = req.body;
+    const parameters: IConversationMessagesGetByParameters = req.body;
     // Extract pagination parameters from query string
     const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
     const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : undefined;

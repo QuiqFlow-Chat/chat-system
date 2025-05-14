@@ -9,19 +9,10 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import Message from './Message';
-import Conversation from './Conversation';
-import UserConversation from './UserConversation';
-
-interface UserAttributes {
-  id: string;
-  fullName: string;
-  email: string;
-  password: string;
-  lastActivity: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import Message from '@/models/Message';
+import Conversation from '@/models/Conversation';
+import UserConversation from '@/models/UserConversation';
+import { IUserAttributes } from '@/types/dtosInterfaces/userDtos';
 
 @Table({
   tableName: 'Users',
@@ -33,7 +24,7 @@ interface UserAttributes {
     },
   ],
 })
-class User extends Model<UserAttributes> implements UserAttributes {
+class User extends Model<IUserAttributes> implements IUserAttributes {
   @PrimaryKey
   @Column({
     type: DataType.UUID,

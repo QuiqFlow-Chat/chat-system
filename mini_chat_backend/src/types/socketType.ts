@@ -1,4 +1,4 @@
-import { MessageCreateParameters } from '../shared/dtosInterfaces/messageDtos';
+import { MessageCreateParameters } from './dtosInterfaces/messageDtos';
 import { Socket } from 'socket.io';
 
 // Data attached to each socket after authentication

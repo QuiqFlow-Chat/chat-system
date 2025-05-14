@@ -1,16 +1,16 @@
-import { ErrorMiddleware } from './middlewares/errorMiddlewares';
+import { ErrorMiddleware } from '@/middlewares/errorMiddlewares';
 import { Application } from 'express';
 import express from 'express';
 import cors from 'cors';
-import { ConversationRoute } from './routes/conversationRoute';
-import { MessageRoute } from './routes/messageRoute';
-import { UserConversationRoute } from './routes/userConversationRoute';
-import { UserRoute } from './routes/userRoute';
-import DataBase from './config/database';
+import { ConversationRoute } from '@/routes/conversationRoute';
+import { MessageRoute } from '@/routes/messageRoute';
+import { UserConversationRoute } from '@/routes/userConversationRoute';
+import { UserRoute } from '@/routes/userRoute';
+import DataBase from '@/config/database';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import { AuthRoute } from './routes/authRoute';
-import { initializeSocket } from './config/socket';
+import { AuthRoute } from '@/routes/authRoute';
+import { initializeSocket } from '@/config/socket';
 
 export class Server {
   port: number;

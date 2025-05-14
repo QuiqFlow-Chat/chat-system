@@ -1,11 +1,11 @@
-import { UserRepository } from './../repositories/userRepository';
-import { MESSAGES } from '../constants/messages';
-import { UserGetByParameter, UserUpdateParameters } from '../shared/dtosInterfaces/userDtos';
-import User from '../models/User';
-import { PaginatedResult, PaginationParams } from '../shared/dtosInterfaces/paginationDtos';
-import { paginate } from '../utils/paginationUtils';
-import { AppError } from '../middlewares/errorMiddlewares';
-import { AuthUtils } from '../utils/authUtils';
+import { UserRepository } from '@/repositories/userRepository';
+import { MESSAGES } from '@/constants/messages';
+import { IUserGetByParameter, IUserUpdateParameters } from '@/types/dtosInterfaces/userDtos';
+import User from '@/models/User';
+import { IPaginatedResult, IPaginationParams } from '@/types/dtosInterfaces/paginationDtos';
+import { paginate } from '@/utils/paginationUtils';
+import { AppError } from '@/middlewares/errorMiddlewares';
+import { AuthUtils } from '@/utils/authUtils';
 
 export class UserService {
   private static _userServiceInstance: UserService;
@@ -19,8 +19,8 @@ export class UserService {
   }
 
   public getAllUsers = async (
-    paginationParams?: PaginationParams
-  ): Promise<PaginatedResult<User>> => {
+    paginationParams?: IPaginationParams
+  ): Promise<IPaginatedResult<User>> => {
     try {
       const users = await this._userRepository.getAll();
       if (users.length === 0) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
@@ -46,7 +46,7 @@ export class UserService {
     }
   };
 
-  public deleteUser = async (parameter: UserGetByParameter): Promise<void> => {
+  public deleteUser = async (parameter: IUserGetByParameter): Promise<void> => {
     try {
       const user = await this._userRepository.getById(parameter.id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
@@ -61,7 +61,7 @@ export class UserService {
    * Updates a user's information
    * @param parameter User update parameters
    */
-  public updateUser = async (parameter: UserUpdateParameters): Promise<void> => {
+  public updateUser = async (parameter: IUserUpdateParameters): Promise<void> => {
     try {
       const user = await this._userRepository.getById(parameter.id);
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);

@@ -1,9 +1,10 @@
-import UserConversation from '../models/UserConversation';
-import { IUserConversationRepository } from './userConversationRepositoryInterface';
+import UserConversation from '@/models/UserConversation';
+import { IUserConversationAttributes } from '@/types/dtosInterfaces/userConversationDtos';
+import { IUserConversationRepository } from '@/repositories/userConversationRepositoryInterface';
 export class UserConversationRepository implements IUserConversationRepository<UserConversation> {
-  public add = async (data: any): Promise<void> => {
+  public add = async (data: unknown): Promise<void> => {
     try {
-      await UserConversation.create(data);
+      await UserConversation.create(data as IUserConversationAttributes);
     } catch (error) {
       console.error('Error in add user conversation:', error);
       throw new Error(`Failed to add userConversation`);
@@ -44,7 +45,7 @@ export class UserConversationRepository implements IUserConversationRepository<U
   public delete = async (entity: UserConversation): Promise<void> => {
     try {
       await UserConversation.destroy({
-        where: { id: (entity as any).id },
+        where: { id: (entity as UserConversation).id },
       });
     } catch (error) {
       console.error('Error in delete userConversation:', error);

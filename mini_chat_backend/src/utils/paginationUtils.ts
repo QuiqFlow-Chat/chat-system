@@ -1,4 +1,4 @@
-import { PaginationParams, PaginatedResult } from '../shared/dtosInterfaces/paginationDtos';
+import { PaginationParams, PaginatedResult } from '../types/dtosInterfaces/paginationDtos';
 
 export function paginate<T>(items: T[], page: number = 1, limit: number = 10): PaginatedResult<T> {
   // Ensure valid parameters

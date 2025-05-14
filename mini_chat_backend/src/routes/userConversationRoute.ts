@@ -1,11 +1,11 @@
-import { userConversationIdSchema } from './../shared/validations/userConversationValidation';
+import { userConversationIdSchema } from '@/validations/userConversationValidation';
 import { Application } from 'express';
-import { BaseRoute } from './baseRoute';
-import { UserConversationRepository } from '../repositories/userConversationRepository';
-import { UserConversationController } from '../controller/userConversationController';
-import { UserConversationService } from '../services/userConversationService';
-import { AuthMiddleware } from '../middlewares/authMiddlewares';
-import { validateRequest } from '../middlewares/validationMiddleware';
+import { BaseRoute } from '@/routes/baseRoute';
+import { UserConversationRepository } from '@/repositories/userConversationRepository';
+import { UserConversationController } from '@/controller/userConversationController';
+import { UserConversationService } from '@/services/userConversationService';
+import { AuthMiddleware } from '@/middlewares/authMiddlewares';
+import { validateRequest } from '@/middlewares/validationMiddleware';
 
 export class UserConversationRoute extends BaseRoute {
   userConversationRepository: UserConversationRepository;

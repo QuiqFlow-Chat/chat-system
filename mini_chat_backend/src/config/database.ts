@@ -4,12 +4,12 @@ import { Dialect } from 'sequelize';
 dotenv.config();
 
 class DataBase {
-  private static db_instance: Sequelize;
+  private static dbInstance: Sequelize;
 
   private constructor() {}
 
   public static getDbInstance = (): Sequelize => {
-    if (!DataBase.db_instance) {
+    if (!DataBase.dbInstance) {
       if (
         !process.env.DB_USER ||
         !process.env.DB_PASSWORD ||
@@ -19,7 +19,7 @@ class DataBase {
       ) {
         throw new Error('Missing required environment variables for database configuration.');
       }
-      DataBase.db_instance = new Sequelize({
+      DataBase.dbInstance = new Sequelize({
         username: process.env.DB_USER,
         database: process.env.DB_NAME,
         password: process.env.DB_PASSWORD,
@@ -32,7 +32,7 @@ class DataBase {
         models: [__dirname + '/../models'],
       });
     }
-    return DataBase.db_instance;
+    return DataBase.dbInstance;
   };
 }
 

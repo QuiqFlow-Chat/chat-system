@@ -1,12 +1,12 @@
-import { messageUpdateContentSchema } from './../shared/validations/messageValidation';
+import { messageUpdateContentSchema } from '@/validations/messageValidation';
 import { Application } from 'express';
-import { BaseRoute } from './baseRoute';
-import { MessageRepository } from '../repositories/messageRepository';
-import { MessageService } from '../services/messageService';
-import { MessageController } from '../controller/messageController';
-import { AuthMiddleware } from '../middlewares/authMiddlewares';
-import { validateRequest } from '../middlewares/validationMiddleware';
-import { messageIdSchema, sendMessageSchema } from '../shared/validations/messageValidation';
+import { BaseRoute } from '@/routes/baseRoute';
+import { MessageRepository } from '@/repositories/messageRepository';
+import { MessageService } from '@/services/messageService';
+import { MessageController } from '@/controller/messageController';
+import { AuthMiddleware } from '@/middlewares/authMiddlewares';
+import { validateRequest } from '@/middlewares/validationMiddleware';
+import { messageIdSchema, sendMessageSchema } from '@/validations/messageValidation';
 
 export class MessageRoute extends BaseRoute {
   messageRepository: MessageRepository;

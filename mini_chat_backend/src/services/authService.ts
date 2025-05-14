@@ -1,12 +1,12 @@
-import { MESSAGES } from '../constants/messages';
+import { MESSAGES } from '@/constants/messages';
 import {
-  UserCreateParameters,
-  UserLoginParameters,
-  AuthResponse,
-} from '../shared/dtosInterfaces/userDtos';
-import { AppError } from '../middlewares/errorMiddlewares';
-import { UserRepository } from '../repositories/userRepository';
-import { AuthUtils } from '../utils/authUtils';
+  IUserCreateParameters,
+  IUserLoginParameters,
+  IAuthResponse,
+} from '@/types/dtosInterfaces/userDtos';
+import { AppError } from '@/middlewares/errorMiddlewares';
+import { UserRepository } from '@/repositories/userRepository';
+import { AuthUtils } from '@/utils/authUtils';
 
 export class AuthService {
   private static _authServiceInstance: AuthService;
@@ -19,7 +19,7 @@ export class AuthService {
     return this._authServiceInstance;
   }
 
-  public register = async (parameters: UserCreateParameters): Promise<void> => {
+  public register = async (parameters: IUserCreateParameters): Promise<void> => {
     try {
       const existingUser = await this._userRepository.getByEmail(parameters.email);
       if (existingUser) {
@@ -46,7 +46,7 @@ export class AuthService {
     }
   };
 
-  public login = async (parameters: UserLoginParameters): Promise<AuthResponse> => {
+  public login = async (parameters: IUserLoginParameters): Promise<IAuthResponse> => {
     try {
       const existingUser = await this._userRepository.getByEmail(parameters.email);
       if (!existingUser) {

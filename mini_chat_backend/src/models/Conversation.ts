@@ -9,23 +9,18 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import Message from './Message';
-import User from './User';
-import UserConversation from './UserConversation';
-
-interface ConversationCreateAttributes {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import Message from '@/models/Message';
+import User from '@/models/User';
+import UserConversation from '@/models/UserConversation';
+import { IConversationAttributes } from '@/types/dtosInterfaces/conversationDtos';
 
 @Table({
   tableName: 'Conversations',
   timestamps: true,
 })
 class Conversation
-  extends Model<ConversationCreateAttributes>
-  implements ConversationCreateAttributes
+  extends Model<IConversationAttributes>
+  implements IConversationAttributes
 {
   @PrimaryKey
   @Column({
