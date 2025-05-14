@@ -57,8 +57,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
               isDisabled={isSubmitting || loading}
             >
               {loading
-                ? t("Register.loginForm.loggingIn")
-                : t("Register.loginForm.loggingIn.logIn")}
+                ? t("register.loginForm.loggingIn")
+                : t("register.loginForm.logIn")}
             </Button>
           </div>
         </Form>

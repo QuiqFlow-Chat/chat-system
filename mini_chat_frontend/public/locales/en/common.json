@@ -59,7 +59,7 @@
     "noResultsFound": "No results found..."
   },
   
-  "Register": {
+  "register": {
     "loginForm": {
       "logIn": "Log In",
       "loggingIn": "Logging in...",
@@ -69,5 +69,14 @@
       "signUp": "Sign Up",
       "signingUp": "Signing up..."
     }
+  },
+  "page"{
+    "loginPage": {
+      "title": "Log In",
+      "error": "Login failed. Please try again.",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up"
+    }
   }
+ 
 }
