@@ -68,8 +68,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit, loading }) => {
               isDisabled={isSubmitting || loading}
             >
               {loading
-                ? t("Register.signUpForm.signingUp")
-                : t("Register.signUpForm.signUp")}
+                ? t("register.signUpForm.signingUp")
+                : t("register.signUpForm.signUp")}
             </Button>
           </div>
         </Form>
