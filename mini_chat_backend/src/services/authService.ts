@@ -7,16 +7,15 @@ import {
 import { AppError } from '@/middlewares/errorMiddlewares';
 import { UserRepository } from '@/repositories/userRepository';
 import { AuthUtils } from '@/utils/authUtils';
-
 export class AuthService {
-  private static _authServiceInstance: AuthService;
+  private static _AUTH_SERVICE_INSTANCE: AuthService;
   private constructor(private _userRepository: UserRepository) {}
 
   public static getInstance(userRepository: UserRepository): AuthService {
-    if (!this._authServiceInstance) {
-      this._authServiceInstance = new AuthService(userRepository);
+    if (!this._AUTH_SERVICE_INSTANCE) {
+      this._AUTH_SERVICE_INSTANCE = new AuthService(userRepository);
     }
-    return this._authServiceInstance;
+    return this._AUTH_SERVICE_INSTANCE;
   }
 
   public register = async (parameters: IUserCreateParameters): Promise<void> => {
@@ -26,7 +25,8 @@ export class AuthService {
         throw AppError.unauthorized(MESSAGES.AUTH.REGISTER.USER_EXISTS);
       }
 
-      if (parameters.password !== parameters.confirmPassword) {
+      const isPasswordsMatching = parameters.password === parameters.confirmPassword;
+      if (!isPasswordsMatching) {
         throw AppError.badRequest(MESSAGES.AUTH.REGISTER.PASSWORD_MISMATCH);
       }
 
@@ -39,10 +39,9 @@ export class AuthService {
         lastActivity: new Date(),
       });
     } catch (error) {
-      console.error('[AuthService][register] Error:', error);
       throw error instanceof AppError
         ? error
-        : new AppError('An error occurred while registering the user', 500);
+        : new AppError(MESSAGES.AUTH.REGISTER.FAILED, 500);
     }
   };
 
@@ -60,11 +59,11 @@ export class AuthService {
 
       if (!isPasswordValid) {
         throw AppError.unauthorized(MESSAGES.AUTH.LOGIN.INVALID_PASSWORD);
-      }
-
-      const token = AuthUtils.generateToken({
-        id: existingUser.id,
-        email: existingUser.email,
+      }      const token = AuthUtils.generateToken({
+        payload: {
+          id: existingUser.id,
+          email: existingUser.email,
+        }
       });
 
       return {
@@ -76,10 +75,9 @@ export class AuthService {
         token,
       };
     } catch (error) {
-      console.error('[AuthService][login] Error:', error);
       throw error instanceof AppError
         ? error
-        : new AppError('An error occurred while logging in the user', 500);
+        : new AppError(MESSAGES.AUTH.LOGIN.FAILED, 500);
     }
   };
 }

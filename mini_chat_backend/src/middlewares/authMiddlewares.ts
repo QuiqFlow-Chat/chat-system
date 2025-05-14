@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { AppError } from './errorMiddlewares';
-import { AuthUtils } from '../utils/authUtils';
-import { catchAsync } from '../decorators/try_catchDecorators';
+import { AppError } from '@/middlewares/errorMiddlewares';
+import { AUTH_MESSAGES, AUTH_CONSTANTS } from '@/constants/messages';
+import { AuthUtils } from '@/utils/authUtils';
+import { catchAsync } from '@/decorators/try_catchDecorators';
 
-// Extend Express Request to include user property
 declare global {
   namespace Express {
     interface Request {
@@ -12,21 +12,16 @@ declare global {
         id: string;
         email: string;
       };
-    }
-  }
+    }  }
 }
 
-export class AuthMiddleware {
-  /**
-   * Middleware to verify JWT token and attach user data to the request object.
-   */
-
-  @catchAsync()
+export class AuthMiddleware {  @catchAsync()
   static async authenticate(req: Request, _res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
+    const hasValidAuthHeader = authHeader && authHeader.startsWith(AUTH_CONSTANTS.TOKEN_PREFIX);
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw AppError.unauthorized('Authorization token is missing or invalid');
+    if (!hasValidAuthHeader) {
+      throw AppError.unauthorized(AUTH_MESSAGES.MISSING_TOKEN);
     }
 
     const token = authHeader.split(' ')[1];
@@ -34,7 +29,6 @@ export class AuthMiddleware {
     try {
       const decoded = AuthUtils.verifyToken(token);
 
-      // Attach user data to the request
       req.user = {
         id: decoded.id,
         email: decoded.email,
@@ -42,8 +36,10 @@ export class AuthMiddleware {
 
       next();
     } catch (err) {
-      if (err instanceof jwt.JsonWebTokenError) {
-        throw AppError.unauthorized('Invalid token');
+      const isJsonWebTokenError = err instanceof jwt.JsonWebTokenError;
+      
+      if (isJsonWebTokenError) {
+        throw AppError.unauthorized(AUTH_MESSAGES.INVALID_TOKEN);
       } else {
         throw err;
       }

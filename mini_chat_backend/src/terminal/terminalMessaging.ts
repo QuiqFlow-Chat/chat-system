@@ -1,87 +1,101 @@
-import { io } from 'socket.io-client';
 import readline from 'readline';
+import { io } from 'socket.io-client';
+import { MESSAGES } from '@/constants/messages';
 
-// Connect to the server
 const SERVER_URL = 'http://localhost:3777';
+const COMMANDS = {
+  EXIT: '/exit',
+  TYPING: '/typing'
+};
+
+interface UserInfo {
+  id: string;
+}
+
+interface ConversationInfo {
+  conversationId: string;
+}
+
+interface MessageInfo {
+  senderId: string;
+  content: string;
+}
+
+interface TypingInfo {
+  conversationId: string;
+  userId: string;
+}
+
 const socket = io(SERVER_URL);
 
-// Create a readline interface for user input
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-// User information
 let userId: string;
 let conversationId: string;
 
-// Function to prompt the user for input
 const prompt = (question: string): Promise<string> => {
   return new Promise((resolve) => rl.question(question, resolve));
 };
 
-// Handle server events
 socket.on('connect', () => {
-  console.log('✅ Connected to the server');
+  console.log(MESSAGES.SOCKET.CONNECTION.SUCCESS);
 });
 
-socket.on('receiveMessage', (message) => {
-  console.log(`📩 New message from ${message.senderId}: ${message.content}`);
+socket.on('receiveMessage', (message: MessageInfo) => {
+  console.log(`${MESSAGES.SOCKET.MESSAGE.NEW} ${message.senderId}: ${message.content}`);
 });
 
-socket.on('isTyping', (userId) => {
-  console.log(`✏️ User ${userId} is typing...`);
+socket.on('isTyping', (user: UserInfo) => {
+  console.log(`${MESSAGES.SOCKET.MESSAGE.TYPING} ${user.id} ${MESSAGES.SOCKET.MESSAGE.TYPING_SUFFIX}`);
 });
 
-socket.on('userOnline', (user) => {
-  console.log(`🟢 User ${user.id} is online`);
+socket.on('userOnline', (user: UserInfo) => {
+  console.log(`${MESSAGES.SOCKET.USER.ONLINE} ${user.id} ${MESSAGES.SOCKET.USER.ONLINE_SUFFIX}`);
 });
 
-socket.on('userOffline', (user) => {
-  console.log(`🔴 User ${user.id} is offline`);
+socket.on('userOffline', (user: UserInfo) => {
+  console.log(`${MESSAGES.SOCKET.USER.OFFLINE} ${user.id} ${MESSAGES.SOCKET.USER.OFFLINE_SUFFIX}`);
 });
 
-// Add these to your existing socket event listeners
 socket.on('connect_error', (error) => {
-  console.log('❌ Connection error:', error.message);
+  console.log(`${MESSAGES.SOCKET.CONNECTION.ERROR} ${error.message}`);
 });
 
 socket.on('error', (error) => {
-  console.log('⚠️ Socket error:', error);
+  console.log(`${MESSAGES.SOCKET.CONNECTION.SOCKET_ERROR} ${error}`);
 });
 
-// Main function
-const main = async () => {
-  console.log('Welcome to the Terminal Messaging App!');
+const main = async (): Promise<void> => {
+  console.log(MESSAGES.TERMINAL.WELCOME);
 
-  // Get user details
-  userId = await prompt('Enter your user ID: ');
-  conversationId = await prompt('Enter the conversation ID: ');
+  userId = await prompt(MESSAGES.TERMINAL.USER_ID_PROMPT);
+  conversationId = await prompt(MESSAGES.TERMINAL.CONVERSATION_ID_PROMPT);
 
-  // Join the conversation room
-  socket.emit('joinConversation', { conversationId });
+  socket.emit('joinConversation', { conversationId } as ConversationInfo);
+  socket.emit('userOnline', { id: userId } as UserInfo);
 
-  // Notify the server that the user is online
-  socket.emit('userOnline', { id: userId });
-
-  // Listen for user input
   rl.on('line', (input: string) => {
-    if (input.trim() === '/exit') {
-      // Notify the server that the user is offline and exit
-      socket.emit('userOffline', { id: userId });
-      console.log('Goodbye!');
+    const trimmedInput = input.trim();
+    
+    if (trimmedInput === COMMANDS.EXIT) {
+      socket.emit('userOffline', { id: userId } as UserInfo);
+      console.log(MESSAGES.TERMINAL.GOODBYE);
       rl.close();
       socket.disconnect();
       process.exit(0);
-    } else if (input.trim() === '/typing') {
-      // Notify the server that the user is typing
-      socket.emit('isTyping', { conversationId, userId });
+    } else if (trimmedInput === COMMANDS.TYPING) {
+      socket.emit('isTyping', { 
+        conversationId, 
+        userId 
+      } as TypingInfo);
     } else {
-      // Send a message
       socket.emit('sendMessage', {
         conversationId,
         senderId: userId,
-        content: input.trim(),
+        content: trimmedInput,
       });
     }
   });

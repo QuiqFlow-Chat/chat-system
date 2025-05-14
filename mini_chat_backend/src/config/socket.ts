@@ -1,74 +1,72 @@
 import { Server } from 'socket.io';
-import { UserRepository } from '../repositories/userRepository';
-import { UserService } from '../services/userService';
-import { MessageService } from '../services/messageService';
-import { MessageRepository } from '../repositories/messageRepository';
-import { registerChatHandlers } from '../sockets/chatSocket';
-import { AuthUtils } from '../utils/authUtils';
+import { AuthUtils } from '@/utils/authUtils';
+import { MESSAGES } from '@/constants/messages';
+import { MessageRepository } from '@/repositories/messageRepository';
+import { MessageService } from '@/services/messageService';
+import { registerChatHandlers } from '@/sockets/chatSocket';
+import { UserRepository } from '@/repositories/userRepository';
+import { UserService } from '@/services/userService';
+import { ClientToServerEvents, ServerToClientEvents, SocketData } from '@/types/socketType';
 
-const userRepository = new UserRepository();
-const userService = UserService.getInstance(userRepository);
+const USER_REPOSITORY = new UserRepository();
+const USER_SERVICE = UserService.getInstance(USER_REPOSITORY);
 
-const messageRepository = new MessageRepository();
-const messageService = MessageService.getInstance(messageRepository);
+const MESSAGE_REPOSITORY = new MessageRepository();
+const MESSAGE_SERVICE = MessageService.getInstance(MESSAGE_REPOSITORY);
 
-// Simple in-memory set to track online users by user ID
-// OLD: export const onlineUsers = new Set<string>();
+export const ONLINE_USERS = new Map<string, string>();
 
-// ✅ NEW:
-export const onlineUsers = new Map<string, string>(); // userId -> socketId
 
-export const initializeSocket = async (io: Server) => {
-  // Auth middleware
+interface InitializeSocketParams {
+  io: Server<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>;
+}
+
+export const initializeSocket = async ({ io }: InitializeSocketParams) => {
   io.use((socket, next) => {
     try {
       const token = socket.handshake.auth.token;
 
       if (!token) {
-        return next(new Error('Authentication token is missing'));
+        return next(new Error(MESSAGES.SOCKET.AUTH.TOKEN_MISSING));
       }
-      console.log('socket Token: before', token);
-      // Verify token using existing AuthUtils
-      const user = AuthUtils.verifyToken(token);
       
-      // Attach user data to socket for later use
+      const user = AuthUtils.verifyToken(token);
       socket.data.user = user;
 
-      console.log(`[AUTH] User authenticated: ${user.id} (${user.email})`);
+      console.log(`${MESSAGES.SOCKET.AUTH.USER_AUTHENTICATED} ${user.id} (${user.email})`);
       next();
     } catch (error) {
       console.error('Authentication error:', error);
-      // Send more specific error message based on error type
       if (error instanceof Error) {
         return next(new Error(error.message));
       }
-      next(new Error('Authentication failed'));
+      next(new Error(MESSAGES.SOCKET.AUTH.AUTH_FAILED));
     }
   });
-
   io.on('connection', (socket) => {
     try {
       const user = socket.data.user;
-      // OLD: onlineUsers.add(user.id);
-      // ✅ NEW:
-      onlineUsers.set(user.id, socket.id);
-      console.log(`⚡ New client connected: ${user.id}`);
-      console.log(`[ONLINE USERS] Now online:`, Array.from(onlineUsers));
-      // Broadcast to others that this user is online
+      ONLINE_USERS.set(user.id, socket.id);
+      console.log(`${MESSAGES.SOCKET.USER.CONNECTED} ${user.id}`);
+      console.log(`${MESSAGES.SOCKET.ONLINE_USERS}`, Array.from(ONLINE_USERS));
       socket.broadcast.emit('userOnline', { id: user.id });
 
-      // Pass authenticated user to chat handlers
-      registerChatHandlers(io, socket, userService, messageService);
+      registerChatHandlers({
+        io,
+        socket,
+        userService: USER_SERVICE,
+        messageService: MESSAGE_SERVICE
+      });
 
       socket.on('disconnect', () => {
-        onlineUsers.delete(user.id); // Remove user from online set
-        console.log(`🔌 Client disconnected: ${user.id}`);
-        console.log(`[ONLINE USERS] Now online:`, Array.from(onlineUsers));
+        ONLINE_USERS.delete(user.id);
+        console.log(`${MESSAGES.SOCKET.USER.DISCONNECTED} ${user.id}`);
+        console.log(`${MESSAGES.SOCKET.ONLINE_USERS}`, Array.from(ONLINE_USERS));
         socket.broadcast.emit('userOffline', { id: user.id });
       });
     } catch (error) {
       console.error('Error in socket connection:', error);
-      socket.emit('error', 'An error occurred during connection.');
+      socket.emit('error', MESSAGES.SOCKET.ERROR.CONNECTION);
       socket.disconnect(true);
     }
   });

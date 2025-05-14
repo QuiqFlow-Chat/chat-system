@@ -8,14 +8,14 @@ import { AppError } from '@/middlewares/errorMiddlewares';
 import { AuthUtils } from '@/utils/authUtils';
 
 export class UserService {
-  private static _userServiceInstance: UserService;
+  private static _USER_SERVICE_INSTANCE: UserService;
   private constructor(private _userRepository: UserRepository) {}
 
   public static getInstance(userRepository: UserRepository): UserService {
-    if (!this._userServiceInstance) {
-      this._userServiceInstance = new UserService(userRepository);
+    if (!this._USER_SERVICE_INSTANCE) {
+      this._USER_SERVICE_INSTANCE = new UserService(userRepository);
     }
-    return this._userServiceInstance;
+    return this._USER_SERVICE_INSTANCE;
   }
 
   public getAllUsers = async (
@@ -23,15 +23,18 @@ export class UserService {
   ): Promise<IPaginatedResult<User>> => {
     try {
       const users = await this._userRepository.getAll();
-      if (users.length === 0) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
-
-      const page = paginationParams?.page || 1;
+      const hasNoUsers = users.length === 0;
+      
+      if (hasNoUsers) {
+        throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
+      }      const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
 
-      return paginate(users, page, limit);
+      return paginate({ items: users, page, limit });
     } catch (error) {
-      console.error('Error in getAllUsers:', error);
-      throw error instanceof Error ? error : new Error('Failed to get all users');
+      throw error instanceof AppError
+        ? error
+        : new AppError(MESSAGES.USER.GET_ALL_FAILED, 500);
     }
   };
 
@@ -41,8 +44,9 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       return user;
     } catch (error) {
-      console.error('Error in getUserById:', error);
-      throw error instanceof Error ? error : new Error('Failed to get user');
+      throw error instanceof AppError
+        ? error
+        : new AppError(MESSAGES.USER.GET_FAILED, 500);
     }
   };
 
@@ -52,8 +56,9 @@ export class UserService {
       if (!user) throw AppError.notFound(MESSAGES.USER.NOT_FOUND);
       await this._userRepository.delete(user);
     } catch (error) {
-      console.error('Error in deleteUser:', error);
-      throw error instanceof Error ? error : new Error('Failed to delete user');
+      throw error instanceof AppError
+        ? error
+        : new AppError(MESSAGES.USER.DELETE_FAILED, 500);
     }
   };
 
@@ -74,8 +79,9 @@ export class UserService {
 
       await this._userRepository.update(user);
     } catch (error) {
-      console.error('Error in updateUser:', error);
-      throw error instanceof Error ? error : new Error('Failed to update user');
+      throw error instanceof AppError
+        ? error
+        : new AppError(MESSAGES.USER.UPDATE_FAILED, 500);
     }
   };
 
@@ -88,8 +94,9 @@ export class UserService {
       await this._userRepository.update(user);
       return user.lastActivity;
     } catch (error) {
-      console.error('Error in getUserLastActivity:', error);
-      throw error instanceof Error ? error : new Error('Failed to update user last activity');
+      throw error instanceof AppError
+        ? error
+        : new AppError(MESSAGES.USER.UPDATE_ACTIVITY_FAILED, 500);
     }
   };
 }

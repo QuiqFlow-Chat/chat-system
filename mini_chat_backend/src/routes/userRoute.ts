@@ -6,54 +6,59 @@ import { UserController } from '@/controller/userController';
 import { AuthMiddleware } from '@/middlewares/authMiddlewares';
 import { validateRequest } from '@/middlewares/validationMiddleware';
 import { userIdSchema, userUpdateSchema } from '@/validations/userValidation';
-
+import { ROUTES } from '@/constants/messages';
 export class UserRoute extends BaseRoute {
-  userRepository: UserRepository;
-  userService: UserService;
-  userController: UserController;
+  private _userRepository: UserRepository;
+  private _userService: UserService;
+  private _userController: UserController;
+  
   constructor(app: Application) {
     super(app);
-    this.userRepository = new UserRepository();
-    this.userService = UserService.getInstance(this.userRepository);
-    this.userController = UserController.getInstance(this.userService);
+    this._userRepository = new UserRepository();
+    this._userService = UserService.getInstance(this._userRepository);
+    this._userController = UserController.getInstance(this._userService);
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
     this.initUpdateHttpMethod();
   }
 
-  private initGetHttpMethod = async () => {
+  private initGetHttpMethod = () => {
     this.router.get(
-      '/getAllUsers',
+      ROUTES.USER.ALL,
       AuthMiddleware.authenticate,
-      this.userController.getAllUsers.bind(this.userController)
+      this._userController.getAllUsers.bind(this._userController)
     );
+    
     this.router.get(
-      '/:id/getUserById',
+      ROUTES.USER.BY_ID,
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'params'),
-      this.userController.getUserById.bind(this.userController)
+      this._userController.getUserById.bind(this._userController)
     );
+    
     this.router.get(
-      '/:id/getUserLastActivity',
+      ROUTES.USER.LAST_ACTIVITY,
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'params'),
-      this.userController.getUserLastActivity.bind(this.userController)
+      this._userController.getUserLastActivity.bind(this._userController)
     );
   };
-  private initDeleteHttpMethod = async () => {
+  
+  private initDeleteHttpMethod = () => {
     this.router.delete(
-      '/deleteUser',
+      ROUTES.USER.DELETE,
       AuthMiddleware.authenticate,
       validateRequest(userIdSchema, 'body'),
-      this.userController.deleteUser.bind(this.userController)
+      this._userController.deleteUser.bind(this._userController)
     );
   };
-  private initUpdateHttpMethod = async () => {
+  
+  private initUpdateHttpMethod = () => {
     this.router.patch(
-      '/updateUser',
+      ROUTES.USER.UPDATE,
       AuthMiddleware.authenticate,
       validateRequest(userUpdateSchema, 'body'),
-      this.userController.updateUser.bind(this.userController)
+      this._userController.updateUser.bind(this._userController)
     );
   };
 }

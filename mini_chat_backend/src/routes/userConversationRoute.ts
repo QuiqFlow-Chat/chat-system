@@ -6,43 +6,46 @@ import { UserConversationController } from '@/controller/userConversationControl
 import { UserConversationService } from '@/services/userConversationService';
 import { AuthMiddleware } from '@/middlewares/authMiddlewares';
 import { validateRequest } from '@/middlewares/validationMiddleware';
-
+import { ROUTES } from '@/constants/messages';
 export class UserConversationRoute extends BaseRoute {
-  userConversationRepository: UserConversationRepository;
-  userConversationService: UserConversationService;
-  userConversationController: UserConversationController;
+  private _userConversationRepository: UserConversationRepository;
+  private _userConversationService: UserConversationService;
+  private _userConversationController: UserConversationController;
+  
   constructor(app: Application) {
     super(app);
-    this.userConversationRepository = new UserConversationRepository();
-    this.userConversationService = UserConversationService.getInstance(
-      this.userConversationRepository
+    this._userConversationRepository = new UserConversationRepository();
+    this._userConversationService = UserConversationService.getInstance(
+      this._userConversationRepository
     );
-    this.userConversationController = UserConversationController.getInstance(
-      this.userConversationService
+    this._userConversationController = UserConversationController.getInstance(
+      this._userConversationService
     );
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
   }
 
-  private initGetHttpMethod = async () => {
+  private initGetHttpMethod = () => {
     this.router.get(
-      '/getAllUserConversations',
+      ROUTES.USER_CONVERSATION.ALL,
       AuthMiddleware.authenticate,
-      this.userConversationController.getAllUserConversations.bind(this.userConversationController)
+      this._userConversationController.getAllUserConversations.bind(this._userConversationController)
     );
+    
     this.router.get(
-      '/:id/getUserConversationsById',
+      ROUTES.USER_CONVERSATION.BY_ID,
       AuthMiddleware.authenticate,
       validateRequest(userConversationIdSchema, 'params'),
-      this.userConversationController.getUserConversationsById.bind(this.userConversationController)
+      this._userConversationController.getUserConversationsById.bind(this._userConversationController)
     );
   };
-  private initDeleteHttpMethod = async () => {
+  
+  private initDeleteHttpMethod = () => {
     this.router.delete(
-      '/deleteUserConversations',
+      ROUTES.USER_CONVERSATION.DELETE,
       AuthMiddleware.authenticate,
       validateRequest(userConversationIdSchema, 'body'),
-      this.userConversationController.deleteUserConversations.bind(this.userConversationController)
+      this._userConversationController.deleteUserConversations.bind(this._userConversationController)
     );
   };
 }

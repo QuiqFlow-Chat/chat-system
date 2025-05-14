@@ -4,12 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "migrate": "ts-node src/migration_control/migrate.ts",
-    "migrate:undo": "ts-node src/migration_control/revert.ts",
-    "seed": "ts-node src/seeders/seed.ts",
+    "migrate": "ts-node -r tsconfig-paths/register src/migration_control/migrate.ts",
+    "migrate:undo": "ts-node -r tsconfig-paths/register src/migration_control/revert.ts",
+    "seed": "ts-node -r tsconfig-paths/register src/seeders/seed.ts",
     "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/app.ts",
     "format": "prettier --write .",
-    "chat": "ts-node src/terminal/terminalMessaging.ts"
+    "chat": "ts-node -r tsconfig-paths/register src/terminal/terminalMessaging.ts"
   },
   "dependencies": {
     "@types/express": "^5.0.1",

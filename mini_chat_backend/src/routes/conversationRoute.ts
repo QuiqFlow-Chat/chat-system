@@ -9,60 +9,66 @@ import {
   conversationIdSchema,
   conversationIdSchemaforMessages,
 } from '@/validations/conversationValidation';
-
+import { ROUTES } from '@/constants/messages';
 export class ConversationRoute extends BaseRoute {
-  conversationRepository: ConversationsRepository;
-  conversationService: ConversationService;
-  conversationController: ConversationController;
+  private _conversationRepository: ConversationsRepository;
+  private _conversationService: ConversationService;
+  private _conversationController: ConversationController;
+  
   constructor(app: Application) {
     super(app);
-    this.conversationRepository = new ConversationsRepository();
-    this.conversationService = ConversationService.getInstance(this.conversationRepository);
-    this.conversationController = ConversationController.getInstance(this.conversationService);
+    this._conversationRepository = new ConversationsRepository();
+    this._conversationService = ConversationService.getInstance(this._conversationRepository);
+    this._conversationController = ConversationController.getInstance(this._conversationService);
     this.initGetHttpMethod();
     this.initDeleteHttpMethod();
     this.initPostHttpMethod();
   }
+  
   private initPostHttpMethod() {
     this.router.post(
-      '/getConversationMessages',
+      ROUTES.CONVERSATION.MESSAGES,
       AuthMiddleware.authenticate,
-      validateRequest(conversationIdSchemaforMessages, 'body'), // نتحقق من body مش params
-      this.conversationController.getConversationMessages.bind(this.conversationController)
+      validateRequest(conversationIdSchemaforMessages, 'body'),
+      this._conversationController.getConversationMessages.bind(this._conversationController)
     );
   }
 
-  private initGetHttpMethod = async () => {
+  private initGetHttpMethod = () => {
     this.router.get(
-      '/getAllConversations',
+      ROUTES.CONVERSATION.ALL,
       AuthMiddleware.authenticate,
-      this.conversationController.getAllConversations.bind(this.conversationController)
+      this._conversationController.getAllConversations.bind(this._conversationController)
     );
+    
     this.router.get(
-      '/:id/getConversationById',
+      ROUTES.CONVERSATION.BY_ID,
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getConversationById.bind(this.conversationController)
+      this._conversationController.getConversationById.bind(this._conversationController)
     );
+    
     this.router.get(
-      '/:id/getConversationUsers',
+      ROUTES.CONVERSATION.USERS,
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getConversationUsers.bind(this.conversationController)
+      this._conversationController.getConversationUsers.bind(this._conversationController)
     );
+    
     this.router.get(
-      '/:id/getUserConversations',
+      ROUTES.CONVERSATION.USER_CONVERSATIONS,
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'params'),
-      this.conversationController.getUserConversations.bind(this.conversationController)
+      this._conversationController.getUserConversations.bind(this._conversationController)
     );
   };
-  private initDeleteHttpMethod = async () => {
+  
+  private initDeleteHttpMethod = () => {
     this.router.delete(
-      '/deleteConversationAsync',
+      ROUTES.CONVERSATION.DELETE,
       AuthMiddleware.authenticate,
       validateRequest(conversationIdSchema, 'body'),
-      this.conversationController.deleteConversation.bind(this.conversationController)
+      this._conversationController.deleteConversation.bind(this._conversationController)
     );
   };
 }

@@ -15,7 +15,14 @@
     "strict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    
+
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "compileOnSave": true
 }

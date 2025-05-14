@@ -1,14 +1,13 @@
 'use strict';
-import { QueryInterface } from 'sequelize';
-import userConversations from '../data/userConversations.json';
 
-// Define the seed function type
-type SeedFn<T> = (options: { context: T }) => Promise<void>;
+import userConversations from '@/data/userConversations.json';
+import { QueryInterfaceSeedFn } from '@/types/seedTypes';
+import { DB_CONSTANTS } from '@/constants/messages';
 
-export const up: SeedFn<QueryInterface> = async ({ context: queryInterface }) => {
-  await queryInterface.bulkInsert('UserConversations', userConversations, {});
+export const up: QueryInterfaceSeedFn = async ({ context: queryInterface }) => {
+  await queryInterface.bulkInsert(DB_CONSTANTS.TABLE_NAMES.USER_CONVERSATIONS, userConversations, {});
 };
 
-export const down: SeedFn<QueryInterface> = async ({ context: queryInterface }) => {
-  await queryInterface.bulkDelete('UserConversations', {}, {});
+export const down: QueryInterfaceSeedFn = async ({ context: queryInterface }) => {
+  await queryInterface.bulkDelete(DB_CONSTANTS.TABLE_NAMES.USER_CONVERSATIONS, {}, {});
 };

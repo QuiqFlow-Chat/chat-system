@@ -7,51 +7,56 @@ import { MessageController } from '@/controller/messageController';
 import { AuthMiddleware } from '@/middlewares/authMiddlewares';
 import { validateRequest } from '@/middlewares/validationMiddleware';
 import { messageIdSchema, sendMessageSchema } from '@/validations/messageValidation';
-
+import { ROUTES } from '@/constants/messages';
 export class MessageRoute extends BaseRoute {
-  messageRepository: MessageRepository;
-  messageService: MessageService;
-  messageController: MessageController;
+  private _messageRepository: MessageRepository;
+  private _messageService: MessageService;
+  private _messageController: MessageController;
+  
   constructor(app: Application) {
     super(app);
-    this.messageRepository = new MessageRepository();
-    this.messageService = MessageService.getInstance(this.messageRepository);
-    this.messageController = MessageController.getInstance(this.messageService);
+    this._messageRepository = new MessageRepository();
+    this._messageService = MessageService.getInstance(this._messageRepository);
+    this._messageController = MessageController.getInstance(this._messageService);
     this.initPostHttpMethod();
     this.initUpdateHttpMethod();
     this.initDeleteHttpMethod();
     this.initGetHttpMethod();
   }
-  initGetHttpMethod() {
+  
+  private initGetHttpMethod() {
     this.router.get(
-      '/:id/updateMessageStatus',
+      ROUTES.MESSAGE.UPDATE_STATUS,
       AuthMiddleware.authenticate,
       validateRequest(messageIdSchema, 'params'),
-      this.messageController.updateMessageStatus.bind(this.messageController)
+      this._messageController.updateMessageStatus.bind(this._messageController)
     );
   }
-  private initPostHttpMethod = async () => {
+  
+  private initPostHttpMethod = () => {
     this.router.post(
-      '/sendMessage',
+      ROUTES.MESSAGE.SEND,
       AuthMiddleware.authenticate,
       validateRequest(sendMessageSchema, 'body'),
-      this.messageController.sendMessage.bind(this.messageController)
+      this._messageController.sendMessage.bind(this._messageController)
     );
   };
-  private initDeleteHttpMethod = async () => {
+  
+  private initDeleteHttpMethod = () => {
     this.router.delete(
-      '/deleteMessage',
+      ROUTES.MESSAGE.DELETE,
       AuthMiddleware.authenticate,
       validateRequest(messageIdSchema, 'body'),
-      this.messageController.deleteMessage.bind(this.messageController)
+      this._messageController.deleteMessage.bind(this._messageController)
     );
   };
-  private initUpdateHttpMethod = async () => {
+  
+  private initUpdateHttpMethod = () => {
     this.router.patch(
-      '/updateMessageContent',
+      ROUTES.MESSAGE.UPDATE_CONTENT,
       AuthMiddleware.authenticate,
       validateRequest(messageUpdateContentSchema, 'body'),
-      this.messageController.updateMessageContent.bind(this.messageController)
+      this._messageController.updateMessageContent.bind(this._messageController)
     );
   };
 }

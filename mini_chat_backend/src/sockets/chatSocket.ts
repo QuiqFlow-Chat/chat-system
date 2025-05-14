@@ -1,139 +1,151 @@
 import { Server } from 'socket.io';
-import { TypedSocket } from '../types/socketType';
-import { UserService } from '../services/userService';
-import { MessageService } from '../services/messageService';
-import { MessageCreateParameters } from '../types/dtosInterfaces/messageDtos';
-import { AppError } from '../middlewares/errorMiddlewares';
-import { onlineUsers } from '../config/socket';
+import { AppError } from '@/middlewares/errorMiddlewares';
+import { MESSAGES } from '@/constants/messages';
+import { IMessageCreateParameters } from '@/types/dtosInterfaces/messageDtos';
+import { ONLINE_USERS } from '@/config/socket';
+import { MessageService } from '@/services/messageService';
+import { TypedSocket } from '@/types/socketType';
+import { UserService } from '@/services/userService';
 
-export const registerChatHandlers = (
-  io: Server,
-  socket: TypedSocket,
-  userService: UserService,
-  messageService: MessageService
-) => {
+interface RegisterChatHandlersParams {
+  io: Server;
+  socket: TypedSocket;
+  userService: UserService;
+  messageService: MessageService;
+
+}
+
+interface TypingData {
+  id: string;
+  conversationId: string;
+}
+
+interface MessagePayload {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  createdAt: string;
+  isRead: boolean;
+  flag: boolean;
+}
+
+export const registerChatHandlers = ({
+  io,
+  socket,
+  messageService
+}: RegisterChatHandlersParams) => {
   const authenticatedUser = socket.data.user;
 
-  socket.on('userOnline', async () => {
+  socket.on('userOnline', () => {
     try {
-      console.log('🟢User online:', authenticatedUser.id);
       socket.broadcast.emit('userOnline', { id: authenticatedUser.id });
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : 'Failed to set user online status');
+      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.ONLINE_STATUS_FAILED);
     }
   });
 
-  socket.on('userOffline', async () => {
+  socket.on('userOffline', () => {
     try {
-      console.log('🔴User offline:', authenticatedUser.id);
       socket.broadcast.emit('userOffline', { id: authenticatedUser.id });
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : 'Failed to set user offline status');
+      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.OFFLINE_STATUS_FAILED);
     }
   });
 
-  socket.on('joinConversation', async ({ conversationId }) => {
+  socket.on('joinConversation', ({ conversationId }) => {
     try {
       socket.join(conversationId);
-      console.log(`User ${authenticatedUser.id} joined conversation ${conversationId}`);
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : 'Failed to join conversation');
+      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.JOIN_CONVERSATION_FAILED);
     }
   });
 
   socket.on('leaveConversation', ({ conversationId }) => {
     try {
       socket.leave(conversationId);
-      console.log(`User ${authenticatedUser.id} left conversation ${conversationId}`);
     } catch (error) {
-      socket.emit('error', error instanceof Error ? error.message : 'Failed to leave conversation');
+      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.LEAVE_CONVERSATION_FAILED);
     }
   });
-socket.on('sendMessage', async (message: MessageCreateParameters) => {
-  try {
-    console.log('Sending message:', message);
 
-    if (message.senderId !== authenticatedUser.id) {
-      throw AppError.unauthorized('Unauthorized: Cannot send messages as another user');
-    }
-
-    const result = await messageService.sendMessage(message);
-    const newMessage = result.message;
-    const flag = result.flag;
-
-    const conversationId = newMessage.conversationId;
-
-    // Ensure the sender is in the room
-    if (!socket.rooms.has(conversationId)) {
-      socket.join(conversationId);
-    }
-
-    const messagePayload = {
-      id: newMessage.id,
-      conversationId,
-      senderId: newMessage.senderId,
-      receiverId: newMessage.receiverId,
-      content: newMessage.content,
-      createdAt: newMessage.createdAt.toISOString(),
-      isRead: newMessage.isRead,
-      flag: flag,
-    };
-
-    // Emit to all users in the conversation room
-    io.to(conversationId).emit('receiveMessage', messagePayload);
-
-    // Also emit directly to receiver if online and not in the room
-    const receiverSocketId = onlineUsers.get(newMessage.receiverId);
-    const conversationRoom = io.sockets.adapter.rooms.get(conversationId);
-    const receiverInRoom = receiverSocketId ? conversationRoom?.has(receiverSocketId) : false;
-
-    if (receiverSocketId && !receiverInRoom) {
-      io.to(receiverSocketId).emit('receiveMessage', messagePayload);
-    }
-
-    console.log("New message sent:", messagePayload);
-
-  } catch (error) {
-    if (error instanceof AppError) {
-      socket.emit('error', error.message);
-    } else {
-      socket.emit('error', error instanceof Error ? error.message : 'Failed to send message');
-    }
-  }
-});
-
-  socket.on('isTyping', async ({ conversationId }) => {
+  socket.on('sendMessage', async (message: IMessageCreateParameters) => {
     try {
-      if (!conversationId) {
-        throw new Error('Missing conversationId');
+      const isSenderAuthorized = message.senderId === authenticatedUser.id;
+      if (!isSenderAuthorized) {
+        throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.UNAUTHORIZED);
       }
 
-      // Make sure the user is actually in the conversation room
-      if (!socket.rooms.has(conversationId)) {
+      const result: any = await messageService.sendMessage(message);
+      const newMessage = result.message;
+      const flag = result.flag;
+      const conversationId = newMessage.conversationId;
+      
+      const isUserInRoom = socket.rooms.has(conversationId);
+      if (!isUserInRoom) {
         socket.join(conversationId);
-        console.log(`User ${authenticatedUser.id} auto-joined conversation ${conversationId} while typing`);
+      }
+
+      const messagePayload: MessagePayload = {
+        id: newMessage.id,
+        conversationId,
+        senderId: newMessage.senderId,
+        receiverId: newMessage.receiverId,
+        content: newMessage.content,
+        createdAt: newMessage.createdAt.toISOString(),
+        isRead: newMessage.isRead,
+        flag: flag,
+      };
+
+      io.to(conversationId).emit('receiveMessage', messagePayload);
+      
+      const receiverSocketId = ONLINE_USERS.get(newMessage.receiverId);
+      const conversationRoom = io.sockets.adapter.rooms.get(conversationId);
+      const isReceiverInRoom = receiverSocketId ? conversationRoom?.has(receiverSocketId) : false;
+
+      const isReceiverOnlineButNotInRoom = receiverSocketId && !isReceiverInRoom;
+      if (isReceiverOnlineButNotInRoom) {
+        io.to(receiverSocketId).emit('receiveMessage', messagePayload);
+      }
+    } catch (error) {
+      if (error instanceof AppError) {
+        socket.emit('error', error.message);
+      } else {
+        socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.SEND_MESSAGE_FAILED);
+      }
+    }
+  });
+
+  socket.on('isTyping', ({ conversationId }) => {
+    try {
+      const hasConversationId = Boolean(conversationId);
+      if (!hasConversationId) {
+        throw new Error(MESSAGES.SOCKET.ERROR.MISSING_CONVERSATION_ID);
+      }
+
+      const isUserInRoom = socket.rooms.has(conversationId);
+      if (!isUserInRoom) {
+        socket.join(conversationId);
       }
       
-      const typingData = { 
+      const typingData: TypingData = { 
         id: authenticatedUser.id,
         conversationId: conversationId 
       };
       
-      // Broadcast typing event to everyone in the conversation EXCEPT the sender
       socket.to(conversationId).emit('isTyping', typingData);
-      
-      console.log(`User ${authenticatedUser.id} is typing in conversation ${conversationId}`, typingData);
     } catch (error) {
-      console.error('Error in isTyping event handler:', error);
-      socket.emit('error', error instanceof Error ? error.message : 'Failed to send typing indicator');
+      socket.emit('error', error instanceof Error ? error.message : MESSAGES.SOCKET.ERROR.TYPING_INDICATOR_FAILED);
     }
   });
 
   socket.on('getOnlineUsers', (_, callback) => {
-  if (typeof callback === 'function') {
-    callback(Array.from(onlineUsers.keys())); // only user IDs
-  }
-});
+    const isCallbackFunction = typeof callback === 'function';
+    if (isCallbackFunction) {
+      callback(Array.from(ONLINE_USERS.keys()));
+    }
+  });
 
   socket.on('disconnect', () => {
     socket.broadcast.emit('userOffline', { id: authenticatedUser.id });

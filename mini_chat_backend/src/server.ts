@@ -1,6 +1,6 @@
 import { ErrorMiddleware } from '@/middlewares/errorMiddlewares';
 import { Application } from 'express';
-import express from 'express';
+import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import { ConversationRoute } from '@/routes/conversationRoute';
 import { MessageRoute } from '@/routes/messageRoute';
@@ -8,21 +8,24 @@ import { UserConversationRoute } from '@/routes/userConversationRoute';
 import { UserRoute } from '@/routes/userRoute';
 import DataBase from '@/config/database';
 import http from 'http';
-import { Server as SocketIOServer } from 'socket.io';
 import { AuthRoute } from '@/routes/authRoute';
 import { initializeSocket } from '@/config/socket';
+import express from 'express';
+import { ClientToServerEvents, SocketData } from './types/socketType';
+import { ServerToClientEvents } from './types/socketType';
+
+
 
 export class Server {
   port: number;
   app: Application;
   httpServer: http.Server;
-  io: SocketIOServer;
+  io: SocketIOServer<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>;
 
-  constructor(port: number) {
-    this.port = port;
+  constructor(port: number) {    this.port = port;
     this.app = express();
     this.httpServer = http.createServer(this.app);
-    this.io = new SocketIOServer(this.httpServer, {
+    this.io = new SocketIOServer<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>(this.httpServer, {
       cors: {
         origin: '*', // Allow all origins
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -57,9 +60,8 @@ export class Server {
 
     this.app.use(express.json());
   };
-
   private initSocket = async () => {
-    initializeSocket(this.io);
+    initializeSocket({ io: this.io });
   };
 
   private initRoutes = async () => {

@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { MESSAGES, HTTP_STATUS_CODES, ERROR_CONSTANTS } from '@/constants/messages';
 
 export class AppError extends Error {
   readonly statusCode: number;
@@ -10,33 +11,32 @@ export class AppError extends Error {
   }
 
   static badRequest = (message: string): AppError => {
-    return new AppError(message, 400);
+    return new AppError(message, HTTP_STATUS_CODES.BAD_REQUEST);
   };
 
   static notFound = (message: string): AppError => {
-    return new AppError(message, 404);
+    return new AppError(message, HTTP_STATUS_CODES.NOT_FOUND);
   };
 
   static unauthorized(message: string): AppError {
-    return new AppError(message, 401);
+    return new AppError(message, HTTP_STATUS_CODES.UNAUTHORIZED);
   }
 }
 
 export class ErrorMiddleware {
   static handleError(err: unknown, req: Request, res: Response, _next: NextFunction): void {
-    const statusCode = err instanceof AppError ? err.statusCode : 500;
-    const message = err instanceof AppError ? err.message : 'Internal server error' + err;
-
-    console.error(`[${req.method}] ${req.originalUrl} - ${message}`);
+    const isAppError = err instanceof AppError;
+    const statusCode = isAppError ? err.statusCode : HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR;
+    const message = isAppError ? err.message : `${MESSAGES.ERROR.INTERNAL_SERVER_ERROR}${err}`;    console.error(`[${req.method}] ${req.originalUrl} - ${message}`);
 
     res.status(statusCode).json({
-      status: 'error',
+      status: ERROR_CONSTANTS.STATUS,
       message,
       timestamp: new Date().toISOString(),
     });
   }
 
   static handleNotFound = (req: Request, _res: Response, next: NextFunction): void => {
-    next(AppError.notFound(`Route not found: ${req.originalUrl}`));
+    next(AppError.notFound(`${MESSAGES.ERROR.ROUTE_NOT_FOUND}: ${req.originalUrl}`));
   };
 }

@@ -16,16 +16,18 @@ import { MessageRepository } from '@/repositories/messageRepository';
 export class ConversationService {
   _userRepository: UserRepository;
   _messageRepository: MessageRepository;
-  private static _conversationServiceInstance: ConversationService;
+  private static _CONVERSATION_SERVICE_INSTANCE: ConversationService;
+
   private constructor(private _conversationRepository: ConversationsRepository) {
     this._userRepository = new UserRepository();
     this._messageRepository = new MessageRepository();
   }
+
   public static getInstance(conversationRepository: ConversationsRepository): ConversationService {
-    if (!this._conversationServiceInstance) {
-      this._conversationServiceInstance = new ConversationService(conversationRepository);
+    if (!this._CONVERSATION_SERVICE_INSTANCE) {
+      this._CONVERSATION_SERVICE_INSTANCE = new ConversationService(conversationRepository);
     }
-    return this._conversationServiceInstance;
+    return this._CONVERSATION_SERVICE_INSTANCE;
   }
 
   public deleteConversation = async (parameter: IConversationGetByParameter): Promise<void> => {
@@ -34,21 +36,23 @@ export class ConversationService {
       if (!conversation) throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       await this._conversationRepository.delete(conversation);
     } catch (error) {
-      throw error instanceof AppError ? error : new AppError('Failed to delete conversation', 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.CONVERSATION.DELETE_FAILED, 500);
     }
   };
 
   public getAllConversations = async (): Promise<Conversation[]> => {
     try {
       const conversations = await this._conversationRepository.getAll();
-      if (!conversations || conversations.length === 0) {
+      const hasNoConversations = !conversations || conversations.length === 0;
+      
+      if (hasNoConversations) {
         throw AppError.notFound(MESSAGES.CONVERSATION.NOT_FOUND);
       }
       return conversations;
     } catch (error) {
       throw error instanceof AppError
         ? error
-        : new AppError('Failed to get all conversations', 500);
+        : new AppError(MESSAGES.CONVERSATION.GET_ALL_FAILED, 500);
     }
   };
 
@@ -60,7 +64,7 @@ export class ConversationService {
     } catch (error) {
       throw error instanceof AppError
         ? error
-        : new AppError('Failed to get conversation by ID', 500);
+        : new AppError(MESSAGES.CONVERSATION.GET_BY_ID_FAILED, 500);
     }
   };
 
@@ -73,43 +77,28 @@ export class ConversationService {
         parameters.senderId,
         parameters.receiverId
       );
-
-     
+      
       const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
-
-      if (messages?.length === 0) {
-        return {
-          data: [],
-          pagination: {
-            total: 0,
-            currentPage: page,
-            totalPages: 0,
-            limit,
-            hasNextPage: false,
-            hasPrevPage: false,
-          },
-        };
-      }
-      
-
-      if (messages?.length === 0) {
-        return {
-          data: [],
-          pagination: {
-            total: 0,
-            currentPage: page,
-            totalPages: 0,
-            limit,
-            hasNextPage: false,
-            hasPrevPage: false,
-          },
-        };
+      const DEFAULT_PAGINATION = {
+        data: [],
+        pagination: {
+          total: 0,
+          currentPage: page,
+          totalPages: 0,
+          limit,
+          hasNextPage: false,
+          hasPrevPage: false,
+        },
+      };
+        const hasNoMessages = messages?.length === 0;
+      if (hasNoMessages) {
+        return DEFAULT_PAGINATION;
       }
 
-      return paginate(messages, page, limit);
+      return paginate({ items: messages, page, limit });
     } catch (error) {
-      throw new AppError('Failed to get conversation messages', 500);
+      throw new AppError(MESSAGES.CONVERSATION.GET_MESSAGES_FAILED, 500);
     }
   };
 
@@ -122,7 +111,7 @@ export class ConversationService {
     } catch (error) {
       throw error instanceof AppError
         ? error
-        : new AppError('Failed to get conversation users', 500);
+        : new AppError(MESSAGES.CONVERSATION.GET_USERS_FAILED, 500);
     }
   };
 
@@ -131,15 +120,12 @@ export class ConversationService {
     paginationParams?: IPaginationParams
   ): Promise<IPaginatedResult<Conversation>> => {
     try {
-      const conversations = await this._userRepository.getUserConversations(userId);
-
-      const page = paginationParams?.page || 1;
+      const conversations = await this._userRepository.getUserConversations(userId);      const page = paginationParams?.page || 1;
       const limit = paginationParams?.limit || 10;
 
-      return paginate(conversations, page, limit);
+      return paginate({ items: conversations, page, limit });
     } catch (error) {
-      console.error('getUserConversations error:', error);
-      throw error instanceof AppError ? error : new AppError('فشل في جلب المحادثات', 500);
+      throw error instanceof AppError ? error : new AppError(MESSAGES.CONVERSATION.GET_USER_CONVS_FAILED, 500);
     }
   };
 }
