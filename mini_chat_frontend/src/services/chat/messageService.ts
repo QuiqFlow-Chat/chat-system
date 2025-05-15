@@ -1,4 +1,4 @@
-import { apiPost } from '@/services/api/requests';
+import { apiGet } from '@/services/api/requests';
 
 export interface RawMessage {
   id: string;
@@ -22,13 +22,12 @@ export interface PaginationResponse {
 }
 
 export const getConversationMessages = async (
-  page: number,
-  senderId: string,
-  receiverId: string
+  // page: number,
+  conversationId: string,
 ): Promise<PaginationResponse> => {
-  const response = await apiPost<{ data: PaginationResponse }>(
-    `/getConversationMessages?page=${page}&limit=4`,
-    { senderId, receiverId }
+  const response = await apiGet<{ data: PaginationResponse }>(
+    `${conversationId}/getConversationMessages`,
+
   );
   return response.data;
 };

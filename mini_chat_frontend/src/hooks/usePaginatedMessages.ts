@@ -44,7 +44,7 @@ export const usePaginatedMessages = ({
     setError(null);
   
     try {
-      const response = await getConversationMessages(pageRef.current, currentUserId, receiverId);
+      const response = await getConversationMessages(conversationId);
       if (response.data && response.pagination) {
         const newMessages = response.data.map((msg: RawMessage): Message => ({
           type: msg.senderId === currentUserId ? "outgoing" : "incoming",
