@@ -17,7 +17,6 @@
 
   /* === Colors: Brand & UI Backgrounds === */
   --quiqflow-color-blue-900: #172b4d;
-  --quiqflow-color-chat-bg: #f9fcff;/**/
   --quiqflow-color-bg: var(--quiqflow-color-white);
   --quiqflow-color-bg-dark: var(--quiqflow-color-blue-900);
   --quiqflow-color-bg-secondary: #e5eaf1;
@@ -36,11 +35,6 @@
   --quiqflow-color-completed: #000563;
   --quiqflow-color-reOpen: #554feb;
 
-  /* user status *//**/
-  --quiqflow-color-dnd: #e53935; /* do-not-disturb */
-  --quiqflow-color-active: #4caf50;
-  --quiqflow-color-idle: #f59e0b;
-  --quiqflow-color-offline: #565656;
 
   /* === Colors: UI Interactions === */
   --quiqflow-color-header-hover-grey: #e9f2ff33;
@@ -78,14 +72,11 @@
 
   /* === Elevation & Effects === */
   --quiqflow-box-shadow-1: 0 1px 4px rgba(0, 0, 0, 0.1);
-  --quiqflow-box-shadow-2: 0 .5rem 1.5rem .5rem rgba(0, 0, 0, .075);/**/
   --quiqflow-box-shadow-focus: 0 0 0 2px rgba(52, 120, 246, 0.3);
   --quiqflow-box-shadow-error: 0 0 0 2px rgba(229, 57, 53, 0.3);
   --quiqflow-box-shadow-success: 0 0 0 2px rgba(76, 175, 80, 0.3);
   --quiqflow-box-shadow-dark: 0 0 0 2px rgba(255, 255, 255, 0.3);
   
-  --quiqflow-radius-button: 3px; /**/
-  --quiqflow-radius-chat-bubble: 0.5rem; /**/
 
 
   /* === Z-Index === */
@@ -132,12 +123,3 @@
   --quiqflow-color-warn-bg: rgba(245, 158, 11, 0.12);
 }
 
-
-/* Responsive */
-
-@media (max-width: 768px) {
-  :root {
-    --quiqflow-font-size-sm: var(--quiqflow-font-size-xs);
-    --quiqflow-font-size-lg: var(--quiqflow-font-size-md);
-  }
-}

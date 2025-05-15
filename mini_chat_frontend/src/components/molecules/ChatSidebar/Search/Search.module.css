@@ -1,5 +1,5 @@
 .contactsHeader {
-  padding: 1rem;
+  padding: var(--quiqflow-spacing-sm);
 }
 
 .searchContainer {

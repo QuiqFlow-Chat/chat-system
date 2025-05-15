@@ -4,7 +4,8 @@
   gap: 0.5rem;
 }
 
-.wrapper {
+.messageWrapper {
   display: flex;
   flex-direction: column;
+  gap: var(--quiqflow-spacing-sm);
 }

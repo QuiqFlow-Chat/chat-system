@@ -1,9 +1,8 @@
-// src/components/molecules/MessengerHeader/MessengerHeader.tsx
 import React, { useEffect, useState } from "react";
 import styles from "./MessengerHeader.module.css";
-import UserName from "../../../atoms/UserName/UserName";
-import { useSocket } from "../../../../contexts/SocketContext";
+import UserName, { UserNameSizeEnum } from "@/components/atoms/UserName/UserName";
 import { useTranslation } from "react-i18next";
+import { useSocket } from "@/contexts/SocketContext";
 
 interface MessengerHeaderProps {
   user: {
@@ -50,7 +49,7 @@ const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
     <div className={styles.messengerHeader}>
       <div className={styles.messengerTitle}>
         <div className={styles.activeUser}>
-          <UserName name={user.fullName} />
+          <UserName name={user.fullName} size={UserNameSizeEnum.MD} />
           <div className={styles.userStatus}>
             <span
               className={`${styles.statusIndicator} ${styles[status]}`}
@@ -58,13 +57,6 @@ const MessengerHeader: React.FC<MessengerHeaderProps> = ({ user }) => {
             ></span>
             <span className={styles.statusText}>{t(status.toLowerCase())}</span>
           </div>
-        </div>
-      </div>
-      <div className={styles.messengerToolbar}>
-        <div className={styles.dropdownMenu}>
-          <button className={styles.menuTrigger} aria-label="Menu">
-            <i className="fa-solid fa-ellipsis"></i>
-          </button>
         </div>
       </div>
     </div>

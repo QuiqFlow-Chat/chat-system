@@ -7,11 +7,6 @@ export enum ThemeEnum {
   DARK = "dark",
 }
 
-export enum DirectionEnum {
-  LTR = "ltr",
-  RTL = "rtl",
-}
-
 export enum MessageVariantEnum {
   INCOMING = "incoming",
   OUTGOING = "outgoing"
@@ -21,14 +16,12 @@ interface MessageTextProps {
   text: string;
   variant?: MessageVariantEnum;
   theme?: ThemeEnum;
-  direction?: DirectionEnum;
 }
 
 const MessageText: React.FC<MessageTextProps> = ({
   text,
   variant = MessageVariantEnum.INCOMING,
   theme = ThemeEnum.LIGHT,
-  direction = DirectionEnum.LTR,
 }) => {
 
   const formattedText = text.split("\n").map((line, index) => (
@@ -43,8 +36,6 @@ const MessageText: React.FC<MessageTextProps> = ({
     {
       [styles.dark]: theme === ThemeEnum.DARK,
       [styles.light]: theme === ThemeEnum.LIGHT,
-      [styles.rtl]: direction === DirectionEnum.RTL,
-      [styles.ltr]: direction === DirectionEnum.LTR,
       [styles.outgoingText]: variant === MessageVariantEnum.OUTGOING,
       [styles.incomingText]: variant === MessageVariantEnum.INCOMING,
     }

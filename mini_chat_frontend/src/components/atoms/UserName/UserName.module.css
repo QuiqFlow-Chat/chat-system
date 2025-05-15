@@ -3,3 +3,15 @@
   font-size: var(--quiqflow-font-size-md);
   font-weight: bold;
 }
+
+.lg {
+  font-size: var(--quiqflow-font-size-lg);
+}
+
+.md {
+  font-size: var(--quiqflow-font-size-md);
+}
+
+.sm {
+  font-size: var(--quiqflow-font-size-sm);
+}

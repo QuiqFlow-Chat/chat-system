@@ -7,14 +7,21 @@
 
 .chatMain {
   background-color: var(--quiqflow-color-white);
-  border-radius: 0.5rem;
+  border-radius: var(--quiqflow-radius);
   box-shadow: var(--quiqflow-box-shadow-1);
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
+.backButton {
+  display: block;
+}
+
 @media (min-width: 769px) {
+  .messengerCard{
+    display: block;
+  }
   .backButton {
     display: none;
   }

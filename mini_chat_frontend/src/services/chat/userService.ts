@@ -11,12 +11,13 @@ export interface Conversation {
   messages: Message[];
 }
 
+
 export interface GetAllUsersResponse {
   id: string;
   email: string;
   fullName: string;
 }
-
+// \?page=${page}&limit=${limit}
 export const getUserConversations = async (userId: string): Promise<Conversation[]> => {
   const response = await apiGet<{ data: { data: Conversation[] } }>(
     `/${userId}/getUserConversations`
@@ -24,10 +25,9 @@ export const getUserConversations = async (userId: string): Promise<Conversation
   return response.data.data;
 };
 
-
 export const getAllUsers = async (): Promise<GetAllUsersResponse[]> => {
   const response = await apiGet<{ data: { data: GetAllUsersResponse[] } }>(
-    '/getAllUsers?page=1&limit=50'
+    `/getAllUsers?page=${page}&limit=${limit}`
   );
   return response.data.data;
 };

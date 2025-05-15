@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import ContactItem from "../../../molecules/ChatSidebar/ContactItem/ContactItem";
-import Search from "../../../molecules/ChatSidebar/Search/Search";
 import styles from "./ChatSidebar.module.css";
 
 import { useSidebarPagination } from "@/hooks/useSidebarPagination";
 import { ChatSidebarProps, SidebarContact } from "@/types/chatTypes";
 import { fetchAllUsers } from "@/services/chat/fetchAllUsersService";
+import Search from "@/components/molecules/ChatSidebar/Search/Search";
+import ContactItem from "@/components/molecules/ChatSidebar/ContactItem/ContactItem";
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
   contacts,
@@ -55,7 +55,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
 
   return (
     <div className={styles.chatSidebar}>
-      <div className={styles.contactsCard}>
         <Search
           query={query}
           setQuery={(value) => {
@@ -90,7 +89,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
             </div>
           )}
         </div>
-      </div>
+
     </div>
   );
 };

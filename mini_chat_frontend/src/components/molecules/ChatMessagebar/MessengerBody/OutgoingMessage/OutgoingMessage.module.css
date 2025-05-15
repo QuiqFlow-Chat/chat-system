@@ -10,31 +10,8 @@
   justify-content: flex-end;
 }
 
-.messageText {
-  background-color: var(--quiqflow-color-black-lightest);
-  border-radius: var(--quiqflow-radius-chat-bubble);
-  color: var(--quiqflow-color-black);
-  font-weight: var(--quiqflow-font-weight-normal);
-  margin-top: 0.25rem;
-  padding: 1rem;
-  text-align: right;
-  word-wrap: break-word;
-}
-
-.messageTime {
-  color: var(--quiqflow-color-modal-overlay);
-  font-size: var(--quiqflow-font-size-xs);
-}
-
 .messageWrapper {
   display: flex;
   flex-direction: column;
-}
-
-.userDetails {
-  align-items: flex-end;
-  display: flex;
-  flex-direction: column;
-  margin-right: 0.75rem;
-  text-align: right;
+  gap: var(--quiqflow-spacing-sm);
 }

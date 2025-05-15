@@ -8,10 +8,6 @@ export enum ThemeEnum {
   DARK = "dark",
 }
 
-export enum Direction {
-  LTR = "ltr",
-  RTL = "rtl",
-}
 
 export enum AvatarVariant {
   SMALL = "small",
@@ -22,11 +18,9 @@ export interface AvatarProps {
   initial?: string;
   variant?: AvatarVariant;
   theme?: ThemeEnum;
-  direction?: Direction;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
-  direction = Direction.LTR,
   initial = "",
   theme = ThemeEnum.LIGHT,
   variant = AvatarVariant.LARGE,
@@ -37,8 +31,6 @@ const Avatar: React.FC<AvatarProps> = ({
     styles.avatar,
     styles[variant], 
     {
-      [styles.rtl]: direction === Direction.RTL,
-      [styles.ltr]: direction === Direction.LTR,
       [styles.avatarDark]: theme === ThemeEnum.DARK,
       [styles.avatarLight]: theme === ThemeEnum.LIGHT,
     }

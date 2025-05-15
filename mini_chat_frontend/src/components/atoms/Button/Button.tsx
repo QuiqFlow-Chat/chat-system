@@ -19,14 +19,9 @@ export enum ThemeEnum {
   DARK = "dark",
 }
 
-export enum DirectionEnum {
-  LTR = "ltr",
-  RTL = "rtl",
-}
 
 export interface ButtonProps {
   children: React.ReactNode;
-  direction?: DirectionEnum;
   isDisabled?: boolean;
   isLoading?: boolean;
   onClick?: () => void;
@@ -45,7 +40,6 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   onClick,
   theme = ThemeEnum.LIGHT,
-  direction = DirectionEnum.LTR,
 }) => {
   const { t } = useTranslation();
 
@@ -56,8 +50,6 @@ const Button: React.FC<ButtonProps> = ({
     {
       [styles.buttonDark]: theme === ThemeEnum.DARK,
       [styles.buttonLight]: theme === ThemeEnum.LIGHT,
-      [styles.rtl]: direction === DirectionEnum.RTL,
-      [styles.ltr]: direction === DirectionEnum.LTR,
     }
   );
 

@@ -1,31 +1,18 @@
 import React, { JSX, useEffect, useState } from "react";
-import styles from "./MessengerChat.module.css";
-import ChatSidebar from "@/components/organisms/Chat/Sidebar/ChatSidebar";
-import Messagebar from "@/components/organisms/Chat/Messagebar/Messagebar";
-import SidebarImage from "@/assets/images/sidebar.jpg";
-import { SocketProvider } from "@/contexts/SocketContext";
-import { userStorage } from "@/utils/localStorageUtil";
-import { getUserConversations } from "@/services/chat/userService";
-import { logout } from "@/services/auth/authService";
 import { useNavigate } from "react-router-dom";
-import Avatar, { AvatarVariant } from "@/components/atoms/Avatar/Avatar";
-import Button, {
-  ButtonSizeEnum,
-  ButtonVariantEnum,
-} from "@/components/atoms/Button/Button";
 import { useTranslation } from "react-i18next";
 
-type User = {
-  id: string;
-  email: string;
-  fullName: string;
-};
+import styles from "./MessengerChat.module.css";
+import SidebarImage from "@/assets/images/sidebar.jpg";
 
-type SidebarContact = {
-  user: User;
-  conversationId: string;
-  lastMessageTime: string;
-};
+import ChatSidebar from "@/components/organisms/Chat/Sidebar/ChatSidebar";
+import Messagebar from "@/components/organisms/Chat/Messagebar/Messagebar";
+import Avatar, { AvatarVariant } from "@/components/atoms/Avatar/Avatar";
+import Button, {ButtonSizeEnum,ButtonVariantEnum} from "@/components/atoms/Button/Button";
+
+import { logout } from "@/services/auth/authService";
+import { SocketProvider } from "@/contexts/SocketContext";
+import {SidebarContact,User,loadUserAndContacts} from "@/services/chat/messengerUtils";
 
 const MessengerChat: React.FC = (): JSX.Element => {
   const [contacts, setContacts] = useState<SidebarContact[]>([]);
@@ -56,44 +43,20 @@ const MessengerChat: React.FC = (): JSX.Element => {
   };
 
   useEffect(() => {
-    const loadUserAndContacts = async () => {
-      const loadedUser = userStorage.load();
-      if (!loadedUser) return;
-
-      setCurrentUser(loadedUser);
-
-      try {
-        const conversations = await getUserConversations(loadedUser.id);
-
-        const formattedContacts: SidebarContact[] = conversations.map(
-          (conv) => {
-            const other = conv.users.find((u: User) => u.id !== loadedUser.id)!;
-            const lastMessage = conv.messages?.[conv.messages.length - 1];
-
-            return {
-              user: other,
-              conversationId: conv.id,
-              lastMessageTime: lastMessage?.createdAt || t("noMessages"),
-            };
-          }
-        );
-
-        setContacts(formattedContacts);
-      } catch (error) {
-        console.error("Failed to fetch conversations:", error);
-      }
+    const fetchData = async () => {
+      const { currentUser, contacts } = await loadUserAndContacts(t);
+      if (!currentUser) return;
+      setCurrentUser(currentUser);
+      setContacts(contacts);
     };
 
-    loadUserAndContacts();
+    fetchData();
   }, [t]);
 
   const handleSelectConversation = (id: string, user: User) => {
     setConversationId(id);
     setOtherUser(user);
-
-    if (isMobile) {
-      setShowSidebar(false);
-    }
+    if (isMobile) setShowSidebar(false);
   };
 
   const handleLogout = () => {

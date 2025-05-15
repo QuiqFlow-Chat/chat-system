@@ -22,17 +22,12 @@
 
 .senderData {
   display: flex;
-  margin-bottom: 0.5rem;
+  gap: var(--quiqflow-spacing-sm);
 }
 
 .userDetails {
   align-items: center;
   display: flex;
-  gap: 1rem;
-  margin-left: 0.5rem;
+  gap: var(--quiqflow-spacing-sm);
 }
 
-.userDetailsReverse {
-  margin-left: 0;
-  margin-right: 0.5rem;
-}

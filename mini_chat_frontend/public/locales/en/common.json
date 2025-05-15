@@ -5,7 +5,7 @@
   "loading": "Loading...",
 
   "logout": "Logout",
-  "unauthorized": "Unauthorized access",
+  "unauthorized": "Unauthorized 401",
 
   "form": {
     "passwordLabel": "Password",
@@ -70,7 +70,7 @@
       "signingUp": "Signing up..."
     }
   },
-  "page"{
+  "page": {
     "loginPage": {
       "title": "Log In",
       "error": "Login failed. Please try again.",

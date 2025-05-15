@@ -8,11 +8,6 @@ export enum ThemeEnum {
   DARK = "dark",
 }
 
-export enum DirectionEnum {
-  LTR = "ltr",
-  RTL = "rtl",
-}
-
 export enum LabelSizeEnum {
   SM = "sm",
   MD = "md",
@@ -29,7 +24,6 @@ export interface LabelProps {
   size?: LabelSizeEnum;
   weight?: LabelWeightEnum;
   theme?: ThemeEnum;
-  direction?: DirectionEnum;
   onClick?: () => void;
   children: React.ReactNode;
 }
@@ -39,7 +33,6 @@ const Label: React.FC<LabelProps> = ({
   size = LabelSizeEnum.MD,
   weight = LabelWeightEnum.NORMAL,
   theme = ThemeEnum.LIGHT,
-  direction = DirectionEnum.LTR,
   onClick,
   children,
 }) => {
@@ -52,8 +45,6 @@ const Label: React.FC<LabelProps> = ({
     {
       [styles.dark]: theme === ThemeEnum.DARK,
       [styles.light]: theme === ThemeEnum.LIGHT,
-      [styles.rtl]: direction === DirectionEnum.RTL,
-      [styles.ltr]: direction === DirectionEnum.LTR,
     }
   );
 
