@@ -58,7 +58,7 @@
     "timeUnit": "hrs",
     "noResultsFound": "No results found..."
   },
-  
+
   "register": {
     "loginForm": {
       "logIn": "Log In",
@@ -70,13 +70,19 @@
       "signingUp": "Signing up..."
     }
   },
-  "page": {
+
+  "pages": {
     "loginPage": {
       "title": "Log In",
       "error": "Login failed. Please try again.",
       "noAccount": "Don't have an account?",
       "signUp": "Sign Up"
+    },
+    "signUpPage": {
+      "title": "Sign Up",
+      "error": "Registration failed. Please try again.",
+      "alreadyHaveAccount": "Already have an account?",
+      "login": "Log In"
     }
   }
- 
 }

@@ -16,7 +16,7 @@ interface EmailFieldProps {
 }
 
 export const emailValidation = Yup.string()
-  .matches(EMAIL_REGEX , "validation.email.format")
+  .matches(EMAIL_REGEX, "validation.email.format")
   .email("validation.email.invalid")
   .required("validation.email.required");
 

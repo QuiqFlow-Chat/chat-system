@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import { FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../../services/auth/authService";
-import { UserLoginParameters } from "../../../shared/dtosInterfaces/userDtos";
+import { UserLoginParameters } from "@/shared/dtosInterfaces/userDtos";
 import styles from "./LoginPage.module.css";
+import LoginForm from "@/components/organisms/Register/LoginForm";
+import { useTranslation } from "react-i18next";
+import { login } from "@/services/auth/authService";
 
-import LoginForm from "../../organisms/Register/LoginForm";
+export enum ThemeEnum {
+  DARK = "dark",
+  LIGHT = "light",
+}
+
+export enum DirectionEnum {
+  LTR = "ltr",
+  RTL = "rtl",
+}
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +36,7 @@ const LoginPage: React.FC = () => {
       console.log("Logged in user:", user);
       navigate("/messengerChat");
     } catch (error: any) {
-      const errorMessage = error?.message || "Login failed. Please try again.";
+      const errorMessage = error?.message || t("pages.loginPage.error");
       setError(errorMessage);
     } finally {
       setSubmitting(false);
@@ -38,7 +49,11 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className={styles.registerPage}>
+    <div
+      className={styles.registerPage}
+      data-theme={ThemeEnum.LIGHT}
+      data-direction={DirectionEnum.LTR}
+    >
       <img
         className={styles.primaryLogo}
         src="https://quiqflow.com/wp-content/uploads/2024/01/logo.png"
@@ -46,19 +61,15 @@ const LoginPage: React.FC = () => {
       />
       <div className={styles.registerContainer}>
         <header className={styles.registerHeader}>
-          <h1 className={styles.registerTitle}>Log In</h1>
+          <h1 className={styles.registerTitle}>{t("pages.loginPage.title")}</h1>
         </header>
 
         <LoginForm onSubmit={handleSubmit} loading={loading} error={error} />
 
         <p className={styles.registerSubtext}>
-          Don&apos;t have an account?{" "}
-          <span
-            style={{ cursor: "pointer" }}
-            onClick={goToSignup}
-            className={styles.registerLink}
-          >
-            Sign Up
+          {t("pages.loginPage.noAccount")}{" "}
+          <span onClick={goToSignup} className={styles.registerLink}>
+            {t("pages.loginPage.signUp")}
           </span>
         </p>
       </div>
