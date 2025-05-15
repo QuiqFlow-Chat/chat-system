@@ -6,25 +6,22 @@ export class UserConversationRepository implements IUserConversationRepository<U
   public getSharedConversation = async (
     senderId: string,
     receiverId: string
-  ): Promise<UserConversation[]|null> => {
-   try {
-    
-    const senderConversations = await UserConversation.findAll({
-      where: { userId: senderId },
-    });
+  ): Promise<UserConversation[] | null> => {
+    try {
+      const senderConversations = await UserConversation.findAll({
+        where: { userId: senderId },
+      });
 
-   
-    const conversationIds = senderConversations.map((uc) => uc.conversationId);
+      const conversationIds = senderConversations.map((uc) => uc.conversationId);
 
-   
-    const sharedConversations = await UserConversation.findAll({
-      where: {
-        conversationId: conversationIds,
-        userId: receiverId,
-      },
-    });
+      const sharedConversations = await UserConversation.findAll({
+        where: {
+          conversationId: conversationIds,
+          userId: receiverId,
+        },
+      });
 
-    return sharedConversations.length > 0 ? sharedConversations : null;
+      return sharedConversations.length > 0 ? sharedConversations : null;
     } catch (error) {
       console.error('Error in get shared conversation:', error);
       throw new Error(`Failed to get shared conversation`);

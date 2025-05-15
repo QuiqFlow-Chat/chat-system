@@ -1,4 +1,3 @@
-
 export interface IUserConversationRepository<UserConversation> {
   add(data: unknown): Promise<void>;
   getAll(): Promise<UserConversation[]>;
