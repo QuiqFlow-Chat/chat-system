@@ -21,7 +21,7 @@ export const loadUserAndContacts = async (
   if (!loadedUser) return { currentUser: null, contacts: [] };
 
   try {
-    const conversations = await getUserConversations(loadedUser.id );
+    const conversations = await getUserConversations();
 
     const formattedContacts: SidebarContact[] = conversations.map((conv) => {
       const other = conv.users.find((u: User) => u.id !== loadedUser.id)!;

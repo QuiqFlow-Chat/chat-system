@@ -35,6 +35,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     try {
       const data = await fetchAllUsers();
       setAllUsers(data);
+      console.log("allUsers",allUsers)
     } catch (error) {
       console.error("Failed to fetch users:", error);
       setAllUsers([]);
@@ -55,6 +56,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
 
   return (
     <div className={styles.chatSidebar}>
+
         <Search
           query={query}
           setQuery={(value) => {

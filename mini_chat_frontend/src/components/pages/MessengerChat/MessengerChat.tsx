@@ -5,7 +5,7 @@ import Messagebar from "@/components/organisms/Chat/Messagebar/Messagebar";
 import SidebarImage from "@/assets/images/sidebar.jpg";
 import { SocketProvider } from "@/contexts/SocketContext";
 import { userStorage } from "@/utils/localStorageUtil";
-import { getUserConversations } from "@/services/chat/userService";
+import { getConversationId, getUserConversations } from "@/services/chat/userService";
 import { logout } from "@/services/auth/authService";
 import { useNavigate } from "react-router-dom";
 import Avatar, { AvatarVariant } from "@/components/atoms/Avatar/Avatar";
@@ -63,10 +63,11 @@ const MessengerChat: React.FC = (): JSX.Element => {
       setCurrentUser(loadedUser);
 
       try {
-        const conversations = await getUserConversations(loadedUser.id);
+        const conversations = await getUserConversations();
 
         const formattedContacts: SidebarContact[] = conversations.map(
           (conv) => {
+
             const other = conv.users.find((u: User) => u.id !== loadedUser.id)!;
             const lastMessage = conv.messages?.[conv.messages.length - 1];
 
@@ -79,6 +80,7 @@ const MessengerChat: React.FC = (): JSX.Element => {
         );
 
         setContacts(formattedContacts);
+        console.log("formattedContacts",formattedContacts)
       } catch (error) {
         console.error("Failed to fetch conversations:", error);
       }
@@ -102,7 +104,7 @@ const MessengerChat: React.FC = (): JSX.Element => {
   };
 
   if (!currentUser) return <div>{t("unauthorized")}</div>;
-
+  
   return (
     <SocketProvider>
       <div className={styles.chatPage}>

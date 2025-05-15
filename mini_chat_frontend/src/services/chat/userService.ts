@@ -18,17 +18,32 @@ export interface GetAllUsersResponse {
   fullName: string;
 }
 // \?page=${page}&limit=${limit}
-export const getUserConversations = async (userId: string): Promise<Conversation[]> => {
+export const getUserConversations = async (): Promise<Conversation[]> => {
   const response = await apiGet<{ data: { data: Conversation[] } }>(
-    `/${userId}/getUserConversations`
+    `/getUserConversations`
   );
   return response.data.data;
 };
 
 export const getAllUsers = async (): Promise<GetAllUsersResponse[]> => {
   const response = await apiGet<{ data: { data: GetAllUsersResponse[] } }>(
-    `/getAllUsers?page=${page}&limit=${limit}`
+    `/getAllUsers?page=1&limit=10`
   );
+
+  console.log("getAllUsers",response)
   return response.data.data;
 };
+
+
+export const getConversationId = async (  
+  user: any,
+): Promise<string> => {
+  const response = await apiGet<{ data: string }>(
+    `${user.id}/checkOrCreateNewConversation`
+  );
+  console.log("getConversationId**",response.data)
+  return response.data;
+};
+
+
 
