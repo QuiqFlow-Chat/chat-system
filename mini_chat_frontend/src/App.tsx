@@ -1,8 +1,13 @@
 import "./App.css";
-import SignUpPage from "./components/page/signUp/SignUpPage";
-import LoginPage from "./components/page/LoginPage/LoginPage";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import MessengerChat from "./components/page/MessengerChat/MessengerChat";
+import SignUpPage from "./components/pages/SignUp/SignUpPage";
+import LoginPage from "./components/pages/LoginPage/LoginPage";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import MessengerChat from "./components/pages/MessengerChat/MessengerChat";
 
 function App() {
   return (

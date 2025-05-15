@@ -1,5 +1,5 @@
 .input {
-  border-radius: var(--quiqflow-radius-button);
+  border-radius: var(--quiqflow-radius);
   border: 1px solid ;
   color: var(--quiqflow-color-grey);
   font-size: var(--quiqflow-font-size-md);
@@ -28,12 +28,12 @@
 /* searchInput */
 .searchInput {
   background-color: var(--quiqflow-color-white);
-  border-radius: 0.3rem;
+  border-radius: var(--quiqflow-radius);
   border: solid var(--quiqflow-color-grey-border);
   color: var(--quiqflow-color-modal-overlay);
   font-size: var(--quiqflow-font-size-sm);
   font-weight: var(--quiqflow-font-weight-normal);
-  padding: 0.75rem 1rem 0.75rem 3rem;
+  padding: var(--quiqflow-spacing-md);
   width: 100%;
 }
 
@@ -43,13 +43,12 @@
   outline: none;
 }
 
-
 /* messageInput */
-
 .messageInput {
   background-color: var(--quiqflow-color-black-lightest);
   border-radius: var(--quiqflow-radius-chat-bubble);
   border: none;
+  color: var(--quiqflow-color-grey);
   font-size: var(--quiqflow-font-size-lg);
   padding: var(--quiqflow-spacing-md, 0.75rem);
   width: 100%;
@@ -75,12 +74,4 @@
 
 .light {
   filter: brightness(1);
-}
-
-.rtl {
-  direction: rtl;
-}
-
-.ltr {
-  direction: ltr;
 }

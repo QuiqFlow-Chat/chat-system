@@ -1,23 +1,23 @@
 .avatar {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: var(--quiqflow-font-size-lg);
-  color: var(--quiqflow-color-white);
   border-radius: 50%;
+  color: var(--quiqflow-color-white);
+  display: flex;
+  font-size: var(--quiqflow-font-size-lg);
+  font-weight: bold;
+  justify-content: center;
 }
 
 .large{
-  width: 45px;
-  height: 45px;
-  font-size: var(--quiqflow-font-size-lg);
+  font-size: var(--quiqflow-font-size-md);
+  height: 40px;
+  width: 40px;
 }
 
 .small {
-  width: 35px;
-  height: 35px;
   font-size: var(--quiqflow-font-size-sm);
+  height: 35px;
+  width: 35px;
 }
 
 
@@ -29,10 +29,15 @@
   background-color: var(--quiqflow-color-dark-bg);
 }
 
-.ltr {
-  direction: ltr;
-}
 
-.rtl {
-  direction: rtl;
-}
+/* ===============================
+   Desktop styles (larger screens)
+   =============================== */
+
+   @media (min-width: 768px) {
+    .large{
+      font-size: var(--quiqflow-font-size-lg);
+      height: 45px;
+      width: 60px;
+    }
+   }

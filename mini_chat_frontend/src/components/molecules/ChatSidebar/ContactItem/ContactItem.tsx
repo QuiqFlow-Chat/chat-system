@@ -1,7 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Avatar, { AvatarVariant } from "../../../atoms/Avatar/Avatar";
+import Avatar, { AvatarVariant } from "@/components/atoms/Avatar/Avatar";
 import styles from "./ContactItem.module.css";
+import UserName, { UserNameSizeEnum } from "@/components/atoms/UserName/UserName";
 
 interface ContactItemProps {
   user: {
@@ -31,7 +32,9 @@ const ContactItem: React.FC<ContactItemProps> = ({
       <div className={styles.contactDetails}>
         <Avatar initial={user.fullName[0]} variant={AvatarVariant.LARGE} />
         <div className={styles.contactInfo}>
-          <div className={styles.contactName}>{user.fullName}</div>
+          <div className={styles.contactName}>
+          <UserName name={user.fullName} size={UserNameSizeEnum.LG} />
+          </div>
           <div className={styles.contactEmail}>{user.email}</div>
         </div>
       </div>

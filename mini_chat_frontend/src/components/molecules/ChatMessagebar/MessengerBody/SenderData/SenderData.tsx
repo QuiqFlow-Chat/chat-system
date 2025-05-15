@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./SenderData.module.css";
-import Avatar, { AvatarVariant } from "../../../../atoms/Avatar/Avatar";
-import UserName from "../../../../atoms/UserName/UserName";
+import Avatar, { AvatarVariant } from "@/components/atoms/Avatar/Avatar";
+import UserName, { UserNameSizeEnum } from "@/components/atoms/UserName/UserName";
 
 interface SenderDataProps {
   name: string;
@@ -31,18 +31,16 @@ const SenderData: React.FC<SenderDataProps> = ({
     <div className={`${styles.senderData} ${reverseOrder ? styles.reverse : ""}`}>
       {avatarContent}
       <div
-        className={`${styles.userDetails} ${
-          reverseOrder ? styles.userDetailsReverse : ""
-        }`}
+        className={styles.userDetails}
       >
         {reverseOrder ? (
           <>
             <div className={styles.messageTime}>{time}</div>
-            <UserName name={name} />
+            <UserName name={name} size={UserNameSizeEnum.SM} />
           </>
         ) : (
           <>
-            <UserName name={name} />
+            <UserName name={name} size={UserNameSizeEnum.SM} />
             <div className={styles.messageTime}>{time}</div>
           </>
         )}

@@ -1,0 +1,38 @@
+:root {
+    /* === Spacing Tokens === */
+    --quiqflow-spacing-xl: 64px;
+    --quiqflow-spacing-lg: 32px;
+    --quiqflow-spacing-md: 16px;
+    --quiqflow-spacing-sm: 10px;
+    --quiqflow-spacing-xs: 5px;
+  
+    /* === Radius Tokens (Custom Additions) === */
+    --quiqflow-radius: 3px;
+    --quiqflow-radius-chat-bubble: 0.5rem;
+  
+    /* === Box Shadows (Custom Additions) === */
+    --quiqflow-box-shadow-2: 0 .5rem 1.5rem .5rem rgba(0, 0, 0, .075);
+  
+    /* === Component Backgrounds (Custom Additions) === */
+    --quiqflow-color-chat-bg: #f9fcff;
+  
+    /* === User Status Colors === */
+    --quiqflow-color-active: #4caf50;
+    --quiqflow-color-dnd: #e53935;
+    --quiqflow-color-idle: #f59e0b;
+    --quiqflow-color-offline: #565656;
+
+
+    --quiqflow-max-width-message:500px
+  }
+  
+/* ===============================
+   Desktop styles (larger screens)
+   =============================== */
+
+   @media (min-width: 769px) {
+  :root {
+    --quiqflow-font-size-xs: var(--quiqflow-font-size-sm);
+    --quiqflow-font-size-md: var(--quiqflow-font-size-lg);
+  }
+}

@@ -3,8 +3,8 @@ import { useField } from "formik";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
-import Label from "../../../atoms/Label/Label";
-import Input, { InputVariantEnum } from "../../../atoms/Input/Input";
+import Label from "@/components/atoms/Label/Label";
+import Input, { InputVariantEnum } from "@/components/atoms/Input/Input";
 
 import styles from "../FormFieldStyles.module.css";
 import { EMAIL_REGEX } from "@/constants/regex";
@@ -16,7 +16,7 @@ interface EmailFieldProps {
 }
 
 export const emailValidation = Yup.string()
-  .matches(EMAIL_REGEX , "validation.email.format")
+  .matches(EMAIL_REGEX, "validation.email.format")
   .email("validation.email.invalid")
   .required("validation.email.required");
 

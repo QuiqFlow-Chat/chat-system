@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--quiqflow-spacing-lg, 1.5rem);
+  padding: var(--quiqflow-spacing-md);
   border-bottom: 1px solid var(--quiqflow-color-light-grey);
 }
 
@@ -12,22 +12,21 @@
 }
 
 .activeUser {
-  display: grid;
-  grid-template-rows: auto auto;
-  row-gap: var(--quiqflow-spacing-xs, 4px);
+  display: flex;
+  flex-direction: column;
 }
 
 .userStatus {
+  gap: var(--quiqflow-spacing-xs);
   display: flex;
   align-items: center;
-  font-size: 0.85rem;
+  font-size: var(--quiqflow-font-size-sm);
 }
 
 .statusIndicator {
-  width: var(--quiqflow-size-indicator, 10px);
-  height: var(--quiqflow-size-indicator, 10px);
+  width:  var(--quiqflow-spacing-sm);
+  height:  var(--quiqflow-spacing-sm);
   border-radius: 50%;
-  margin-inline-end: 0.5rem;
 }
 
 /* status color modifiers */
@@ -41,28 +40,4 @@
 .statusText {
   color: var(--quiqflow-color-modal-overlay);
   font-weight: var(--quiqflow-font-weight-bold);
-}
-
-.messengerToolbar {
-  display: flex;
-  align-items: center;
-}
-
-.dropdownMenu {
-  display: flex;
-}
-
-.menuTrigger {
-  background: none;
-  border-radius: var(--quiqflow-radius-chat-bubble);
-  border: none;
-  color: var(--quiqflow-color-modal-overlay);
-  cursor: pointer;
-  font-size: var(--quiqflow-font-size-lg);
-  padding: 5px 10px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.menuTrigger:hover {
-  background-color: var(--quiqflow-color-primary-light);
 }

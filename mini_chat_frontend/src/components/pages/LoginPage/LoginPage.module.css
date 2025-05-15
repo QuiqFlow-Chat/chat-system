@@ -1,12 +1,12 @@
 .registerContainer {
   background-color: var(--quiqflow-color-white);
-  border-radius: 0.5rem;
+  border-radius: 8px;
   box-shadow: var(--quiqflow-box-shadow-2);
   color: var(--quiqflow-color-primary-font);
   display: flex;
   flex-direction: column;
-  max-width: 28rem;
-  padding: 1.5rem 2.5rem;
+  max-width: 448px;
+  padding: 24px 40px;
   width: 100%;
 }
 
@@ -18,12 +18,12 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 16px;
   width: 100%;
 }
 
 .registerHeader {
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   text-align: center;
 }
 
@@ -40,13 +40,14 @@
   display: flex;
   font-size: var(--quiqflow-font-size-xs);
   justify-content: center;
-  margin: 1.5rem 0;
+  margin: 24px 0;
 }
 
 .registerLink {
   color: var(--quiqflow-color-primary);
   text-decoration: none;
   transition: color 0.2s ease;
+  cursor: pointer;
 }
 
 .registerLink:hover {
@@ -56,6 +57,6 @@
 
 .primaryLogo {
   height: auto;
-  margin: 1.5rem;
+  margin: 24px;
   width: 200px;
 }
