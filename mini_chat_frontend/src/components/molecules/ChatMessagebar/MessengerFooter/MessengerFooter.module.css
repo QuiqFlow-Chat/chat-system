@@ -1,6 +1,6 @@
 .messengerFooter {
   border-top: 1px solid var(--quiqflow-color-light-grey);
-  padding: var(--quiqflow-spacing-lg, 1.5rem);
+  padding: var(--quiqflow-spacing-md);
 }
 
 .inputGroup {

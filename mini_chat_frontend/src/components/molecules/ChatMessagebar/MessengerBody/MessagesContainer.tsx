@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import styles from "./MessagesContainer.module.css";
 import IncomingMessage from "./IncomingMessage/IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
-import { usePaginatedMessages } from "../../../../hooks/usePaginatedMessages";
-import { User } from "../../../organisms/Chat/Messagebar/Messagebar";
+import { usePaginatedMessages } from "@/hooks/usePaginatedMessages";
 import { useTranslation } from "react-i18next";
+import { User } from "@/types/chatTypes";
 
 interface MessagesContainerProps {
   conversationId: string;
@@ -40,6 +40,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
   }, [isTyping, otherUser.fullName, bottomRef]);
 
   return (
+    <>
     <div className={styles.messengerBody} ref={containerRef}>
       <div className={styles.messagesContainer}>
         {loading && (
@@ -66,17 +67,20 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
           )
         )}
 
-        {isTyping && (
+
+
+        <div ref={bottomRef} />
+      </div>
+    </div>
+
+    {isTyping && (
           <div className={styles.typingIndicator}>
             <span className={styles.dot}></span>
             <span className={styles.dot}></span>
             <span className={styles.dot}></span>
           </div>
         )}
-
-        <div ref={bottomRef} />
-      </div>
-    </div>
+    </>
   );
 };
 

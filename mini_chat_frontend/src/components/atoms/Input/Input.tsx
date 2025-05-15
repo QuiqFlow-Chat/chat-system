@@ -9,10 +9,6 @@ export enum ThemeEnum {
   DARK = "dark",
 }
 
-export enum DirectionEnum {
-  LTR = "ltr",
-  RTL = "rtl",
-}
 
 export enum InputVariantEnum {
   AUTH = "auth",
@@ -22,7 +18,6 @@ export enum InputVariantEnum {
 }
 
 export interface InputProps {
-  direction?: DirectionEnum;
   id?: string;
   isInvalid?: boolean;
   isValid?: boolean;
@@ -40,7 +35,6 @@ export interface InputProps {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(({
-  direction = DirectionEnum.LTR,
   id,
   isInvalid = false,
   isValid = false,
@@ -61,8 +55,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
   const inputClassName = clsx(
     styles.input,
     {
-      [styles.rtl]: direction === DirectionEnum.RTL,
-      [styles.ltr]: direction === DirectionEnum.LTR,
       [styles.dark]: theme === ThemeEnum.DARK,
       [styles.light]: theme === ThemeEnum.LIGHT,
       [styles.authInput]: variant === InputVariantEnum.AUTH,

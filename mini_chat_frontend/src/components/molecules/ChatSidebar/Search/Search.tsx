@@ -4,7 +4,6 @@ import styles from "./Search.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { DirectionEnum } from "@/components/atoms/Button/Button";
 import Input, { InputVariantEnum } from "@/components/atoms/Input/Input";
 
 
@@ -21,9 +20,7 @@ const Search: React.FC<SearchProps> = ({
   query,
   setQuery,
 }) => {
-  const { t, i18n } = useTranslation();
-  const direction =
-    i18n.dir() === "rtl" ? DirectionEnum.RTL : DirectionEnum.LTR;
+  const { t } = useTranslation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -37,7 +34,6 @@ const Search: React.FC<SearchProps> = ({
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </span>
         <Input
-          direction={direction}
           onChange={handleChange}
           onFocus={onFocus}
           placeholder={t("chatSidebar.searchPlaceholder")}

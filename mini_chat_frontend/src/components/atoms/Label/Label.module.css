@@ -1,5 +1,6 @@
 .label {
   display: block;
+  color: var(--quiqflow-color-blue-900);
 }
 /* size */
 .sm {
@@ -28,12 +29,4 @@
 
 .dark {
   color: var(--quiqflow-color-white);
-}
-
-.ltr {
-  direction: ltr;
-}
-
-.rtl {
-  direction: rtl;
 }

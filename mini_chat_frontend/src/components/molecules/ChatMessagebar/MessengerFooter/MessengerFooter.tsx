@@ -5,11 +5,10 @@ import Button, {
   ButtonSizeEnum,
   ButtonVariantEnum,
   ThemeEnum,
-  DirectionEnum,
-} from "../../../atoms/Button/Button";
+} from "@/components/atoms/Button/Button";
 import Input, {
   InputVariantEnum,
-} from "../../../atoms/Input/Input";
+} from "@/components/atoms/Input/Input";
 import { useTranslation } from "react-i18next";
 
 interface MessengerFooterProps {
@@ -23,10 +22,7 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({
 }) => {
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const { t, i18n } = useTranslation();
-
-  const direction =
-    i18n.dir() === "rtl" ? DirectionEnum.RTL : DirectionEnum.LTR;
+  const { t } = useTranslation();
 
   const handleSend = () => {
     const trimmed = message.trim();
@@ -57,7 +53,6 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({
           value={message}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          direction={direction}
           theme={ThemeEnum.LIGHT}
           variant={InputVariantEnum.MESSAGE}
           placeholder="typeMessage"
@@ -67,7 +62,6 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({
           isDisabled={!message.trim()}
           variant={ButtonVariantEnum.PRIMARY}
           size={ButtonSizeEnum.MD}
-          direction={direction}
         >
           {t("send")}
         </Button>

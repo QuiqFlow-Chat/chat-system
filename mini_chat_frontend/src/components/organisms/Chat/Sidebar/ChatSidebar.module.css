@@ -2,25 +2,20 @@
   background-color: var(--quiqflow-color-white);
   border-radius: 0.5rem;
   box-shadow: var(--quiqflow-box-shadow-1);
-  height: 100%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.contactsCard {
-  background-color: var(--quiqflow-color-white);
-  border-radius: 0.5rem;
+  height: auto; 
 }
 
 .contactsList {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-height: 460px;
+  gap: var(--quiqflow-spacing-sm);
   overflow-y: auto;
-  padding: 1rem;
+  padding: var(--quiqflow-spacing-sm);
+  max-height: 500px;
 }
 
 .noResults {
@@ -28,5 +23,19 @@
   color: var(--quiqflow-color-modal-overlay);
   padding: 1rem;
   font-style: italic;
-  width: 300px;
+  width: 100%; 
+}
+
+/* ===============================
+   Desktop styles (larger screens)
+   =============================== */
+
+@media (min-width: 768px) {
+  .chatSidebar {
+    height: 100%;
+  }
+
+  .noResults {
+    width: 300px;
+  }
 }

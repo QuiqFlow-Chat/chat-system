@@ -1,22 +1,21 @@
 .messageText {
-  border-radius: var(--quiqflow-radius-chat-bubble);
-  font-weight: var(--quiqflow-font-weight-normal);
-  color: var(--quiqflow-color-black);
-  padding: 16px;
-  word-wrap: break-word;
   animation: messagePopIn 0.3s ease-out;
-  max-width: 500px;
-  margin-top: 4px
+  border-radius: var(--quiqflow-radius-chat-bubble);
+  color: var(--quiqflow-color-black);
+  font-weight: var(--quiqflow-font-weight-normal);
+  max-width: var(--quiqflow-max-width-message);
+  padding: var(--quiqflow-spacing-sm);
+  word-wrap: break-word;
 }
 
 .incomingText {
-  background-color: var(--quiqflow-color-primary-light);
   align-self: flex-start;
+  background-color: var(--quiqflow-color-primary-light);
 }
 
 .outgoingText {
-  background-color: var(--quiqflow-color-black-lightest);
   align-self: flex-end;
+  background-color: var(--quiqflow-color-black-lightest);
 }
 
 .dark {

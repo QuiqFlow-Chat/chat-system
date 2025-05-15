@@ -5,8 +5,8 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 
-import Label from "../../../atoms/Label/Label";
-import Input, { InputVariantEnum } from "../../../atoms/Input/Input";
+import Label from "@/components/atoms/Label/Label";
+import Input, { InputVariantEnum } from "@/components/atoms/Input/Input";
 
 import styles from "../FormFieldStyles.module.css";
 
