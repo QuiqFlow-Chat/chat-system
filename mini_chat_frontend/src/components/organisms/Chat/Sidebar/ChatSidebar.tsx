@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 
 import styles from "./ChatSidebar.module.css";
 
-import { useSidebarPagination } from "@/hooks/useSidebarPagination";
 import { ChatSidebarProps, SidebarContact } from "@/types/chatTypes";
 import { fetchAllUsers } from "@/services/chat/fetchAllUsersService";
 import Search from "@/components/molecules/ChatSidebar/Search/Search";
 import ContactItem from "@/components/molecules/ChatSidebar/ContactItem/ContactItem";
+import { getConversationId } from "@/services/chat/userService";
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
   contacts,
@@ -35,7 +35,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     try {
       const data = await fetchAllUsers();
       setAllUsers(data);
-      console.log("allUsers",allUsers)
+      console.log("allUsers", allUsers);
     } catch (error) {
       console.error("Failed to fetch users:", error);
       setAllUsers([]);
@@ -46,52 +46,55 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
 
   const baseContacts = isSearchActive ? allUsers ?? [] : contacts;
 
-  const { visibleItems: filteredContacts, observerRef } = useSidebarPagination(
-    baseContacts,
-    query,
-    (contact, q) =>
-      contact.user.fullName.toLowerCase().includes(q.toLowerCase()) ||
-      contact.user.email.toLowerCase().includes(q.toLowerCase())
+  const filteredContacts = baseContacts.filter((contact) =>
+    contact.user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+    contact.user.email.toLowerCase().includes(query.toLowerCase())
   );
+
+  const handleSelectContact = async (contact: SidebarContact) => {
+    try {
+      const conversationId = await getConversationId(contact.user);
+      onSelectConversation(conversationId, contact.user);
+    } catch (error) {
+      console.error("Error getting conversation ID:", error);
+    }
+  };
+  
+  console.log("filteredContacts",filteredContacts)
 
   return (
     <div className={styles.chatSidebar}>
-
-        <Search
-          query={query}
-          setQuery={(value) => {
-            setQuery(value);
-            setIsSearchActive(value.trim() !== "");
-          }}
-          onFocus={loadUsers}
-        />
-        <div className={styles.contactsList}>
-          {isLoading ? (
-            <div>{t("loading")}</div>
-          ) : filteredContacts.length > 0 ? (
-            <>
-              {filteredContacts.map((contact, index) => (
-                <ContactItem
-                  key={index}
-                  user={{
-                    ...contact.user,
-                    lastActivity: contact.lastMessageTime,
-                  }}
-                  time={contact.lastMessageTime}
-                  onClick={() =>
-                    onSelectConversation(contact.conversationId, contact.user)
-                  }
-                />
-              ))}
-              <div ref={observerRef} className={styles.observerSpacer} />
-            </>
-          ) : (
-            <div className={styles.noResults}>
-              {t("chatSidebar.noResultsFound")}
-            </div>
-          )}
-        </div>
-
+      <Search
+        query={query}
+        setQuery={(value) => {
+          setQuery(value);
+          setIsSearchActive(value.trim() !== "");
+        }}
+        onFocus={loadUsers}
+      />
+      <div className={styles.contactsList}>
+        {isLoading ? (
+          <div>{t("loading")}</div>
+        ) : filteredContacts.length > 0 ? (
+          <>
+            {filteredContacts.map((contact, index) => (
+              <ContactItem
+                key={index}
+                user={{
+                  ...contact.user,
+                  lastActivity: contact.lastMessageTime,
+                }}
+                time={contact.lastMessageTime}
+                onClick={() => handleSelectContact(contact)}
+              />
+            ))}
+          </>
+        ) : (
+          <div className={styles.noResults}>
+            {t("chatSidebar.noResultsFound")}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

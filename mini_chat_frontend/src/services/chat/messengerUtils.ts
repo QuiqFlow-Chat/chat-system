@@ -23,16 +23,24 @@ export const loadUserAndContacts = async (
   try {
     const conversations = await getUserConversations();
 
+    console.log("conversations",conversations)
+
     const formattedContacts: SidebarContact[] = conversations.map((conv) => {
       const other = conv.users.find((u: User) => u.id !== loadedUser.id)!;
       const lastMessage = conv.messages?.[conv.messages.length - 1];
+      const conversationId = conv.id;
 
+      console.log("other",other)
+      console.log("lastMessage",lastMessage)
+      console.log("conversationId",conversationId)
       return {
         user: other,
-        conversationId: conv.id,
-        lastMessageTime: lastMessage?.createdAt || t("noMessages"),
+        conversationId: conversationId,
+        lastMessageTime: lastMessage?.createdAt ,
+        
       };
-    });
+    }
+  );
 
     return { currentUser: loadedUser, contacts: formattedContacts };
   } catch (error) {

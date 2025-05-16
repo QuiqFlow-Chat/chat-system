@@ -10,13 +10,14 @@ import ConfirmPasswordField, {
 import EmailField, {
   emailValidation,
 } from "@/components/molecules/FormField/EmailField/EmailField";
-import { UserCreateParameters } from "@/shared/dtosInterfaces/userDtos";
+
 import PasswordField, {
   passwordValidation,
 } from "@/components/molecules/FormField/PasswordField/PasswordField";
 import FullNameField, {
   fullNameValidation,
 } from "@/components/molecules/FormField/FullNameField/FullNameField";
+import { UserCreateParameters } from "@/types/chatTypes";
 
 interface SignUpFormProps {
   onSubmit: (

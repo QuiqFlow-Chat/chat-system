@@ -1,6 +1,6 @@
 import { Socket } from "socket.io-client";
 import { debounce } from "lodash";
-import { MessageCreateParameters } from "@/shared/dtosInterfaces/messageDtos";
+import { MessageCreateParameters } from "@/types/chatTypes";
 
 interface TypingUser {
   id: string;
@@ -78,5 +78,6 @@ export const emitSendMessage = (
     return;
   }
 
+  console.log("data",data)
   socket.emit("sendMessage", data);
 };

@@ -22,10 +22,12 @@ const ContactItem: React.FC<ContactItemProps> = ({
   onClick,
 }) => {
   const { t } = useTranslation();
-
+  
+  console.log("formattedTime😀",time)
+  
   const formattedTime = time
-    ? `${new Date(time).getHours().toString().padStart(2, "0")} ${t("chatSidebar.timeUnit")}`
-    : "";
+  ? `${new Date(time).getUTCHours().toString().padStart(2, "0")} ${t("chatSidebar.timeUnit")}`
+  : "";
 
   return (
     <div className={styles.contactItem} onClick={onClick}>

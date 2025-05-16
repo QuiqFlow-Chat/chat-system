@@ -48,6 +48,7 @@
   },
 
   "chat": {
+    "newMessage": "New message",
     "noUserName": "U",
     "loadingOlderMessages": "Loading older messages...",
     "selectConversation": "Select a conversation to start chatting"

@@ -4,7 +4,7 @@ import { FormikHelpers } from "formik";
 import styles from "./signUp.module.css";
 import SignUpForm from "../../organisms/Register/SignUpForm";
 import { signUp } from "../../../services/auth/authService";
-import { UserCreateParameters } from "../../../shared/dtosInterfaces/userDtos";
+import { UserCreateParameters } from "@/types/chatTypes";
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

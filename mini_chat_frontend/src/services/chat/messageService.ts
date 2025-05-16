@@ -22,12 +22,22 @@ export interface PaginationResponse {
 }
 
 export const getConversationMessages = async (
-  // page: number,
   conversationId: string,
-): Promise<PaginationResponse> => {
-  const response = await apiGet<{ data: PaginationResponse }>(
-    `${conversationId}/getConversationMessages`,
+): Promise<{
+  status: string;
+  message: string;
+  data: PaginationResponse;
+  timestamp: string;
+}> => {
+  const response = await apiGet<{
+    status: string;
+    message: string;
+    data: PaginationResponse;
+    timestamp: string;
+  }>(`${conversationId}/getConversationMessages/?page=1&limit=10`);
 
-  );
-  return response.data;
+  console.log("response", response);
+
+  return response;
 };
+

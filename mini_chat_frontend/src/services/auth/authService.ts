@@ -1,6 +1,6 @@
 import { apiPost } from '@/services/api/requests';
 import  { tokenStorage, userStorage } from '../../utils/localStorageUtil';
-import { UserLoginParameters,AuthResponse, UserCreateParameters } from '../../shared/dtosInterfaces/userDtos';
+import { AuthResponse, UserCreateParameters, UserLoginParameters } from '@/types/chatTypes';
 
 // LogIn
 export const login = async (credentials: UserLoginParameters) => {

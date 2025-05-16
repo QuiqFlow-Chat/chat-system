@@ -4,9 +4,8 @@ import styles from "./Messagebar.module.css";
 import MessengerHeader from "@/components/molecules/ChatMessagebar/MessengerHeader/MessengerHeader";
 import MessagesContainer from "@/components/molecules/ChatMessagebar/MessengerBody/MessagesContainer";
 import MessengerFooter from "@/components/molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
-import { MessageCreateParameters } from "@/shared/dtosInterfaces/messageDtos";
 import { useSocket } from "@/contexts/SocketContext";
-import { User } from "@/types/chatTypes";
+import { MessageCreateParameters, User } from "@/types/chatTypes";
 import {setupMessageSocket,createEmitTypingEvent,emitSendMessage,} from "@/services/socket/messageSocketHandlers";
 
 interface MessagebarProps {
@@ -64,11 +63,12 @@ const Messagebar: React.FC<MessagebarProps> = ({
     if (!newMessage.trim() || !otherUser.id) return;
 
     const messageData: MessageCreateParameters = {
-      senderId: currentUser.id,
-      content: newMessage,
       receiverId: otherUser.id,
+      conversationId: conversationId!,
+      content: newMessage,
     };
 
+    console.log("messageData",messageData)
     emitSendMessage(socket, messageData);
   };
 

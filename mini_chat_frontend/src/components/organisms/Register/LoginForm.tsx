@@ -10,7 +10,8 @@ import EmailField, {
   emailValidation,
 } from "@/components/molecules/FormField/EmailField/EmailField";
 import Button, { ButtonVariantEnum } from "@/components/atoms/Button/Button";
-import { UserLoginParameters } from "@/shared/dtosInterfaces/userDtos";
+import { UserLoginParameters } from "@/types/chatTypes";
+
 
 // Component props
 interface LoginFormProps {

@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import styles from "./UserName.module.css";
 import clsx from "clsx";
 
@@ -15,11 +14,11 @@ interface UserNameProps {
 }
 
 const UserName: React.FC<UserNameProps> = ({ name, size = UserNameSizeEnum.MD }) => {
-  const { t } = useTranslation();
+
 
   return (
     <span className={clsx(styles.userName, styles[size])}>
-      {t(name)}
+      {name}
     </span>
   );
 };

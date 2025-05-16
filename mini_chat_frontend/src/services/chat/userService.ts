@@ -22,15 +22,14 @@ export const getUserConversations = async (): Promise<Conversation[]> => {
   const response = await apiGet<{ data: { data: Conversation[] } }>(
     `/getUserConversations`
   );
+
   return response.data.data;
 };
 
 export const getAllUsers = async (): Promise<GetAllUsersResponse[]> => {
   const response = await apiGet<{ data: { data: GetAllUsersResponse[] } }>(
-    `/getAllUsers?page=1&limit=10`
+    `/getAllUsers?page=1&limit=50`
   );
-
-  console.log("getAllUsers",response)
   return response.data.data;
 };
 
@@ -41,9 +40,6 @@ export const getConversationId = async (
   const response = await apiGet<{ data: string }>(
     `${user.id}/checkOrCreateNewConversation`
   );
-  console.log("getConversationId**",response.data)
+  console.log("getConversationId**",response)
   return response.data;
 };
-
-
-
