@@ -6,6 +6,7 @@ import LoginForm from "@/components/organisms/Register/LoginForm";
 import { useTranslation } from "react-i18next";
 import { login } from "@/services/auth/authService";
 import { ThemeEnum } from "@/shared/enums/ui.enums";
+import { UserLoginParameters } from "@/types/chatTypes";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
