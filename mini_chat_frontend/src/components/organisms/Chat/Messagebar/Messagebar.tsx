@@ -19,12 +19,14 @@ interface MessagebarProps {
   otherUser: User;
   conversationId?: string | null;
   onBack?: () => void;
+  onMessageSent?: () => void;
 }
 
 const Messagebar: React.FC<MessagebarProps> = ({
   conversationId,
   currentUser,
   otherUser,
+  onMessageSent,
 }) => {
   const socket = useSocket();
   const [isTyping, setIsTyping] = useState(false);
@@ -48,6 +50,7 @@ const Messagebar: React.FC<MessagebarProps> = ({
     }, 3000);
   };
 
+  
   useEffect(() => {
     if (!socket) return;
 
@@ -75,6 +78,7 @@ const Messagebar: React.FC<MessagebarProps> = ({
           message: msg.content,
         } as const;
 
+        console.log("newMessage👋",newMessage)
         addMessage(newMessage);
       }
     );
@@ -86,16 +90,27 @@ const Messagebar: React.FC<MessagebarProps> = ({
   }, [socket, currentUser.id, otherUser.id, conversationId]);
 
   const handleSend = (newMessage: string) => {
-    if (!newMessage.trim() || !otherUser.id) return;
-
+    if (!newMessage.trim() || !conversationId || !otherUser.id) {
+      console.warn("🚫 Missing message data:", {
+        content: newMessage,
+        conversationId,
+        otherUserId: otherUser.id,
+      });
+      return;
+    }
+  
     const messageData: MessageCreateParameters = {
       senderId: currentUser.id,
       receiverId: otherUser.id,
-      conversationId: conversationId!,
+      conversationId,
       content: newMessage,
     };
-
+  
+    console.log("📤 Sending message:", messageData);
     emitSendMessage(socket, messageData);
+
+    if (onMessageSent) onMessageSent();
+
   };
 
   const emitTypingEvent = useMemo(

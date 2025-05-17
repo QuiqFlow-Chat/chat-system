@@ -44,13 +44,14 @@ export const setupMessageSocket = (
   }
 
   socket.emit("userOnline");
+  console.log("joinConversation✅", conversationId);
   socket.emit("joinConversation", { conversationId });
-  console.log("joinConversation😭😭", conversationId);
 
   // ----------------- Event Listeners -----------------
   socket.on("isTyping", onTyping);
 
   const handleReceiveMessage = (msg: ReceiveMessage) => {
+    console.log("🔔 Received message event fired");
     console.log("msg😀", msg);
     try {
       onReceiveMessage(msg);
@@ -58,9 +59,9 @@ export const setupMessageSocket = (
       console.error("Error handling received message:", error);
     }
   };
-
-  // socket.off("receiveMessage"); 
-  socket.on("receiveMessage", handleReceiveMessage);
+  
+  socket.off("receiveMessage");
+  socket.on("receiveMessage",handleReceiveMessage);
 
   // ----------------- Cleanup -----------------
   return () => {

@@ -32,9 +32,6 @@ export const loadUserAndContacts = async (
       const lastMessage = conv.messages?.[conv.messages.length - 1];
       const conversationId = conv.id;
 
-      // console.log("other",other)
-      // console.log("lastMessage",lastMessage)
-      // console.log("conversationId",conversationId)
       return {
         user: other,
         conversationId: conversationId,

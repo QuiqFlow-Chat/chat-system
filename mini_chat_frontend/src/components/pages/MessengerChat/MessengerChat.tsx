@@ -54,18 +54,17 @@ const MessengerChat: React.FC = (): JSX.Element => {
     setShowSidebar(true);
   };
 
+
+  const fetchContacts = async () => {
+    const { currentUser, contacts } = await loadUserAndContacts();
+    if (!currentUser) return;
+    setCurrentUser(currentUser);
+    setContacts(contacts);
+  };
+
+
   useEffect(() => {
-    const fetchData = async () => {
-      const { currentUser, contacts } = await loadUserAndContacts();
-  
-      if (!currentUser) return;
-  
-      setCurrentUser(currentUser);
-      setContacts(contacts);
-      console.log("**********",contacts)
-    };
-  
-    fetchData();
+    fetchContacts();
   }, [t]);
 
   const handleSelectConversation = (id: string, user: User) => {
@@ -133,6 +132,7 @@ const MessengerChat: React.FC = (): JSX.Element => {
                 otherUser={otherUser}
                 conversationId={conversationId}
                 onBack={isMobile ? goBackToSidebar : undefined}
+                onMessageSent={fetchContacts}
               />
             ) : (
               !isMobile && (
