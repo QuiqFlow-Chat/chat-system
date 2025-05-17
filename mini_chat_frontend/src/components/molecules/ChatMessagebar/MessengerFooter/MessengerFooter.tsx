@@ -1,14 +1,12 @@
 // src/components/molecules/MessengerFooter/MessengerFooter.tsx
 import React, { useState, useRef } from "react";
 import styles from "./MessengerFooter.module.css";
+import { ThemeEnum } from "@/shared/enums/ui.enums";
 import Button, {
   ButtonSizeEnum,
   ButtonVariantEnum,
-  ThemeEnum,
 } from "@/components/atoms/Button/Button";
-import Input, {
-  InputVariantEnum,
-} from "@/components/atoms/Input/Input";
+import Input, { InputVariantEnum } from "@/components/atoms/Input/Input";
 import { useTranslation } from "react-i18next";
 
 interface MessengerFooterProps {

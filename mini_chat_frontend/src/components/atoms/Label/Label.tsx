@@ -1,12 +1,8 @@
 import React from "react";
-import clsx from "clsx";  // تأكد من تثبيت مكتبة clsx: npm install clsx
+import clsx from "clsx"; // تأكد من تثبيت مكتبة clsx: npm install clsx
 import styles from "./Label.module.css";
 import { useTranslation } from "react-i18next";
-
-export enum ThemeEnum {
-  LIGHT = "light",
-  DARK = "dark",
-}
+import { ThemeEnum } from "@/shared/enums/ui.enums";
 
 export enum LabelSizeEnum {
   SM = "sm",
@@ -38,15 +34,10 @@ const Label: React.FC<LabelProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const labelClassName = clsx(
-    styles.label,
-    styles[size],
-    styles[weight],
-    {
-      [styles.dark]: theme === ThemeEnum.DARK,
-      [styles.light]: theme === ThemeEnum.LIGHT,
-    }
-  );
+  const labelClassName = clsx(styles.label, styles[size], styles[weight], {
+    [styles.dark]: theme === ThemeEnum.DARK,
+    [styles.light]: theme === ThemeEnum.LIGHT,
+  });
 
   return (
     <label htmlFor={htmlFor} className={labelClassName} onClick={onClick}>

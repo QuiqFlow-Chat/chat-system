@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Button.module.css";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import { ThemeEnum } from "@/shared/enums/ui.enums";
 
 export enum ButtonVariantEnum {
   PRIMARY = "primary",
@@ -12,11 +13,6 @@ export enum ButtonSizeEnum {
   SM = "sm",
   MD = "md",
   LG = "lg",
-}
-
-export enum ThemeEnum {
-  LIGHT = "light",
-  DARK = "dark",
 }
 
 

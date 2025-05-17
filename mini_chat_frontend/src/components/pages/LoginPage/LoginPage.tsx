@@ -5,17 +5,7 @@ import styles from "./LoginPage.module.css";
 import LoginForm from "@/components/organisms/Register/LoginForm";
 import { useTranslation } from "react-i18next";
 import { login } from "@/services/auth/authService";
-import { UserLoginParameters } from "@/types/chatTypes";
-
-export enum ThemeEnum {
-  DARK = "dark",
-  LIGHT = "light",
-}
-
-export enum DirectionEnum {
-  LTR = "ltr",
-  RTL = "rtl",
-}
+import { ThemeEnum } from "@/shared/enums/ui.enums";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -49,11 +39,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div
-      className={styles.registerPage}
-      data-theme={ThemeEnum.LIGHT}
-      data-direction={DirectionEnum.LTR}
-    >
+    <div className={styles.registerPage} data-theme={ThemeEnum.LIGHT}>
       <img
         className={styles.primaryLogo}
         src="https://quiqflow.com/wp-content/uploads/2024/01/logo.png"
