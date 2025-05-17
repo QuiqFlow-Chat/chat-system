@@ -61,6 +61,7 @@ export const registerChatHandlers = ({
   socket.on('joinConversation', ({ conversationId }) => {
     try {
       socket.join(conversationId);
+      console.log(`User ${authenticatedUser.id} joined conversation🌹🌹😘 ${conversationId}`);
     } catch (error) {
       socket.emit(
         'error',
@@ -72,6 +73,7 @@ export const registerChatHandlers = ({
   socket.on('leaveConversation', ({ conversationId }) => {
     try {
       socket.leave(conversationId);
+      console.log(`User ${authenticatedUser.id} left conversation🤞🤞✌ ${conversationId}`);
     } catch (error) {
       socket.emit(
         'error',
@@ -82,13 +84,12 @@ export const registerChatHandlers = ({
 
   socket.on('sendMessage', async (message: IMessageCreateParameters) => {
     try {
-      const isSenderAuthorized = message.senderId === authenticatedUser.id;
-      if (!isSenderAuthorized) {
-        throw AppError.unauthorized(MESSAGES.MESSAGE.CREATE.UNAUTHORIZED);
-      }
+      const messageWithSender = {
+        ...message,
+        senderId: authenticatedUser.id, // Override any client-provided sender ID
+      };
 
-      const result: any = await messageService.sendMessage(message);
-      const newMessage = result.message;
+      const newMessage:any = await messageService.sendMessage(messageWithSender);
       const conversationId = newMessage.conversationId;
 
       const isUserInRoom = socket.rooms.has(conversationId);

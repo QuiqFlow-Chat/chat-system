@@ -10,7 +10,7 @@ export interface IMessageAttributes {
 }
 
 export interface IMessageCreateParameters {
-  senderId: string;
+  //senderId: string;
   receiverId: string;
   conversationId: string;
   content: string;
