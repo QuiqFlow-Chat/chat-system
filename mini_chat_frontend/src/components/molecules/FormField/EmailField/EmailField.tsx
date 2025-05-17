@@ -23,7 +23,6 @@ export const emailValidation = Yup.string()
 const EmailField: React.FC<EmailFieldProps> = ({
   name,
   id = "email",
-  placeholder,
 }) => {
   const { t } = useTranslation();
   const [field, meta] = useField(name);
@@ -39,7 +38,7 @@ const EmailField: React.FC<EmailFieldProps> = ({
         name={field.name}
         onBlur={field.onBlur}
         onChange={field.onChange}
-        placeholder={placeholder ?? t("form.emailPlaceholder")}
+        placeholder={ t("form.emailPlaceholder")}
         type="email"
         value={field.value}
         variant={InputVariantEnum.AUTH}

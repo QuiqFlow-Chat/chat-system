@@ -16,13 +16,13 @@ export interface PaginationResponse {
     currentPage: number;
     totalPages: number;
     limit: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
   };
 }
 
 export const getConversationMessages = async (
   conversationId: string,
+  page: number,
+  limit: number,
 ): Promise<{
   status: string;
   message: string;
@@ -34,7 +34,11 @@ export const getConversationMessages = async (
     message: string;
     data: PaginationResponse;
     timestamp: string;
-  }>(`${conversationId}/getConversationMessages/?page=1&limit=10`);
+  }>(`${conversationId}/getConversationMessages`,
+    {
+      params: { page, limit },
+    }
+  );
 
   console.log("response", response);
 

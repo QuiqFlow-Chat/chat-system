@@ -1,8 +1,11 @@
 import { SidebarContact } from '@/types/chatTypes';
 import { getAllUsers } from '@/services/chat/userService';
 
-export const fetchAllUsers = async (): Promise<SidebarContact[]> => {
-  const users = await getAllUsers();
+export const fetchAllUsers = async (
+  page: number,
+  limit: number
+): Promise<SidebarContact[]> => {
+  const users = await getAllUsers(page, limit);
 
   return users.map((user) => ({
     user: {
@@ -11,6 +14,6 @@ export const fetchAllUsers = async (): Promise<SidebarContact[]> => {
       fullName: user.fullName,
     },
     conversationId: "",
-    lastMessageTime: "", 
+    lastMessageTime: "",
   }));
 };

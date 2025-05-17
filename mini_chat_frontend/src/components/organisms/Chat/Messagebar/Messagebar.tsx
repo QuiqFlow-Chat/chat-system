@@ -63,12 +63,12 @@ const Messagebar: React.FC<MessagebarProps> = ({
     if (!newMessage.trim() || !otherUser.id) return;
 
     const messageData: MessageCreateParameters = {
+      senderId: currentUser.id,
       receiverId: otherUser.id,
       conversationId: conversationId!,
       content: newMessage,
     };
 
-    console.log("messageData",messageData)
     emitSendMessage(socket, messageData);
   };
 

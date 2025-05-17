@@ -32,7 +32,6 @@
     conversationId: string;
     isRead: boolean;
     createdAt: string;
-    updatedAt: string;
   }
 
   export interface UserLoginParameters {
@@ -52,6 +51,7 @@
   }
 
   export interface MessageCreateParameters {
+    senderId:string;
     receiverId: string;
     conversationId: string;
     content: string;

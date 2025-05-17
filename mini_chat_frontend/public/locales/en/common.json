@@ -10,13 +10,17 @@
   "form": {
     "passwordLabel": "Password",
     "passwordPlaceholder": "Enter your password",
+    
     "confirmPasswordLabel": "Confirm Password",
     "confirmPasswordPlaceholder": "Re-enter your password",
     "confirmPasswordMismatch": "Passwords do not match",
+    
     "emailLabel": "Email",
     "emailPlaceholder": "Enter your email",
+    
     "fullNameLabel": "Full Name",
     "fullNamePlaceholder": "Enter your full name",
+    
     "passwordHint": "Use 8 or more characters with a mix of letters, numbers & symbols",
     "showPassword": "Show password",
     "hidePassword": "Hide password"
@@ -51,7 +55,9 @@
     "newMessage": "New message",
     "noUserName": "U",
     "loadingOlderMessages": "Loading older messages...",
-    "selectConversation": "Select a conversation to start chatting"
+    "selectConversation": "Select a conversation to start chatting",
+    "messageInputPlaceholder":"type Message",
+    "sendButton": "Send"
   },
 
   "chatSidebar": {

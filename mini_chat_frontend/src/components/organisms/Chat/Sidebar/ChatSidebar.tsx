@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import styles from "./ChatSidebar.module.css";
@@ -9,42 +9,29 @@ import Search from "@/components/molecules/ChatSidebar/Search/Search";
 import ContactItem from "@/components/molecules/ChatSidebar/ContactItem/ContactItem";
 import { getConversationId } from "@/services/chat/userService";
 
+import { USERS_CONVERSATION_LIMIT } from "@/constants/regex";
+import { usePagination } from "@/hooks/useSidebarPagination";
+
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
   contacts,
   onSelectConversation,
 }) => {
   const { t } = useTranslation();
 
-  const [allUsers, setAllUsers] = useState<SidebarContact[] | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const listRef = useRef<HTMLDivElement | null>(null);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      if (isSearchActive && !allUsers) {
-        loadUsers();
-      }
-    }, 500);
+  const {
+    data: paginatedUsers,
+    loading,
+  } = usePagination<SidebarContact>({
+    fetchFn: (page, limit) => fetchAllUsers(page, limit),
+    limit: USERS_CONVERSATION_LIMIT,
+    containerRef: listRef,
+  });
 
-    return () => clearTimeout(delay);
-  }, [isSearchActive, allUsers]);
-
-  const loadUsers = async () => {
-    setIsLoading(true);
-    try {
-      const data = await fetchAllUsers();
-      setAllUsers(data);
-      console.log("allUsers", allUsers);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-      setAllUsers([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const baseContacts = isSearchActive ? allUsers ?? [] : contacts;
+  const baseContacts = isSearchActive ? paginatedUsers : contacts;
 
   const filteredContacts = baseContacts.filter((contact) =>
     contact.user.fullName.toLowerCase().includes(query.toLowerCase()) ||
@@ -59,8 +46,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
       console.error("Error getting conversation ID:", error);
     }
   };
-  
-  console.log("filteredContacts",filteredContacts)
 
   return (
     <div className={styles.chatSidebar}>
@@ -70,10 +55,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
           setQuery(value);
           setIsSearchActive(value.trim() !== "");
         }}
-        onFocus={loadUsers}
       />
-      <div className={styles.contactsList}>
-        {isLoading ? (
+      <div className={styles.contactsList} ref={listRef}>
+        {loading && baseContacts.length === 0 ? (
           <div>{t("loading")}</div>
         ) : filteredContacts.length > 0 ? (
           <>
@@ -88,6 +72,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
                 onClick={() => handleSelectContact(contact)}
               />
             ))}
+            {loading && baseContacts.length > 0 && <div>{t("loading")}</div>}
           </>
         ) : (
           <div className={styles.noResults}>

@@ -7,6 +7,20 @@ interface TypingUser {
   conversationId: string;
 }
 
+interface ReceiveMessage {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  conversationId: string;
+  content: string;
+  createdAt: string;
+  isRead: boolean
+}
+
+interface OnReceiveMessageParams {
+  (msg: ReceiveMessage): void;
+}
+
 export const setupMessageSocket = (
   socket: Socket,
   currentUserId: string,
@@ -29,7 +43,9 @@ export const setupMessageSocket = (
   }
 
   socket.emit("userOnline");
+
   socket.emit("joinConversation", { conversationId });
+  console.log("joinConversation😭😭",conversationId)
   socket.on("isTyping", onTyping);
 
   return () => {
@@ -80,4 +96,34 @@ export const emitSendMessage = (
 
   console.log("data",data)
   socket.emit("sendMessage", data);
+
+};
+
+
+
+export const setupReceiveMessageListener = (
+  socket: Socket,
+  onReceiveMessage: OnReceiveMessageParams
+) => {
+  console.log("setupReceiveMessageListener")
+  if (!socket) {
+    console.error("Socket not connected");
+    return;
+  }
+
+  const handleReceiveMessage = (msg: ReceiveMessage) => {
+    console.log("msg😀",msg)
+    try {
+      onReceiveMessage(msg);
+    } catch (error) {
+      console.error("Error handling received message:", error);
+    }
+  };
+
+  socket.off("receiveMessage"); 
+  socket.on("receiveMessage", handleReceiveMessage);
+
+  return () => {
+    socket.off("receiveMessage", handleReceiveMessage);
+  };
 };

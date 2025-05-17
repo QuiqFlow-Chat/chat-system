@@ -56,7 +56,7 @@ const MessengerChat: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { currentUser, contacts } = await loadUserAndContacts(t);
+      const { currentUser, contacts } = await loadUserAndContacts();
   
       if (!currentUser) return;
   

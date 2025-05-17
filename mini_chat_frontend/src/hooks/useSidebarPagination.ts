@@ -1,47 +1,55 @@
-// // src/hooks/useSidebarPagination.ts
-// import { useState, useEffect, useRef, useCallback } from "react";
+import React , { useState, useEffect } from 'react';
 
-// export function useSidebarPagination<T>(
-//   items: T[],
-//   query: string,
-//   filterFn: (item: T, query: string) => boolean,
-//   step = 5
-// ) {
-//   const [visibleCount, setVisibleCount] = useState(step);
-//   const observerRef = useRef<HTMLDivElement | null>(null);
+type UsePaginationProps<T> = {
+  fetchFn: (page: number, limit: number) => Promise<T[]>;
+  limit?: number;
+  containerRef?: React.RefObject<HTMLElement | null>;
+};
 
-//   const filteredItems = items.filter((item) => filterFn(item, query));
-//   const visibleItems = filteredItems.slice(0, visibleCount);
-//   const hasMore = visibleCount < filteredItems.length;
+export const usePagination = <T>({
+  fetchFn,
+  limit = 10,
+  containerRef,
+}: UsePaginationProps<T>) => {
+  const [data, setData] = useState<T[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-//   useEffect(() => {
-//     setVisibleCount(step); // reset on query change
-//   }, [query]);
+  const loadMore = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    const newData = await fetchFn(page, limit);
+    setData((prev) => [...prev, ...newData]);
+    setPage((prev) => prev + 1);
+    setHasMore(newData.length === limit);
+    setLoading(false);
+  };
 
-//   const handleObserver = useCallback(
-//     (entries: IntersectionObserverEntry[]) => {
-//       const target = entries[0];
-//       if (target.isIntersecting && hasMore) {
-//         setVisibleCount((prev) => prev + step);
-//       }
-//     },
-//     [hasMore, step]
-//   );
+  useEffect(() => {
+    loadMore();
+  }, []);
 
-//   useEffect(() => {
-//     const observer = new IntersectionObserver(handleObserver, {
-//       threshold: 1.0,
-//     });
-//     if (observerRef.current) observer.observe(observerRef.current);
+  useEffect(() => {
+    if (!containerRef?.current) return;
 
-//     return () => {
-//       if (observerRef.current) observer.unobserve(observerRef.current);
-//     };
-//   }, [handleObserver]);
+    const handleScroll = () => {
+      const el = containerRef.current;
+      if (!el || loading || !hasMore) return;
 
-//   return {
-//     visibleItems,
-//     observerRef,
-//     hasMore,
-//   };
-// }
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      if (scrollTop + clientHeight >= scrollHeight - 50) {
+        loadMore();
+      }
+    };
+
+    const el = containerRef.current;
+    el.addEventListener('scroll', handleScroll);
+
+    return () => {
+      el.removeEventListener('scroll', handleScroll);
+    };
+  }, [containerRef, loading, hasMore]);
+
+  return { data, loadMore, hasMore, loading };
+};

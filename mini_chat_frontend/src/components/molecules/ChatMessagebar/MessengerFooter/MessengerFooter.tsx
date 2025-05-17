@@ -55,7 +55,7 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({
           onKeyDown={handleKeyDown}
           theme={ThemeEnum.LIGHT}
           variant={InputVariantEnum.MESSAGE}
-          placeholder="typeMessage"
+          placeholder={t("chat.messageInputPlaceholder")}
         />
         <Button
           onClick={handleSend}
@@ -63,7 +63,7 @@ const MessengerFooter: React.FC<MessengerFooterProps> = ({
           variant={ButtonVariantEnum.PRIMARY}
           size={ButtonSizeEnum.MD}
         >
-          {t("send")}
+          {t("chat.sendButton")}
         </Button>
       </div>
     </div>

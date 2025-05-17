@@ -1,6 +1,6 @@
 import { userStorage } from "@/utils/localStorageUtil";
 import { getUserConversations } from "@/services/chat/userService";
-import { TFunction } from "i18next";
+// import { TFunction } from "i18next";
 
 export interface User {
   id: string;
@@ -15,13 +15,15 @@ export interface SidebarContact {
 }
 
 export const loadUserAndContacts = async (
-  t: TFunction
+  // t: TFunction
+  page = 1,
+  limit = 10
 ): Promise<{ currentUser: User | null; contacts: SidebarContact[] }> => {
   const loadedUser = userStorage.load();
   if (!loadedUser) return { currentUser: null, contacts: [] };
 
   try {
-    const conversations = await getUserConversations();
+    const conversations = await getUserConversations(page, limit);
 
     console.log("conversations",conversations)
 
@@ -30,9 +32,9 @@ export const loadUserAndContacts = async (
       const lastMessage = conv.messages?.[conv.messages.length - 1];
       const conversationId = conv.id;
 
-      console.log("other",other)
-      console.log("lastMessage",lastMessage)
-      console.log("conversationId",conversationId)
+      // console.log("other",other)
+      // console.log("lastMessage",lastMessage)
+      // console.log("conversationId",conversationId)
       return {
         user: other,
         conversationId: conversationId,

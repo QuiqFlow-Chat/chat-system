@@ -17,21 +17,33 @@ export interface GetAllUsersResponse {
   email: string;
   fullName: string;
 }
-// \?page=${page}&limit=${limit}
-export const getUserConversations = async (): Promise<Conversation[]> => {
+
+export const getUserConversations = async (
+  page: number,
+  limit: number
+): Promise<Conversation[]> => {
   const response = await apiGet<{ data: { data: Conversation[] } }>(
-    `/getUserConversations`
+    `/getUserConversations`,
+    {
+      params: { page, limit },
+    }
   );
 
   return response.data.data;
 };
 
-export const getAllUsers = async (): Promise<GetAllUsersResponse[]> => {
+
+export const getAllUsers = async (
+  page: number,
+  limit: number
+): Promise<GetAllUsersResponse[]> => {
   const response = await apiGet<{ data: { data: GetAllUsersResponse[] } }>(
-    `/getAllUsers?page=1&limit=50`
+    `/getAllUsers`,
+    {params: { page, limit },}
   );
   return response.data.data;
 };
+
 
 
 export const getConversationId = async (  

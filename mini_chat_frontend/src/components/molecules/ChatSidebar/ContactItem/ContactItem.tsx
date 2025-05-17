@@ -23,8 +23,6 @@ const ContactItem: React.FC<ContactItemProps> = ({
 }) => {
   const { t } = useTranslation();
   
-  console.log("formattedTime😀",time)
-  
   const formattedTime = time
   ? `${new Date(time).getUTCHours().toString().padStart(2, "0")} ${t("chatSidebar.timeUnit")}`
   : "";
