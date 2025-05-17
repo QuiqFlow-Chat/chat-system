@@ -43,6 +43,10 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
   }, [isTyping]);
 
   useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+  
+  useEffect(() => {
     const container = listRef.current;
     if (!container) return;
 
