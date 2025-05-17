@@ -1,13 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import clsx from "clsx";  
+import clsx from "clsx";
 import styles from "./Avatar.module.css";
-
-export enum ThemeEnum {
-  LIGHT = "light",
-  DARK = "dark",
-}
-
+import { ThemeEnum } from "@/shared/enums/ui.enums";
 
 export enum AvatarVariant {
   SMALL = "small",
@@ -27,14 +22,10 @@ const Avatar: React.FC<AvatarProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const avatarClassName = clsx(
-    styles.avatar,
-    styles[variant], 
-    {
-      [styles.avatarDark]: theme === ThemeEnum.DARK,
-      [styles.avatarLight]: theme === ThemeEnum.LIGHT,
-    }
-  );
+  const avatarClassName = clsx(styles.avatar, styles[variant], {
+    [styles.avatarDark]: theme === ThemeEnum.DARK,
+    [styles.avatarLight]: theme === ThemeEnum.LIGHT,
+  });
 
   return (
     <div className={avatarClassName}>

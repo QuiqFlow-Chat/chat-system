@@ -5,7 +5,7 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  height: auto; 
+  height: auto;
 }
 
 .contactsList {
@@ -22,7 +22,7 @@
   color: var(--quiqflow-color-modal-overlay);
   padding: 1rem;
   font-style: italic;
-  width: 100%; 
+  width: 100%;
 }
 
 /* ===============================
