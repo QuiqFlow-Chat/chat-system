@@ -26,7 +26,8 @@ export const setupMessageSocket = (
   currentUserId: string,
   otherUserId: string,
   conversationId: string | null | undefined,
-  onTyping: (user: TypingUser) => void
+  onTyping: (user: TypingUser) => void,
+  onReceiveMessage: OnReceiveMessageParams
 ) => {
   if (!socket) {
     console.error("Socket not connected");
@@ -43,11 +44,25 @@ export const setupMessageSocket = (
   }
 
   socket.emit("userOnline");
-
   socket.emit("joinConversation", { conversationId });
-  console.log("joinConversation😭😭",conversationId)
+  console.log("joinConversation😭😭", conversationId);
+
+  // ----------------- Event Listeners -----------------
   socket.on("isTyping", onTyping);
 
+  const handleReceiveMessage = (msg: ReceiveMessage) => {
+    console.log("msg😀", msg);
+    try {
+      onReceiveMessage(msg);
+    } catch (error) {
+      console.error("Error handling received message:", error);
+    }
+  };
+
+  // socket.off("receiveMessage"); 
+  socket.on("receiveMessage", handleReceiveMessage);
+
+  // ----------------- Cleanup -----------------
   return () => {
     socket.emit("userOffline");
 
@@ -56,6 +71,7 @@ export const setupMessageSocket = (
     }
 
     socket.off("isTyping", onTyping);
+    socket.off("receiveMessage", handleReceiveMessage);
   };
 };
 
@@ -101,29 +117,3 @@ export const emitSendMessage = (
 
 
 
-export const setupReceiveMessageListener = (
-  socket: Socket,
-  onReceiveMessage: OnReceiveMessageParams
-) => {
-  console.log("setupReceiveMessageListener")
-  if (!socket) {
-    console.error("Socket not connected");
-    return;
-  }
-
-  const handleReceiveMessage = (msg: ReceiveMessage) => {
-    console.log("msg😀",msg)
-    try {
-      onReceiveMessage(msg);
-    } catch (error) {
-      console.error("Error handling received message:", error);
-    }
-  };
-
-  socket.off("receiveMessage"); 
-  socket.on("receiveMessage", handleReceiveMessage);
-
-  return () => {
-    socket.off("receiveMessage", handleReceiveMessage);
-  };
-};

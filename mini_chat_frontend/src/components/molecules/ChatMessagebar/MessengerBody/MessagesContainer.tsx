@@ -4,9 +4,6 @@ import IncomingMessage from "./IncomingMessage/IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage/OutgoingMessage";
 import { useTranslation } from "react-i18next";
 import { User } from "@/types/chatTypes";
-import { useSocket } from "@/contexts/SocketContext";
-import { setupReceiveMessageListener } from "@/services/socket/messageSocketHandlers";
-import { useMessagePagination } from "@/hooks/useMessagePagination";
 
 interface Message {
   type: "incoming" | "outgoing";
@@ -19,26 +16,25 @@ interface MessagesContainerProps {
   currentUser: User;
   isTyping: boolean;
   otherUser: User;
+  messages: Message[];
+  addMessage: (msg: Message) => void;
+  loadMoreMessages: () => void;
+  hasMore: boolean;
+  loading: boolean;
 }
 
 const MessagesContainer: React.FC<MessagesContainerProps> = ({
-  conversationId,
   currentUser,
   isTyping,
   otherUser,
+  messages,
+  loadMoreMessages,
+  hasMore,
+  loading,
 }) => {
   const { t } = useTranslation();
-  const socket = useSocket();
   const listRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
-
-  const {
-    messages,
-    fetchMessages: loadMoreMessages,
-    hasMore,
-    loading,
-    addMessage,
-  } = useMessagePagination(conversationId, currentUser.id);
 
   useEffect(() => {
     if (isTyping) {
@@ -46,51 +42,27 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({
     }
   }, [isTyping]);
 
-
-  useEffect(() => {
-    const unsubscribe = setupReceiveMessageListener(socket, (msg) => {
-      const newMessage: Message = {
-        type: msg.senderId === currentUser.id ? "outgoing" : "incoming",
-        time: new Date(msg.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        message: msg.content,
-      };
-  
-      console.log("newMessage",newMessage)
-      addMessage(newMessage);
-    });
-  
-    return () => {
-      unsubscribe?.();
-    };
-  }, [socket, currentUser.id ,conversationId]);
-
   useEffect(() => {
     const container = listRef.current;
     if (!container) return;
-  
+
     const handleScroll = () => {
       if (container.scrollTop === 0 && hasMore && !loading) {
         loadMoreMessages();
       }
     };
-  
+
     container.addEventListener("scroll", handleScroll);
-  
+
     return () => {
       container.removeEventListener("scroll", handleScroll);
     };
   }, [listRef, loadMoreMessages, hasMore, loading]);
-  
-
-  console.log("messages",messages)
 
   return (
     <>
-      <div className={styles.messengerBody}ref={listRef}>
-        <div className={styles.messagesContainer} >
+      <div className={styles.messengerBody} ref={listRef}>
+        <div className={styles.messagesContainer}>
           {loading && (
             <div className={styles.loadingIndicator}>
               {t("chat.loadingOlderMessages")}

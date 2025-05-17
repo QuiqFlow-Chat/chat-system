@@ -6,7 +6,13 @@ import MessagesContainer from "@/components/molecules/ChatMessagebar/MessengerBo
 import MessengerFooter from "@/components/molecules/ChatMessagebar/MessengerFooter/MessengerFooter";
 import { useSocket } from "@/contexts/SocketContext";
 import { MessageCreateParameters, User } from "@/types/chatTypes";
-import {setupMessageSocket,createEmitTypingEvent,emitSendMessage,} from "@/services/socket/messageSocketHandlers";
+import {
+  setupMessageSocket,
+  createEmitTypingEvent,
+  emitSendMessage,
+} from "@/services/socket/messageSocketHandlers";
+import { useMessagePagination } from "@/hooks/useMessagePagination";
+
 
 interface MessagebarProps {
   currentUser: User;
@@ -23,6 +29,14 @@ const Messagebar: React.FC<MessagebarProps> = ({
   const socket = useSocket();
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const {
+    messages,
+    fetchMessages: loadMoreMessages,
+    hasMore,
+    loading,
+    addMessage,
+  } = useMessagePagination(conversationId || "", currentUser.id);
 
   const handleResetTypingIndicator = () => {
     if (typingTimeoutRef.current) {
@@ -43,7 +57,6 @@ const Messagebar: React.FC<MessagebarProps> = ({
       otherUser.id,
       conversationId,
       (user) => {
-        console.log(user)
         if (
           user.id === otherUser.id &&
           user.conversationId === conversationId
@@ -51,8 +64,21 @@ const Messagebar: React.FC<MessagebarProps> = ({
           setIsTyping(true);
           handleResetTypingIndicator();
         }
+      },
+      (msg) => {
+        const newMessage = {
+          type: msg.senderId === currentUser.id ? "outgoing" : "incoming",
+          time: new Date(msg.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          message: msg.content,
+        } as const;
+
+        addMessage(newMessage);
       }
     );
+
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
       cleanup?.();
@@ -92,6 +118,11 @@ const Messagebar: React.FC<MessagebarProps> = ({
             currentUser={currentUser}
             otherUser={otherUser}
             isTyping={isTyping}
+            messages={messages}
+            addMessage={addMessage}
+            loadMoreMessages={loadMoreMessages}
+            hasMore={hasMore}
+            loading={loading}
           />
         )}
         <MessengerFooter onSend={handleSend} onTyping={handleTyping} />
