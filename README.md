@@ -2,7 +2,7 @@
 
 A modern, full-stack real-time chat application built with TypeScript, Express, Socket.IO, React, and Sequelize.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Overview
@@ -21,23 +21,23 @@ QuiqFlow is a feature-rich chat application that enables real-time messaging bet
 ## Tech Stack
 
 ### Backend
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Language**: TypeScript
-- **Database**: PostgreSQL with Sequelize ORM
-- **Real-time Communication**: Socket.IO
-- **Authentication**: JWT (JSON Web Tokens)
-- **Data Validation**: Joi
+- **Runtime**: Node.js (v22+)
+- **Framework**: Express.js (v5.1.0)
+- **Language**: TypeScript (v5.8.3)
+- **Database**: PostgreSQL (v8.15.6) with Sequelize ORM (v6.37.7)
+- **Real-time Communication**: Socket.IO (v4.8.1)
+- **Authentication**: JWT (v9.0.2)
+- **Data Validation**: Joi (v17.13.3)
 
 ### Frontend
-- **Framework**: React 19
-- **Build Tool**: Vite
+- **Framework**: React (v19.0.0)
+- **Build Tool**: Vite (latest)
 - **Styling**: CSS with modern patterns
 - **State Management**: React Context
-- **Form Handling**: Formik with Yup validation
-- **Routing**: React Router
-- **HTTP Client**: Axios
-- **Design**: metronic
+- **Form Handling**: Formik (v2.4.6) with Yup (v1.6.1) validation
+- **Routing**: React Router (v7.5.2)
+- **HTTP Client**: Axios (v1.9.0)
+- **Design**: Custom components
 
 ## Project Structure
 
@@ -50,7 +50,7 @@ The application is organized as a monorepo with two main directories:
 
 ### Prerequisites
 
-- Node.js (v18 or later)
+- Node.js (v22 or later)
 - PostgreSQL (v14 or later)
 - Yarn or npm
 
@@ -135,9 +135,10 @@ The API follows RESTful principles with a base path of `/api/miniChat` and inclu
 - `GET /getAllConversations`: Get all conversations (protected)
 - `GET /:id/getConversationById`: Get conversation details by ID (protected)
 - `GET /:id/getConversationUsers`: Get all users in a conversation (protected)
-- `GET /:id/getUserConversations`: Get all conversations for a user (protected)
-- `POST /getConversationMessages`: Get messages from a conversation (protected)
-- `DELETE /deleteConversation`: Delete a conversation (protected)
+- `GET /getUserConversations`: Get all conversations for the current user (protected)
+- `GET /:conversationId/getConversationMessages`: Get messages from a conversation (protected)
+- `GET /:receiverId/checkOrCreateNewConversation`: Check if a conversation exists or create a new one (protected)
+- `DELETE /deleteConversationAsync`: Delete a conversation (protected)
 
 ### Message Routes
 - `POST /sendMessage`: Send a new message (protected)
@@ -150,7 +151,7 @@ The API follows RESTful principles with a base path of `/api/miniChat` and inclu
 - `GET /:id/getUserConversationsById`: Get a specific user-conversation relationship (protected)
 - `DELETE /deleteUserConversations`: Remove a user from a conversation (protected)
 
-All protected routes require a valid JWT token in the Authorization header.
+All protected routes require a valid JWT token in the Authorization header with format: `Bearer <token>`.
 
 ## Socket.IO Events
 
@@ -163,7 +164,6 @@ The real-time communication uses the following events to enable interactive chat
 - `sendMessage`: Sends a new chat message to the server
   ```typescript
   socket.emit('sendMessage', { 
-    senderId: string,
     conversationId: string, 
     receiverId: string, 
     content: string
@@ -219,8 +219,8 @@ The real-time communication uses the following events to enable interactive chat
   ```
 - `isTyping`: Notifies when a user is typing in a conversation
   ```typescript
-  socket.on('isTyping', (user) => {
-    // user: { id: string, conversationId: string }
+  socket.on('isTyping', (data) => {
+    // data: { id: string, conversationId: string }
   });
   ```
 - `error`: Delivers error messages from the server
@@ -236,7 +236,8 @@ Socket connections require JWT authentication through the handshake:
 
 ```typescript
 // Client-side connection with auth token
-const socket = io.connect(SERVER_URL, {
+const socket = io(SERVER_URL, {
+  transports: ["websocket"],
   auth: {
     token: "your-jwt-token"
   }
